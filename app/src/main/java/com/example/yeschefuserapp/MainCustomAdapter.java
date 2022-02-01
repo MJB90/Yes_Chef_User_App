@@ -1,6 +1,9 @@
 package com.example.yeschefuserapp;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,13 +13,22 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainCustomAdapter extends RecyclerView.Adapter<MainCustomAdapter.MyViewHolder> {
-    ArrayList<Recipe> recipes;
+    List<Recipe> recipes;
     Context context;
     private ItemClickListener mItemListener;
-    public MainCustomAdapter(Context context, ArrayList<Recipe> recipes, ItemClickListener itemClickListener){
+
+    private URL url;
+    private Bitmap image;
+
+    public MainCustomAdapter(Context context, List<Recipe> recipes, ItemClickListener itemClickListener){
         this.context=context;
         this.recipes=recipes;
         mItemListener=itemClickListener;
@@ -32,7 +44,16 @@ public class MainCustomAdapter extends RecyclerView.Adapter<MainCustomAdapter.My
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        holder.recipeImage.setImageResource(recipes.get(position).getRecipePhoto());
+        try {
+            url = new URL(recipes.get(position).getRecipePhoto());
+            image = BitmapFactory.decodeStream(url.openStream());
+            holder.recipeImage.setImageBitmap(image);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        //holder.recipeImage.setImageResource(recipes.get(position).getRecipePhoto());
         holder.recipeName.setText(recipes.get(position).getRecipeName());
         holder.itemView.setOnClickListener(view->{
             mItemListener.onItemClick(recipes.get(position));

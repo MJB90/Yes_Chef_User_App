@@ -3,22 +3,30 @@ package com.example.yeschefuserapp;
 import java.util.ArrayList;
 
 public class Recipe {
+    private String id;
+    private String recipeUrl;
     private String recipeName;
-    private Integer recipePhoto;
+    private String recipePhoto;
     private ArrayList<Ingredient> ingredients;
     private int ratings;
     private int reviews;
     private String cookTime;
     private int serve;
 
-    public Recipe(String recipeName, Integer recipePhoto, ArrayList<Ingredient> ingredients, int ratings, int reviews, String cookTime, int serve) {
-        this.recipeName = recipeName;
-        this.recipePhoto = recipePhoto;
-        this.ingredients = ingredients;
-        this.ratings = ratings;
-        this.reviews = reviews;
-        this.cookTime = cookTime;
-        this.serve = serve;
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getRecipeUrl() {
+        return recipeUrl;
+    }
+
+    public void setRecipeUrl(String recipeUrl) {
+        this.recipeUrl = recipeUrl;
     }
 
     public String getRecipeName() {
@@ -29,11 +37,11 @@ public class Recipe {
         this.recipeName = recipeName;
     }
 
-    public Integer getRecipePhoto() {
+    public String getRecipePhoto() {
         return recipePhoto;
     }
 
-    public void setRecipePhoto(Integer recipePhoto) {
+    public void setRecipePhoto(String recipePhoto) {
         this.recipePhoto = recipePhoto;
     }
 
