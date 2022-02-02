@@ -35,11 +35,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        fetchData();
-
         MainCustomAdapter adapter=new MainCustomAdapter(this, recipes, recipe -> {
             //Click on a recipe
         });
+
+        fetchData(adapter);
 
         RecyclerView recyclerView=findViewById(R.id.recycler_view);
 
@@ -53,37 +53,19 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void fetchData() {
+    private void fetchData(MainCustomAdapter adapter) {
         //Fetching JSON object
         JsonArrayRequest objectRequest=new JsonArrayRequest(
                 Request.Method.GET,
-                "http://10.0.2.2:8080/api/user/all_recipes",
+                "http://10.0.2.2:8090/api/user/all_recipes",
                 null,
                 response -> {
-                    for (int i=0;i<response.length();i++)
-                    {
-                        try{
-                            JSONObject responseObj=response.getJSONObject(i);
-                            String id=responseObj.getString("id");
-                            String recipeUrl=responseObj.getString("recipeUrl");
-                            String recipeName=responseObj.getString("recipeName");
-                            String recipePhoto=responseObj.getString("recipePhoto");
-                            String[] ingredients=new String[responseObj.getJSONArray("ingredients").length()];
-                            for (int j=0;j<responseObj.getJSONArray("ingredients").length();j++)
-                            {
-                                ingredients[j]=responseObj.getJSONArray("ingredients").getString(j);
-                            }
-                            int ratings=responseObj.getInt("ratings");
-                            int reviews = responseObj.getInt("reviews");
-                            String cookTime=responseObj.getString("cookTime");
-                            int serve = responseObj.getInt("serve");
-                            Recipe r=new Recipe(id,recipeUrl,recipeName,recipePhoto,ingredients,ratings,reviews,cookTime,serve);
-                            recipes.add(r);
-                        }catch(JSONException e)
-                        {
-                            Toast.makeText(MainActivity.this, "Fail", Toast.LENGTH_LONG).show();
-                        }
-                    }
+                    Gson gson = new Gson();
+                    Recipe[] recipesArray = gson.fromJson(response.toString(), Recipe[].class);
+                    recipes = Arrays.asList(recipesArray.clone());
+                    adapter.setRecipes(this.recipes);
+                    Toast.makeText(MainActivity.this, "HiHi", Toast.LENGTH_LONG).show();
+                    // update the recipes in the adapter
                 },
                 error -> Toast.makeText(MainActivity.this, error.toString(), Toast.LENGTH_LONG).show()
         );
