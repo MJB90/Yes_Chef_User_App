@@ -10,16 +10,26 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private List<Recipe> recipes=new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,18 +54,38 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void fetchData() {
-        String URL="http://localhost:8080/api/user/all_recipes";
         //Fetching JSON object
-        JsonObjectRequest objectRequest=new JsonObjectRequest(
+        JsonArrayRequest objectRequest=new JsonArrayRequest(
                 Request.Method.GET,
-                URL,
+                "http://10.0.2.2:8080/api/user/all_recipes",
                 null,
                 response -> {
-                    Gson json = new GsonBuilder().serializeNulls().create();
-                    Recipe[] recipesArray=json.fromJson(String.valueOf(response),Recipe[].class);
-                    recipes= Arrays.asList(recipesArray);
+                    for (int i=0;i<response.length();i++)
+                    {
+                        try{
+                            JSONObject responseObj=response.getJSONObject(i);
+                            String id=responseObj.getString("id");
+                            String recipeUrl=responseObj.getString("recipeUrl");
+                            String recipeName=responseObj.getString("recipeName");
+                            String recipePhoto=responseObj.getString("recipePhoto");
+                            String[] ingredients=new String[responseObj.getJSONArray("ingredients").length()];
+                            for (int j=0;j<responseObj.getJSONArray("ingredients").length();j++)
+                            {
+                                ingredients[j]=responseObj.getJSONArray("ingredients").getString(j);
+                            }
+                            int ratings=responseObj.getInt("ratings");
+                            int reviews = responseObj.getInt("reviews");
+                            String cookTime=responseObj.getString("cookTime");
+                            int serve = responseObj.getInt("serve");
+                            Recipe r=new Recipe(id,recipeUrl,recipeName,recipePhoto,ingredients,ratings,reviews,cookTime,serve);
+                            recipes.add(r);
+                        }catch(JSONException e)
+                        {
+                            Toast.makeText(MainActivity.this, "Fail", Toast.LENGTH_LONG).show();
+                        }
+                    }
                 },
-                error -> Toast.makeText(this,error.toString(),Toast.LENGTH_SHORT).show()
+                error -> Toast.makeText(MainActivity.this, error.toString(), Toast.LENGTH_LONG).show()
         );
         MySingleton.getInstance(this).addToRequestQueue(objectRequest);
     }

@@ -1,5 +1,6 @@
 package com.example.yeschefuserapp;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 public class Recipe {
@@ -7,11 +8,23 @@ public class Recipe {
     private String recipeUrl;
     private String recipeName;
     private String recipePhoto;
-    private ArrayList<Ingredient> ingredients;
+    private String[] ingredients;
     private int ratings;
     private int reviews;
     private String cookTime;
     private int serve;
+
+    public Recipe(String id, String recipeUrl, String recipeName, String recipePhoto, String[] ingredients, int ratings, int reviews, String cookTime, int serve) {
+        this.id = id;
+        this.recipeUrl = recipeUrl;
+        this.recipeName = recipeName;
+        this.recipePhoto = recipePhoto;
+        this.ingredients = ingredients;
+        this.ratings = ratings;
+        this.reviews = reviews;
+        this.cookTime = cookTime;
+        this.serve = serve;
+    }
 
     public String getId() {
         return id;
@@ -45,11 +58,11 @@ public class Recipe {
         this.recipePhoto = recipePhoto;
     }
 
-    public ArrayList<Ingredient> getIngredients() {
+    public String[] getIngredients() {
         return ingredients;
     }
 
-    public void setIngredients(ArrayList<Ingredient> ingredients) {
+    public void setIngredients(String[] ingredients) {
         this.ingredients = ingredients;
     }
 
