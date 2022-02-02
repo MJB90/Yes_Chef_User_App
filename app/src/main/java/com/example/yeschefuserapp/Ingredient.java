@@ -1,5 +1,7 @@
 package com.example.yeschefuserapp;
 
+import java.io.Serializable;
+
 public class Ingredient {
     private String id;
     private String name;
