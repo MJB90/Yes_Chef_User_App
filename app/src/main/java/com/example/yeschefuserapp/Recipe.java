@@ -2,6 +2,7 @@ package com.example.yeschefuserapp;
 
 import lombok.Data;
 
+
 @Data
 public class Recipe {
     private String id;

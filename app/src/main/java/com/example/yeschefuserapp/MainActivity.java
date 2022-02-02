@@ -1,5 +1,6 @@
 package com.example.yeschefuserapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
@@ -26,6 +27,9 @@ public class MainActivity extends AppCompatActivity {
 
         MainCustomAdapter adapter = new MainCustomAdapter(this, this.recipes, recipe -> {
             //Click on a recipe
+            Intent intent = new Intent(this,ViewRecipeActivity.class);
+            intent.putExtra("recipeId", recipe.getId());
+            startActivity(intent);
         });
 
         fetchData(adapter);
@@ -51,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
                     Recipe[] tmpArray = gson.fromJson(response.toString(), Recipe[].class);
                     // The recipes should be the same reference
                     recipes.addAll(Arrays.asList(tmpArray.clone()));
+
                     // Need to notify the adapter after updating the recipes
                     // ref: https://stackoverflow.com/a/48959184
                     adapter.notifyDataSetChanged();
