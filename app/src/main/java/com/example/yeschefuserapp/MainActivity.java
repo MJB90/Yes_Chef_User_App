@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     private void fetchData(MainCustomAdapter adapter) {
         JsonArrayRequest objectRequest = new JsonArrayRequest(
                 Request.Method.GET,
-                "http://10.0.2.2:8080/api/user/all_recipes",
+                "http://10.0.2.2:8090/api/user/all_recipes",
                 null,
                 response -> {
                     Gson gson = new Gson();
