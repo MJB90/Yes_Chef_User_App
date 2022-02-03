@@ -2,4 +2,9 @@
     <string name="app_name">Yes Chef User App</string>
     <string name="project_name">Yes Chef</string>
 
+    <string name="nav_home">Home</string>
+    <string name="nav_bookmarks">Bookmarks</string>
+    <string name="nav_advanced_filter">Advanced Filter</string>
+    <string name="nav_account">Account</string>
+
 </resources>

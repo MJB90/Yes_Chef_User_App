@@ -35,8 +35,14 @@
         android:id="@+id/recycler_view"
         />
 
-
-
     </LinearLayout>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_nav"
+        android:layout_weight="0.3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#ff4500"
+        app:menu="@menu/bottom_menu"/>
 
 </LinearLayout>
