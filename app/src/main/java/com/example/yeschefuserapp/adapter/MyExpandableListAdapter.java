@@ -1,14 +1,19 @@
 package com.example.yeschefuserapp.adapter;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
-import android.widget.ImageView;
+
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.yeschefuserapp.R;
 
@@ -19,6 +24,9 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter{
     private Context context;
     private List<String> selections;
     private Map<String,List<String>> categories;
+    CardAdapter adapter;
+    RecyclerView cardList;
+
     public MyExpandableListAdapter(Context context, List<String> selections,Map<String,List<String>> categories){
         this.context=context;
         this.selections=selections;
@@ -32,7 +40,7 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter{
 
     @Override
     public int getChildrenCount(int i) {
-        return categories.get(selections.get(i)).size();
+        return 1;
     }
 
     @Override
@@ -75,19 +83,24 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter{
     @Override
     public View getChildView(int i, int i1, boolean b, View view, ViewGroup viewGroup) {
         if (view==null){
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = inflater.inflate(R.layout.filter_child_item, null);
+            view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.filter_child_item,viewGroup,false);
         }
-        // TODO: add images later
-        //ImageView image=view.findViewById(R.id.image_child_item);
-
-        TextView item = (TextView) view.findViewById(R.id.child_item);
-        String word=getChild(i,i1).toString();
-        item.setText(word);
-        int la=1+1;
-        item.setOnClickListener(v->{
-            Toast.makeText(v.getContext(),getChild(i,i1).toString(),Toast.LENGTH_LONG ).show();
+        cardList=view.findViewById(R.id.gridView);
+        adapter=new CardAdapter(view.getContext(), categories.get(selections.get(i)),(itemName,card)-> {
+            //Clicking on a card
+            Toast.makeText(context, itemName, Toast.LENGTH_SHORT).show();
+            card.setRotationY(0f);
+            card.animate().rotationY(90f).setDuration(200).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animator) {
+                    card.setRotationY(270f);
+                    card.animate().rotationY(360f).setListener(null);
+                }
+            });
         });
+        GridLayoutManager gridLayoutManager=new GridLayoutManager(view.getContext(),3,GridLayoutManager.VERTICAL,false);
+        cardList.setLayoutManager(gridLayoutManager);
+        cardList.setAdapter(adapter);
         return view;
     }
 

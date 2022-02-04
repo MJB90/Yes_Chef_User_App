@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 
@@ -18,7 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class AdvancedFilterFragment extends Fragment {
+public class AdvancedFilterFragment extends Fragment implements AdapterView.OnItemClickListener{
 
     private List<String> categoryList;
     private List<String> childList;
@@ -79,9 +80,9 @@ public class AdvancedFilterFragment extends Fragment {
                 "High Iron", "High Potassium", "High Protein", "High Vitamin C", "High Vitamin D",
                 "High in Omega-3s", "Low Calorie", "Low Carb", "Low Fat", "Low Saturated Fat", "Low Sodium",
                 "Low Sugar", "No Carb", "Source of Omega-3s", "Sugar Free"};
-        String[] calories={"200kcals and below","201-400kcals","401-600kcals,601-800kcals,800kcals and above"};
+        String[] calories={"Under 200kcals","201-400kcals","401-600kcals","601-800kcals", "Above 800kcals"};
         String[] difficulty={"Easy", "Quick", "Quick and Easy", "test diff"};
-        String[] preparationTime={"Below or 10 minutes","10 to 30 minutes","31 to 60 minutes","More than 1 hour"};
+        String[] preparationTime={"Under 10 minutes","10 to 30 minutes","31 to 60 minutes","More than 1 hour"};
         String[] noServings={"1","2","3","4","5","6"};
         String[] courseType={"Appetizers", "Beverages", "Breads", "Breakfast and Brunch", "Cocktails",
                 "Desserts", "Main Dishes", "Salads", "Side Dishes", "Soups", "coursetype test"};
@@ -107,5 +108,10 @@ public class AdvancedFilterFragment extends Fragment {
         {
             childList.add(childCategory);
         }
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
     }
 }

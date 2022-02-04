@@ -17,8 +17,8 @@ import com.example.yeschefuserapp.model.Recipe;
 import java.util.List;
 
 public class MainCustomAdapter extends RecyclerView.Adapter<MainCustomAdapter.MyViewHolder> {
-    List<Recipe> recipes;
-    Context context;
+    private List<Recipe> recipes;
+    private Context context;
     private ItemClickListener mItemListener;
 
     public MainCustomAdapter(Context context, List<Recipe> recipes, ItemClickListener itemClickListener) {
