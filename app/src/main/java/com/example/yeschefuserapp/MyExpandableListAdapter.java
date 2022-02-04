@@ -74,12 +74,15 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter{
     public View getChildView(int i, int i1, boolean b, View view, ViewGroup viewGroup) {
         if (view==null){
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = inflater.inflate(R.layout.filter_item, null);
+            view = inflater.inflate(R.layout.filter_child_item, null);
         }
-        TextView item = view.findViewById(R.id.child_item);
-        ImageView image=view.findViewById(R.id.image_child_item);
-        item.setText(getChild(i,i1).toString());
+        // TODO: add images later
+        //ImageView image=view.findViewById(R.id.image_child_item);
 
+        TextView item = (TextView) view.findViewById(R.id.child_item);
+        String word=getChild(i,i1).toString();
+        item.setText(word);
+        int la=1+1;
         item.setOnClickListener(v->{
             Toast.makeText(v.getContext(),getChild(i,i1).toString(),Toast.LENGTH_LONG ).show();
         });
