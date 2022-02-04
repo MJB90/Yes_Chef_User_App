@@ -36,8 +36,8 @@ public class MainCustomAdapter extends RecyclerView.Adapter<MainCustomAdapter.My
         Recipe recipe = recipes.get(position);
         DownloadImageTask downloadImageTask = new DownloadImageTask(holder.recipeImage);
         // TODO: replace to real photo
-        downloadImageTask.execute("https://lh3.googleusercontent.com/Js7QBBDQumvLixXwk7wnmyArHjN7SZbOElZHwzmZrR7mjA_ElR_p2tNGAMqcmr4Ru2ei47Gi8EvX7mDZd3ii=s640-c-rw-v1-e365");
-        holder.recipeName.setText(recipe.getRecipeName());
+        downloadImageTask.execute(recipe.getImageUrl().get(0));
+        holder.recipeName.setText(recipe.getName());
         holder.itemView.setOnClickListener(view -> mItemListener.onItemClick(recipe));
     }
 
