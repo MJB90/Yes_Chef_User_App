@@ -13,10 +13,10 @@
         android:theme="@style/Theme.YesChefUserApp"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".ViewRecipeActivity"
+            android:name=".activity.ViewRecipeActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".activity.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

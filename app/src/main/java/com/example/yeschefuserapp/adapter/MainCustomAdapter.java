@@ -1,4 +1,4 @@
-package com.example.yeschefuserapp;
+package com.example.yeschefuserapp.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,6 +9,10 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.yeschefuserapp.utility.DownloadImageTask;
+import com.example.yeschefuserapp.R;
+import com.example.yeschefuserapp.model.Recipe;
 
 import java.util.List;
 

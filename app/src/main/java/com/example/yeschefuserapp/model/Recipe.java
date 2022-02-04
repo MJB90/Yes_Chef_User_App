@@ -1,4 +1,6 @@
-package com.example.yeschefuserapp;
+package com.example.yeschefuserapp.model;
+
+import com.example.yeschefuserapp.model.Ingredient;
 
 import java.util.List;
 

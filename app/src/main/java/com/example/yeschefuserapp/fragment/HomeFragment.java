@@ -1,23 +1,25 @@
-package com.example.yeschefuserapp;
+package com.example.yeschefuserapp.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.example.yeschefuserapp.R;
+import com.example.yeschefuserapp.activity.ViewRecipeActivity;
+import com.example.yeschefuserapp.adapter.MainCustomAdapter;
+import com.example.yeschefuserapp.model.Recipe;
+import com.example.yeschefuserapp.utility.MySingleton;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -39,7 +41,7 @@ public class HomeFragment extends Fragment  {
 
         MainCustomAdapter adapter = new MainCustomAdapter(view.getContext(), this.recipes, recipe -> {
             //Click on a recipe
-            Intent intent = new Intent(view.getContext(),ViewRecipeActivity.class);
+            Intent intent = new Intent(view.getContext(), ViewRecipeActivity.class);
             intent.putExtra("recipeId", recipe.getId());
             startActivity(intent);
         });

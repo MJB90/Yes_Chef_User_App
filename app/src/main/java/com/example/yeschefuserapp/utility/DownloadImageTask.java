@@ -1,4 +1,4 @@
-package com.example.yeschefuserapp;
+package com.example.yeschefuserapp.utility;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

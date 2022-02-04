@@ -1,4 +1,4 @@
-package com.example.yeschefuserapp;
+package com.example.yeschefuserapp.adapter;
 
 import android.content.Context;
 import android.graphics.Typeface;
@@ -9,6 +9,8 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.yeschefuserapp.R;
 
 import java.util.List;
 import java.util.Map;

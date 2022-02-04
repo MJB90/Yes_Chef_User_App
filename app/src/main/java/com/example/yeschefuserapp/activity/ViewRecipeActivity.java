@@ -1,4 +1,4 @@
-package com.example.yeschefuserapp;
+package com.example.yeschefuserapp.activity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -16,6 +16,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.Request;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.example.yeschefuserapp.R;
+import com.example.yeschefuserapp.model.Recipe;
+import com.example.yeschefuserapp.utility.DownloadImageTask;
+import com.example.yeschefuserapp.utility.MySingleton;
 import com.google.gson.Gson;
 
 public class ViewRecipeActivity extends AppCompatActivity implements View.OnClickListener{

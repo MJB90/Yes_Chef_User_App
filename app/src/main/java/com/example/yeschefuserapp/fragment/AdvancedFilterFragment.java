@@ -1,4 +1,4 @@
-package com.example.yeschefuserapp;
+package com.example.yeschefuserapp.fragment;
 
 import android.os.Bundle;
 
@@ -9,7 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
-import android.widget.Toast;
+
+import com.example.yeschefuserapp.R;
+import com.example.yeschefuserapp.adapter.MyExpandableListAdapter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
