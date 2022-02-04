@@ -8,6 +8,11 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import com.example.yeschefuserapp.R;
+import com.example.yeschefuserapp.fragment.AccountFragment;
+import com.example.yeschefuserapp.fragment.AdvancedFilterFragment;
+import com.example.yeschefuserapp.fragment.BookmarksFragment;
+import com.example.yeschefuserapp.fragment.HomeFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener{
