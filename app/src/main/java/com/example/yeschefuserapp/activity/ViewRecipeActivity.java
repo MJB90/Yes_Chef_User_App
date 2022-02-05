@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.android.volley.Request;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.yeschefuserapp.R;
+import com.example.yeschefuserapp.listener.BookmarkListener;
 import com.example.yeschefuserapp.model.Recipe;
 import com.example.yeschefuserapp.utility.DownloadImageTask;
 import com.example.yeschefuserapp.utility.MySingleton;
@@ -42,6 +43,11 @@ public class ViewRecipeActivity extends AppCompatActivity implements View.OnClic
 
         DownloadImageTask downloadImageTask = new DownloadImageTask(recipeImage);
         downloadImageTask.execute("https://lh3.googleusercontent.com/Js7QBBDQumvLixXwk7wnmyArHjN7SZbOElZHwzmZrR7mjA_ElR_p2tNGAMqcmr4Ru2ei47Gi8EvX7mDZd3ii=s640-c-rw-v1-e365");
+
+        Button addBookmark = findViewById(R.id.add_bookmark_btn);
+        // TODO: Change to real user id
+        BookmarkListener bookmarkListener = new BookmarkListener(this, "", recipeId);
+        addBookmark.setOnClickListener(bookmarkListener);
     }
 
     public void fetchSelectedRecipe(String uri){
