@@ -7,11 +7,14 @@ import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.example.yeschefuserapp.model.Bookmark;
 import com.example.yeschefuserapp.utility.MySingleton;
+import com.google.gson.Gson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,12 +35,12 @@ public class BookmarkListener implements View.OnClickListener {
     @Override
     public void onClick(View view) {
         try {
-            JSONObject postBody = new JSONObject();
-            postBody.put("recipeId", recipeId);
+            Bookmark bookmark = new Bookmark(recipeId, LocalDateTime.now());
+            Gson gson = new Gson();
             JsonObjectRequest objectRequest = new JsonObjectRequest(
                     Request.Method.POST,
                     "http://10.0.2.2:8090/api/user/bookmark",
-                    postBody,
+                    new JSONObject(gson.toJson(bookmark)),
                     response -> Toast.makeText(context, "Add successfully", Toast.LENGTH_LONG).show(),
                     error -> {
                         Log.e(TAG, "Add bookmark failed", error);
