@@ -3,6 +3,7 @@ package com.example.yeschefuserapp.adapter;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -23,9 +25,11 @@ import com.example.yeschefuserapp.R;
 import com.example.yeschefuserapp.fragment.AdvancedFilterFragment;
 import com.example.yeschefuserapp.utility.AdvancedFilterTags;
 import com.example.yeschefuserapp.utility.MySingleton;
+import com.google.android.material.card.MaterialCardView;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -37,12 +41,20 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter{
     private RecyclerView cardList;
     private IMyExpandableList iMyExpandableList;
 
+    private Map<String,List<MaterialCardView>> cards=new HashMap<>();
     private final AdvancedFilterTags advancedFilterTags=new AdvancedFilterTags(.0,0,0,null,null,null,null);
 
     private List<String> tags;
     private List<String> difficulty;
     private List<String> courseType;
     private List<String> cuisineType;
+
+    private int caloriesCount=0;
+    private int difficultyCount=0;
+    private int prepTimeCount=0;
+    private int noServingCount=0;
+    private int courseTypeCount=0;
+    private int cuisineCount=0;
 
     public MyExpandableListAdapter(Context context, List<String> selections,Map<String,List<String>> categories,IMyExpandableList iMyExpandableList){
         this.context=context;
@@ -104,18 +116,177 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter{
         if (view==null){
             view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.filter_child_item,viewGroup,false);
         }
+
         cardList=view.findViewById(R.id.gridView);
+
+        List<MaterialCardView> cardToSendToCardAdapter=cards.get(selections.get(i));
+
         adapter=new CardAdapter(view.getContext(), selections.get(i) ,categories.get(selections.get(i)),(card,item)->{
-            //Animation
-            card.setRotationY(0f);
-            card.animate().rotationY(90f).setDuration(200).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animator) {
-                    card.setRotationY(270f);
-                    card.animate().rotationY(360f).setListener(null);
-                }
-            });
-            //Add clicked value to AdvancedFilterTags
+            switch (selections.get(i)){
+                case "Tags":
+                    if (cards.get("Tags")==null)
+                    {
+                        List<MaterialCardView> temp=new ArrayList<>();
+                        temp.add(card);
+                        cards.put("Tags",temp);
+                        card.setStrokeColor(0xffff0000);
+                    }
+                    else if (cards.get("Tags").contains(card))
+                    {
+                        card.setStrokeColor(0xffffff);
+                        cards.get("Tags").remove(card);
+                    }
+                    else{
+                        card.setStrokeColor(0xffff0000);
+                        cards.get("Tags").add(card);
+                    }
+                    break;
+                case "Calories":
+                    if (caloriesCount==0)
+                    {
+                        if (cards.get("Calories")==null){
+                            List<MaterialCardView> temp=new ArrayList<>();
+                            temp.add(card);
+                            cards.put("Calories",temp);
+                        }
+                        else{
+                            cards.get("Calories").add(card);
+                        }
+                        card.setStrokeColor(0xffff0000);
+                        caloriesCount++;
+                    }
+                    else if(caloriesCount==1){
+                        if (cards.get("Calories").contains(card)){
+                            cards.get("Calories").clear();
+                            card.setStrokeColor(0xffffff);
+                            caloriesCount--;
+                        }
+                        else
+                        {
+                            cards.get("Calories").get(0).setStrokeColor(0xffffff);
+                            cards.get("Calories").clear();
+                            card.setStrokeColor(0xffff0000);
+                            cards.get("Calories").add(card);
+                            Toast.makeText(context,"Select one option",Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                    break;
+                case "Difficulty":
+                    if (cards.get("Difficulty")==null)
+                    {
+                        List<MaterialCardView> temp=new ArrayList<>();
+                        temp.add(card);
+                        cards.put("Difficulty",temp);
+                        card.setStrokeColor(0xffff0000);
+                    }
+                    else if (cards.get("Difficulty").contains(card))
+                    {
+                        card.setStrokeColor(0xffffff);
+                        cards.get("Difficulty").remove(card);
+                    }
+                    else{
+                        card.setStrokeColor(0xffff0000);
+                        cards.get("Difficulty").add(card);
+                    }
+                    break;
+                case "Preparation Time":
+                    if (prepTimeCount==0)
+                    {
+                        if (cards.get("Preparation Time")==null){
+                            List<MaterialCardView> temp=new ArrayList<>();
+                            temp.add(card);
+                            cards.put("Preparation Time",temp);
+                        }
+                        else{
+                            cards.get("Preparation Time").add(card);
+                        }
+                        card.setStrokeColor(0xffff0000);
+                        prepTimeCount++;
+                    }
+                    else if(prepTimeCount==1){
+                        if (cards.get("Preparation Time").contains(card)){
+                            cards.get("Preparation Time").clear();
+                            card.setStrokeColor(0xffffff);
+                            prepTimeCount--;
+                        }
+                        else
+                        {
+                            cards.get("Preparation Time").get(0).setStrokeColor(0xffffff);
+                            cards.get("Preparation Time").clear();
+                            card.setStrokeColor(0xffff0000);
+                            cards.get("Preparation Time").add(card);
+                            Toast.makeText(context,"Select one option",Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                    break;
+                case "Number of Servings":
+                    if (noServingCount==0)
+                    {
+                        if (cards.get("Number of Servings")==null){
+                            List<MaterialCardView> temp=new ArrayList<>();
+                            temp.add(card);
+                            cards.put("Number of Servings",temp);
+                        }
+                        else{
+                            cards.get("Number of Servings").add(card);
+                        }
+                        card.setStrokeColor(0xffff0000);
+                        noServingCount++;
+                    }
+                    else if(noServingCount==1){
+                        if (cards.get("Number of Servings").contains(card)){
+                            cards.get("Number of Servings").clear();
+                            card.setStrokeColor(0xffffff);
+                            noServingCount--;
+                        }
+                        else
+                        {
+                            cards.get("Number of Servings").get(0).setStrokeColor(0xffffff);
+                            cards.get("Number of Servings").clear();
+                            card.setStrokeColor(0xffff0000);
+                            cards.get("Number of Servings").add(card);
+                            Toast.makeText(context,"Select one option",Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                    break;
+                case "Course Type":
+                    if (cards.get("Course Type")==null)
+                    {
+                        List<MaterialCardView> temp=new ArrayList<>();
+                        temp.add(card);
+                        cards.put("Course Type",temp);
+                        card.setStrokeColor(0xffff0000);
+                    }
+                    else if (cards.get("Course Type").contains(card))
+                    {
+                        card.setStrokeColor(0xffffff);
+                        cards.get("Course Type").remove(card);
+                    }
+                    else{
+                        card.setStrokeColor(0xffff0000);
+                        cards.get("Course Type").add(card);
+                    }
+                    break;
+                case "Cuisine Type":
+                    if (cards.get("Cuisine Type")==null)
+                    {
+                        List<MaterialCardView> temp=new ArrayList<>();
+                        temp.add(card);
+                        cards.put("Cuisine Type",temp);
+                        card.setStrokeColor(0xffff0000);
+                    }
+                    else if (cards.get("Cuisine Type").contains(card))
+                    {
+                        card.setStrokeColor(0xffffff);
+                        cards.get("Cuisine Type").remove(card);
+                    }
+                    else{
+                        card.setStrokeColor(0xffff0000);
+                        cards.get("Cuisine Type").add(card);
+                    }
+                    break;
+            }
+            //Create an AdvancedFilterTags object
             if (selections.get(i)=="Tags"){
                 if (advancedFilterTags.getTags()==null) {
                     tags=new ArrayList<>();
@@ -179,10 +350,11 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter{
                 advancedFilterTags.setCuisineType(cuisineType);
             }
             iMyExpandableList.onItemClick(advancedFilterTags);
-        });
+        },cardToSendToCardAdapter);
         GridLayoutManager gridLayoutManager=new GridLayoutManager(view.getContext(),3,GridLayoutManager.VERTICAL,false);
         cardList.setLayoutManager(gridLayoutManager);
         cardList.setAdapter(adapter);
+
         return view;
     }
 

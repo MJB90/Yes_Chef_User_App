@@ -1,54 +1,36 @@
 package com.example.yeschefuserapp.adapter;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.android.volley.Request;
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.yeschefuserapp.R;
-import com.example.yeschefuserapp.model.Recipe;
 import com.example.yeschefuserapp.utility.AdvancedFilterTags;
-import com.example.yeschefuserapp.utility.MySingleton;
-import com.google.gson.Gson;
+import com.google.android.material.card.MaterialCardView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
 
-    private String parent;
     private List<String> child;
     private CardClickListener cardClickListener;
 
-    private List<String> tags;
-    private List<String> difficulty;
-    private List<String> courseType;
-    private List<String> cuisineType;
+    private List<MaterialCardView> cards;
 
-    private Context context;
     private LayoutInflater inflater;
-    private final AdvancedFilterTags advancedFilterTags=new AdvancedFilterTags(.0,0,0,null,null,null,null);
 
-    public CardAdapter(Context context, String parent,List<String> child,CardClickListener cardClickListener) {
-        this.context=context;
-        this.parent=parent;
+    public CardAdapter(Context context, String parent,List<String> child,CardClickListener cardClickListener,List<MaterialCardView> cards) {
         this.child=child;
         this.inflater=LayoutInflater.from(context);
         this.cardClickListener=cardClickListener;
+        this.cards=cards;
     }
 
 
@@ -67,11 +49,20 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
         holder.card.setOnClickListener(view ->{
             cardClickListener.onItemClick(holder.card,item);
         });
-
+        if (cards!=null)
+        {
+            for (MaterialCardView c: cards){
+                ViewGroup viewGroup = ((ViewGroup)c.getChildAt(0));
+                String getName = ((TextView)viewGroup.getChildAt(1)).getText().toString();
+                if (child.get(position).equals(getName)){
+                    holder.card.setStrokeColor(0xffff0000);
+                }
+            }
+        }
     }
 
     public interface CardClickListener{
-        void onItemClick(CardView card,String text);
+        void onItemClick(MaterialCardView card,String text);
     }
 
 
@@ -83,7 +74,8 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
     public class ViewHolder extends RecyclerView.ViewHolder{
         TextView text;
         ImageView image;
-        CardView card;
+        MaterialCardView card;
+        MaterialCardView selectedCard;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             text=itemView.findViewById(R.id.child_item);
