@@ -16,7 +16,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.Request;
-import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.yeschefuserapp.R;
 import com.example.yeschefuserapp.model.Recipe;
 import com.example.yeschefuserapp.utility.DownloadImageTask;
@@ -45,7 +45,7 @@ public class ViewRecipeActivity extends AppCompatActivity implements View.OnClic
     }
 
     public void fetchSelectedRecipe(String uri){
-        JsonArrayRequest objectRequest = new JsonArrayRequest(
+        JsonObjectRequest objectRequest = new JsonObjectRequest(
                 Request.Method.GET,
                 uri,
                 null,
