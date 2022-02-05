@@ -46,7 +46,7 @@ public class ViewRecipeActivity extends AppCompatActivity implements View.OnClic
 
         Button addBookmark = findViewById(R.id.add_bookmark_btn);
         // TODO: Change to real user id
-        BookmarkListener bookmarkListener = new BookmarkListener(this, "", recipeId);
+        BookmarkListener bookmarkListener = new BookmarkListener(this, "xxx@gmail.com", recipeId);
         addBookmark.setOnClickListener(bookmarkListener);
     }
 

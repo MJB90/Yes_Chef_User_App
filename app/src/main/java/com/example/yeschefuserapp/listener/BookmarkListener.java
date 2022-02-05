@@ -22,12 +22,12 @@ public class BookmarkListener implements View.OnClickListener {
     private static final String TAG = "BookmarkListener";
 
     private final Context context;
-    private final String userId;
+    private final String userEmail;
     private final String recipeId;
 
-    public BookmarkListener(Context context, String userId, String recipeId) {
+    public BookmarkListener(Context context, String userEmail, String recipeId) {
         this.context = context;
-        this.userId = userId;
+        this.userEmail = userEmail;
         this.recipeId = recipeId;
     }
 
@@ -51,7 +51,7 @@ public class BookmarkListener implements View.OnClickListener {
                 @Override
                 public Map<String, String> getHeaders() {
                     final Map<String, String> headers = new HashMap<>();
-                    headers.put("User-ID", userId);
+                    headers.put("User-Email", userEmail);
                     return headers;
                 }
             };
