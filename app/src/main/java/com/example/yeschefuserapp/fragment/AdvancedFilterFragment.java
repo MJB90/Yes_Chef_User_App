@@ -130,7 +130,8 @@ public class AdvancedFilterFragment extends Fragment implements View.OnClickList
     public void onClick(View view) {
         Gson gson = new Gson();
         String json=gson.toJson(advancedFilterTags);
-        JSONObject object=gson.fromJson(json,JSONObject.class);
+        Toast.makeText(view.getContext(),json,Toast.LENGTH_SHORT).show();
+        /*JSONObject object=gson.fromJson(json,JSONObject.class);
         JsonObjectRequest objectRequest = new JsonObjectRequest(
                 Request.Method.POST,
                 "http://10.0.2.2:8090/api/user/filter_properties",
@@ -144,6 +145,6 @@ public class AdvancedFilterFragment extends Fragment implements View.OnClickList
         MySingleton.getInstance(view.getContext()).addToRequestQueue(objectRequest);
         Intent intent=new Intent(view.getContext(), FilterResult.class);
         intent.putExtra("Recipes",recipes);
-        startActivity(intent);
+        startActivity(intent);*/
     }
 }
