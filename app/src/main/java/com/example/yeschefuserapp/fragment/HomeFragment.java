@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class HomeFragment extends Fragment  {
+public class HomeFragment extends Fragment {
 
     private final List<Recipe> recipes = new ArrayList<>();
 
@@ -37,7 +37,7 @@ public class HomeFragment extends Fragment  {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view=inflater.inflate(R.layout.fragment_home, container, false);
+        View view = inflater.inflate(R.layout.fragment_home, container, false);
 
         MainCustomAdapter adapter = new MainCustomAdapter(view.getContext(), this.recipes, recipe -> {
             //Click on a recipe
@@ -52,7 +52,7 @@ public class HomeFragment extends Fragment  {
         return view;
     }
 
-    private void fetchData(MainCustomAdapter adapter,View view) {
+    private void fetchData(MainCustomAdapter adapter, View view) {
         JsonArrayRequest objectRequest = new JsonArrayRequest(
                 Request.Method.GET,
                 "http://10.0.2.2:8090/api/user/all_recipes",
@@ -71,7 +71,8 @@ public class HomeFragment extends Fragment  {
         );
         MySingleton.getInstance(view.getContext()).addToRequestQueue(objectRequest);
     }
-    private void initView(MainCustomAdapter adapter, View view){
+
+    private void initView(MainCustomAdapter adapter, View view) {
         RecyclerView recyclerView = view.findViewById(R.id.recycler_view);
 
         if (recyclerView != null) {
@@ -81,7 +82,4 @@ public class HomeFragment extends Fragment  {
             recyclerView.setAdapter(adapter);
         }
     }
-
-
-
 }
