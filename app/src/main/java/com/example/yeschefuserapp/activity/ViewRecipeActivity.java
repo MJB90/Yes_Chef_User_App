@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -52,7 +53,10 @@ public class ViewRecipeActivity extends AppCompatActivity implements View.OnClic
                     Gson gson = new Gson();
                     selectedRecipe = gson.fromJson(response.toString(), Recipe.class);
                 },
-                error -> Toast.makeText(ViewRecipeActivity.this, error.toString(), Toast.LENGTH_LONG).show()
+                error -> {
+                    Log.e("ViewRecipeActivity", "FetchSelectedRecipe failed", error);
+                    Toast.makeText(ViewRecipeActivity.this, error.toString(), Toast.LENGTH_LONG).show();
+                }
         );
         MySingleton.getInstance(this).addToRequestQueue(objectRequest);
     }

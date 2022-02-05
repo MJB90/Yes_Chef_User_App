@@ -2,6 +2,7 @@ package com.example.yeschefuserapp.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -86,7 +87,10 @@ public class HomeFragment extends Fragment {
                     // ref: https://stackoverflow.com/a/48959184
                     adapter.notifyDataSetChanged();
                 },
-                error -> Toast.makeText(view.getContext(), error.toString(), Toast.LENGTH_LONG).show()
+                error -> {
+                    Log.e("HomeFragment", "FetchData failed", error);
+                    Toast.makeText(view.getContext(), error.toString(), Toast.LENGTH_LONG).show();
+                }
         );
         MySingleton.getInstance(view.getContext()).addToRequestQueue(objectRequest);
     }
