@@ -1,7 +1,9 @@
 package com.example.yeschefuserapp.fragment;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,23 +42,25 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
-        MainCustomAdapter adapter = new MainCustomAdapter(view.getContext(), this.recipes, recipe -> {
+        int rowItemResourceId = R.layout.main_recycler_row_item;
+        Context viewContext = view.getContext();
+        MainCustomAdapter adapter = new MainCustomAdapter(rowItemResourceId, viewContext, this.recipes, recipe -> {
             //Click on a recipe
-            Intent intent = new Intent(view.getContext(), ViewRecipeActivity.class);
+            Intent intent = new Intent(viewContext, ViewRecipeActivity.class);
             intent.putExtra("recipeId", recipe.getId());
             startActivity(intent);
         });
 
-        MainCustomAdapter recommendationAdapter = new MainCustomAdapter(view.getContext(), this.recommendationRecipes, recipe -> {
+        MainCustomAdapter recommendationAdapter = new MainCustomAdapter(rowItemResourceId, viewContext, this.recommendationRecipes, recipe -> {
             //Click on a recipe
-            Intent intent = new Intent(view.getContext(), ViewRecipeActivity.class);
+            Intent intent = new Intent(viewContext, ViewRecipeActivity.class);
             intent.putExtra("recipeId", recipe.getId());
             startActivity(intent);
         });
 
-        MainCustomAdapter likeAdapter = new MainCustomAdapter(view.getContext(), this.likeRecipes, recipe -> {
+        MainCustomAdapter likeAdapter = new MainCustomAdapter(rowItemResourceId, viewContext, this.likeRecipes, recipe -> {
             //Click on a recipe
-            Intent intent = new Intent(view.getContext(), ViewRecipeActivity.class);
+            Intent intent = new Intent(viewContext, ViewRecipeActivity.class);
             intent.putExtra("recipeId", recipe.getId());
             startActivity(intent);
         });
@@ -86,7 +90,10 @@ public class HomeFragment extends Fragment {
                     // ref: https://stackoverflow.com/a/48959184
                     adapter.notifyDataSetChanged();
                 },
-                error -> Toast.makeText(view.getContext(), error.toString(), Toast.LENGTH_LONG).show()
+                error -> {
+                    Log.e("HomeFragment", "FetchData failed", error);
+                    Toast.makeText(view.getContext(), error.toString(), Toast.LENGTH_LONG).show();
+                }
         );
         MySingleton.getInstance(view.getContext()).addToRequestQueue(objectRequest);
     }
