@@ -1,5 +1,6 @@
 package com.example.yeschefuserapp.fragment;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -41,23 +42,25 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
-        MainCustomAdapter adapter = new MainCustomAdapter(view.getContext(), this.recipes, recipe -> {
+        int rowItemResourceId = R.layout.main_recycler_row_item;
+        Context viewContext = view.getContext();
+        MainCustomAdapter adapter = new MainCustomAdapter(rowItemResourceId, viewContext, this.recipes, recipe -> {
             //Click on a recipe
-            Intent intent = new Intent(view.getContext(), ViewRecipeActivity.class);
+            Intent intent = new Intent(viewContext, ViewRecipeActivity.class);
             intent.putExtra("recipeId", recipe.getId());
             startActivity(intent);
         });
 
-        MainCustomAdapter recommendationAdapter = new MainCustomAdapter(view.getContext(), this.recommendationRecipes, recipe -> {
+        MainCustomAdapter recommendationAdapter = new MainCustomAdapter(rowItemResourceId, viewContext, this.recommendationRecipes, recipe -> {
             //Click on a recipe
-            Intent intent = new Intent(view.getContext(), ViewRecipeActivity.class);
+            Intent intent = new Intent(viewContext, ViewRecipeActivity.class);
             intent.putExtra("recipeId", recipe.getId());
             startActivity(intent);
         });
 
-        MainCustomAdapter likeAdapter = new MainCustomAdapter(view.getContext(), this.likeRecipes, recipe -> {
+        MainCustomAdapter likeAdapter = new MainCustomAdapter(rowItemResourceId, viewContext, this.likeRecipes, recipe -> {
             //Click on a recipe
-            Intent intent = new Intent(view.getContext(), ViewRecipeActivity.class);
+            Intent intent = new Intent(viewContext, ViewRecipeActivity.class);
             intent.putExtra("recipeId", recipe.getId());
             startActivity(intent);
         });

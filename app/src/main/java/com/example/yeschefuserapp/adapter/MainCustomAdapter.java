@@ -17,11 +17,13 @@ import com.example.yeschefuserapp.model.Recipe;
 import java.util.List;
 
 public class MainCustomAdapter extends RecyclerView.Adapter<MainCustomAdapter.MyViewHolder> {
+    private int resourceId;
     private List<Recipe> recipes;
     private Context context;
     private ItemClickListener mItemListener;
 
-    public MainCustomAdapter(Context context, List<Recipe> recipes, ItemClickListener itemClickListener) {
+    public MainCustomAdapter(int resourceId, Context context, List<Recipe> recipes, ItemClickListener itemClickListener) {
+        this.resourceId = resourceId;
         this.context = context;
         this.recipes = recipes;
         mItemListener = itemClickListener;
@@ -30,7 +32,7 @@ public class MainCustomAdapter extends RecyclerView.Adapter<MainCustomAdapter.My
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.main_recycler_row_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(this.resourceId, parent, false);
         return new MyViewHolder(view);
     }
 
