@@ -1,14 +1,13 @@
 package com.example.yeschefuserapp.model;
 
-import com.example.yeschefuserapp.model.Ingredient;
-
+import java.io.Serializable;
 import java.util.List;
 
 import lombok.Data;
 
 
 @Data
-public class Recipe {
+public class Recipe implements Serializable {
     private String id;
     private String name;
     private String description;
@@ -22,4 +21,6 @@ public class Recipe {
     private Double calories;
     private List<Ingredient> ingredients;
     private List<String> prepSteps;
+    private List<UserReview> userReviews;
+
 }
