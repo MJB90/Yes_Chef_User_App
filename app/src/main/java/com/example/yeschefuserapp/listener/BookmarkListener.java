@@ -7,16 +7,12 @@ import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.example.yeschefuserapp.model.Bookmark;
+import com.example.yeschefuserapp.model.BookmarkCommunicationModel;
 import com.example.yeschefuserapp.utility.MySingleton;
 import com.google.gson.Gson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
 
 public class BookmarkListener implements View.OnClickListener {
     private static final String TAG = "BookmarkListener";
@@ -35,26 +31,18 @@ public class BookmarkListener implements View.OnClickListener {
     @Override
     public void onClick(View view) {
         try {
-            Bookmark bookmark = new Bookmark(recipeId, LocalDateTime.now());
+            BookmarkCommunicationModel model = new BookmarkCommunicationModel(recipeId, userEmail);
             Gson gson = new Gson();
             JsonObjectRequest objectRequest = new JsonObjectRequest(
                     Request.Method.POST,
-                    "http://10.0.2.2:8090/api/user/bookmark",
-                    new JSONObject(gson.toJson(bookmark)),
+                    "http://10.0.2.2:8090/api/user/post_bookmark",
+                    new JSONObject(gson.toJson(model)),
                     response -> Toast.makeText(context, "Add successfully", Toast.LENGTH_LONG).show(),
                     error -> {
                         Log.e(TAG, "Add bookmark failed", error);
                         Toast.makeText(context, "Add failed", Toast.LENGTH_LONG).show();
-
                     }
-            ) {
-                @Override
-                public Map<String, String> getHeaders() {
-                    final Map<String, String> headers = new HashMap<>();
-                    headers.put("User-Email", userEmail);
-                    return headers;
-                }
-            };
+            );
             MySingleton.getInstance(context).addToRequestQueue(objectRequest);
         } catch (JSONException e) {
             Log.e(TAG, "Build json object failed", e);
