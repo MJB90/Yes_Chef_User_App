@@ -13,6 +13,9 @@
         android:theme="@style/Theme.YesChefUserApp"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".activity.FilterResult"
+            android:exported="false" />
+        <activity
             android:name=".activity.ViewRecipeActivity"
             android:exported="false" />
         <activity

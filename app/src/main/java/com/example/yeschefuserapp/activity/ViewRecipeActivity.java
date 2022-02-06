@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,16 +12,21 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.android.volley.Request;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.yeschefuserapp.R;
+import com.example.yeschefuserapp.listener.BookmarkListener;
 import com.example.yeschefuserapp.model.Ingredient;
 import com.example.yeschefuserapp.model.Recipe;
 import com.example.yeschefuserapp.model.UserReview;
 import com.example.yeschefuserapp.utility.DownloadImageTask;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.gson.Gson;
 
 public class ViewRecipeActivity extends AppCompatActivity
         implements View.OnClickListener, BottomNavigationView.OnNavigationItemSelectedListener {
@@ -44,7 +50,7 @@ public class ViewRecipeActivity extends AppCompatActivity
 //        recipeImgUrl = intent.getStringExtra("recipeImgUrl");
         String uri = String.format("http://10.0.2.2:8090/api/user/all_recipes/%s", selectedRecipe.getId());
 
-        //fetchSelectedRecipe(uri);
+        fetchSelectedRecipe(uri);
 
         ImageView recipeImage = findViewById(R.id.recipe_image);
         DownloadImageTask downloadImageTask = new DownloadImageTask(recipeImage);
@@ -86,6 +92,12 @@ public class ViewRecipeActivity extends AppCompatActivity
         getSteps();
         steps.setText(preparationSteps);
 
+        //downloadImageTask.execute("https://lh3.googleusercontent.com/Js7QBBDQumvLixXwk7wnmyArHjN7SZbOElZHwzmZrR7mjA_ElR_p2tNGAMqcmr4Ru2ei47Gi8EvX7mDZd3ii=s640-c-rw-v1-e365");
+
+        Button addBookmark = findViewById(R.id.add_bookmark_btn);
+        // TODO: Change to real user id
+        BookmarkListener bookmarkListener = new BookmarkListener(this, "xxx@gmail.com", recipeId);
+        addBookmark.setOnClickListener(bookmarkListener);
     }
 
 //    public void fetchSelectedRecipe(String uri){
@@ -104,12 +116,29 @@ public class ViewRecipeActivity extends AppCompatActivity
 //
 //    }
 
-    public void getAvgRating(){
-        for(UserReview ur : selectedRecipe.getUserReviews()){
+    public void getAvgRating() {
+        for (UserReview ur : selectedRecipe.getUserReviews()) {
             ratingTotal += ur.getRating();
         }
         reviewNo = selectedRecipe.getUserReviews().size();
-        ratingAvg = Long.valueOf(ratingTotal/reviewNo);
+        ratingAvg = Long.valueOf(ratingTotal / reviewNo);
+    }
+
+    public void fetchSelectedRecipe(String uri){
+        JsonObjectRequest objectRequest = new JsonObjectRequest(
+                Request.Method.GET,
+                uri,
+                null,
+                response -> {
+                    Gson gson = new Gson();
+                    selectedRecipe = gson.fromJson(response.toString(), Recipe.class);
+                },
+                error -> {
+                    Log.e("ViewRecipeActivity", "FetchSelectedRecipe failed", error);
+                    Toast.makeText(ViewRecipeActivity.this, error.toString(), Toast.LENGTH_LONG).show();
+                }
+        );
+        MySingleton.getInstance(this).addToRequestQueue(objectRequest);
     }
 
     public void getIngredients(){
