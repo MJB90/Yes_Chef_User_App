@@ -148,7 +148,6 @@ public class AdvancedFilterFragment extends Fragment implements View.OnClickList
     public void onClick(View view) {
         Gson gson = new GsonBuilder().serializeNulls().create();
         String json = gson.toJson(advancedFilterTags);
-        Toast.makeText(view.getContext(), json, Toast.LENGTH_SHORT).show();
         JSONArray object=null;
         try {
             JSONObject jObject = new JSONObject(json);
