@@ -42,7 +42,7 @@ public class MainCustomAdapter extends RecyclerView.Adapter<MainCustomAdapter.My
         Recipe recipe = recipes.get(position);
         DownloadImageTask downloadImageTask = new DownloadImageTask(holder.recipeImage);
         // TODO: replace to real photo
-        downloadImageTask.execute(recipe.getImageUrl().get(0));
+        downloadImageTask.execute(recipe.getImageURL().get(0));
         holder.recipeName.setText(recipe.getName());
         holder.itemView.setOnClickListener(view -> mItemListener.onItemClick(recipe));
     }

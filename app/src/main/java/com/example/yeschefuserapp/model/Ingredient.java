@@ -7,6 +7,7 @@ import lombok.Data;
 @Data
 public class Ingredient implements Serializable {
     private String ingredient;
-    private Integer amount;
+    private String amount;
     private String unit;
+    private String comment;
 }
