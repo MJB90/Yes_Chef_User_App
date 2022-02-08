@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 public class UserReview implements Serializable {
-    private String email;
+    private String userEmail;
     private Integer rating;
     private String description;
 }

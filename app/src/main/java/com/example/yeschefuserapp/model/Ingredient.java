@@ -10,4 +10,15 @@ public class Ingredient implements Serializable {
     private String amount;
     private String unit;
     private String comment;
+
+    @Override
+    public String toString(){
+        if(getComment() == null||getComment().trim().isEmpty())
+            return getAmount()+ " "+getUnit()+" of "+getIngredient();
+        else
+        return getAmount()+ " "+getUnit()+" of "+getIngredient()+", "+getComment();
+    }
 }
+
+
+

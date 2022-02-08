@@ -27,9 +27,14 @@ import com.example.yeschefuserapp.model.Ingredient;
 import com.example.yeschefuserapp.model.Recipe;
 import com.example.yeschefuserapp.model.UserReview;
 import com.example.yeschefuserapp.utility.DownloadImageTask;
+import com.example.yeschefuserapp.utility.ReviewCommunicationModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.gson.Gson;
 import com.example.yeschefuserapp.utility.MySingleton;
+import com.google.gson.JsonArray;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -41,9 +46,13 @@ public class ViewRecipeActivity extends AppCompatActivity
     private Integer reviewNo;
     private Long ratingAvg;
     private Integer ratingTotal;
-    private String ingredients;
-    private String preparationSteps;
+    private String ingredients="";
+    private String preparationSteps="";
+    private int counter = 0;
+    private JSONObject reviewJsonObject;
+
     AlertDialog myPopUpReviewDialog;
+    EditText inputReview;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,7 +96,7 @@ public class ViewRecipeActivity extends AppCompatActivity
 
         TextView ingredientsHeader = findViewById(R.id.ingredients_header);
         TextView ingredientsView = findViewById(R.id.ingredients);
-        //getIngredients();
+        getIngredients();
         ingredientsView.setText(ingredients);
 
         TextView stepsHeader = findViewById(R.id.steps_header);
@@ -103,6 +112,9 @@ public class ViewRecipeActivity extends AppCompatActivity
         BookmarkListener bookmarkListener = new BookmarkListener(this, userEmail, selectedRecipe.getId(), bookmarkBtn, false);
         bookmarkBtn.setOnClickListener(bookmarkListener);
         fetchBookmarkData(bookmarkBtn, bookmarkListener, userEmail);
+
+        navigationBar();
+
     }
 
     public void getAvgRating() {
@@ -126,6 +138,39 @@ public class ViewRecipeActivity extends AppCompatActivity
                     Log.e("ViewRecipeActivity", "FetchSelectedRecipe failed", error);
                     Toast.makeText(ViewRecipeActivity.this, error.toString(), Toast.LENGTH_LONG).show();
                 }
+        );
+        MySingleton.getInstance(this).addToRequestQueue(objectRequest);
+    }
+
+    private void reviewToJson(){
+        ReviewCommunicationModel review = new ReviewCommunicationModel();
+        review.setRecipeId(selectedRecipe.getId());
+        review.setRating(5);
+        review.setUserEmail("xxx@gmail.com");
+        review.setDescription(inputReview.getText().toString());
+
+        Gson gson = new Gson();
+        String json = gson.toJson(review);
+        try {
+            reviewJsonObject = new JSONObject(json);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void submitReview(){
+        JsonObjectRequest objectRequest = new JsonObjectRequest(
+                Request.Method.POST,
+                String.format("http://10.0.2.2:8090/api/user/post_review"),
+                reviewJsonObject,
+                response -> {
+                    //TODO go to review page
+//                    Intent intent = new Intent(view.getContext(), FilterResult.class);
+//                    startActivity(intent);
+                },
+                error -> Toast.makeText(this, error.toString(), Toast.LENGTH_LONG).show()
+
         );
         MySingleton.getInstance(this).addToRequestQueue(objectRequest);
     }
@@ -161,14 +206,18 @@ public class ViewRecipeActivity extends AppCompatActivity
 
     public void getIngredients() {
         for (Ingredient i : selectedRecipe.getIngredients()) {
-            ingredients += i.toString() + "\n";
+            counter++;
+            ingredients += counter + ". " + i.toString() + "\n";
         }
+        counter=0;
     }
 
     public void getSteps() {
         for (String prepStep : selectedRecipe.getPrepSteps()) {
-            preparationSteps += prepStep + "\n";
+            counter++;
+            preparationSteps += counter + ". " + prepStep + "\n \n";
         }
+        counter = 0;
     }
 
     public void PopUpWriteReview() {
@@ -184,7 +233,7 @@ public class ViewRecipeActivity extends AppCompatActivity
         TextView header = myPopUpReview.findViewById(R.id.writeReviewHead);
         header.setText("Write A Review");
 
-        EditText inputReview = myPopUpReview.findViewById(R.id.writeReviewText);
+        inputReview = myPopUpReview.findViewById(R.id.writeReviewText);
 
         Button submitBtn = myPopUpReview.findViewById(R.id.submitBtn);
         if (submitBtn != null) {
@@ -204,11 +253,13 @@ public class ViewRecipeActivity extends AppCompatActivity
         int id = view.getId();
 
         if (id == R.id.submitBtn) {
-            //save the review and the star to the document
+            reviewToJson();
+            submitReview();
+            myPopUpReviewDialog.dismiss();
         }
 
         if (id == R.id.cancelBtn) {
-            myPopUpReviewDialog.cancel();
+            myPopUpReviewDialog.dismiss();
         }
 
         if (id == R.id.bookmark_this) {
@@ -222,6 +273,12 @@ public class ViewRecipeActivity extends AppCompatActivity
         }
     }
 
+
+    private void navigationBar(){
+        BottomNavigationView bottonNavigationView=findViewById(R.id.bottom_nav);
+        bottonNavigationView.setOnNavigationItemSelectedListener(this);
+        //getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new HomeFragment()).commit();
+    }
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
