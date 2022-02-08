@@ -14,6 +14,7 @@ import android.widget.ExpandableListView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.yeschefuserapp.R;
 import com.example.yeschefuserapp.activity.FilterResult;
@@ -23,9 +24,15 @@ import com.example.yeschefuserapp.utility.AdvancedFilterTags;
 import com.example.yeschefuserapp.utility.MySingleton;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -69,7 +76,6 @@ public class AdvancedFilterFragment extends Fragment implements View.OnClickList
         categoryList.add("Calories");
         categoryList.add("Difficulty");
         categoryList.add("Preparation Time");
-        categoryList.add("Number of Servings");
         categoryList.add("Course Type");
         categoryList.add("Cuisine Type");
     }
@@ -115,18 +121,15 @@ public class AdvancedFilterFragment extends Fragment implements View.OnClickList
         for (String category : categoryList) {
             if (category.equals("Tags")) childList = filterTags.getTags();
             else if (category.equals("Calories")) {
-                Double maxCalorie = Math.ceil(filterTags.getMaxCalories() / 100) * 100;
+                Double maxCalorie = filterTags.getMaxCalories();
                 childList = new ArrayList<>();
-                if (maxCalorie % 2 == 0) {
-                    for (int i = 200; i <= maxCalorie; i += 200) {
+                    int i=100;
+                    for (; i <= maxCalorie; i*=2) {
                         childList.add("Under " + i + "kcals");
                     }
-                } else {
-                    for (int i = 100; i <= maxCalorie; i += 200) {
-                        childList.add("Under " + i + "kcals");
-                    }
-                }
-            } else if (category.equals("Difficulty")) childList = filterTags.getDifficulty();
+                    childList.add("Under " + i + "kcals");
+            }
+            else if (category.equals("Difficulty")) childList = filterTags.getDifficulty();
             else if (category.equals("Preparation Time")) {
                 childList = new ArrayList<>();
                 childList.add("Under 10 minutes");
@@ -134,11 +137,6 @@ public class AdvancedFilterFragment extends Fragment implements View.OnClickList
                 childList.add("Under 1 hour");
                 childList.add("Under 4 hour");
                 childList.add("Under 9 hour");
-            } else if (category.equals("Number of Servings")) {
-                childList = new ArrayList<>();
-                for (int i = 1; i <= filterTags.getMaxNoServings(); i++) {
-                    childList.add(String.valueOf(i));
-                }
             } else if (category.equals("Course Type")) childList = filterTags.getCourseType();
             else if (category.equals("Cuisine Type")) childList = filterTags.getCuisineType();
 
@@ -150,18 +148,24 @@ public class AdvancedFilterFragment extends Fragment implements View.OnClickList
     public void onClick(View view) {
         Gson gson = new GsonBuilder().serializeNulls().create();
         String json = gson.toJson(advancedFilterTags);
-        Toast.makeText(view.getContext(), json, Toast.LENGTH_SHORT).show();
-        JSONObject object = gson.fromJson(json, JSONObject.class);
+        JSONArray object=null;
+        try {
+            JSONObject jObject = new JSONObject(json);
+            object=new JSONArray();
+            object.put(jObject);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         List<Recipe> recipes = new ArrayList<>();
-        JsonObjectRequest objectRequest = new JsonObjectRequest(
+        JsonArrayRequest objectRequest = new JsonArrayRequest(
                 Request.Method.POST,
-                "http://10.0.2.2:8090/api/user/filter_properties",
+                "http://10.0.2.2:8090/api/user/advanced_filter",
                 object,
                 response -> {
                     Recipe[] tmpArray = gson.fromJson(response.toString(), Recipe[].class);
                     recipes.addAll(Arrays.asList(tmpArray.clone()));
                     Intent intent = new Intent(view.getContext(), FilterResult.class);
-                    //intent.putExtra("Recipes", recipes);
+                    intent.putExtra("recipes", (Serializable) recipes);
                     startActivity(intent);
                 },
                 error -> Toast.makeText(view.getContext(), error.toString(), Toast.LENGTH_LONG).show()

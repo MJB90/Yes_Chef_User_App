@@ -219,36 +219,6 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter{
                         }
                     }
                     break;
-                case "Number of Servings":
-                    if (noServingCount==0)
-                    {
-                        if (cards.get("Number of Servings")==null){
-                            List<MaterialCardView> temp=new ArrayList<>();
-                            temp.add(card);
-                            cards.put("Number of Servings",temp);
-                        }
-                        else{
-                            cards.get("Number of Servings").add(card);
-                        }
-                        card.setStrokeColor(0xffff0000);
-                        noServingCount++;
-                    }
-                    else if(noServingCount==1){
-                        if (cards.get("Number of Servings").contains(card)){
-                            cards.get("Number of Servings").clear();
-                            card.setStrokeColor(0xffffff);
-                            noServingCount--;
-                        }
-                        else
-                        {
-                            cards.get("Number of Servings").get(0).setStrokeColor(0xffffff);
-                            cards.get("Number of Servings").clear();
-                            card.setStrokeColor(0xffff0000);
-                            cards.get("Number of Servings").add(card);
-                            Toast.makeText(context,"Select one option",Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                    break;
                 case "Course Type":
                     if (cards.get("Course Type")==null)
                     {
@@ -321,9 +291,6 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter{
                         advancedFilterTags.setMaxPrepTime(Integer.parseInt(item.substring(6,7))*3600);
                         break;
                 }
-            }
-            else if(selections.get(i)=="Number of Servings"){
-                advancedFilterTags.setMaxNoServings(Integer.parseInt(item));
             }
             else if (selections.get(i)=="Course Type")
             {

@@ -27,6 +27,7 @@ import com.example.yeschefuserapp.model.UserReview;
 import com.example.yeschefuserapp.utility.DownloadImageTask;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.gson.Gson;
+import com.example.yeschefuserapp.utility.MySingleton;
 
 public class ViewRecipeActivity extends AppCompatActivity
         implements View.OnClickListener, BottomNavigationView.OnNavigationItemSelectedListener {
@@ -54,7 +55,7 @@ public class ViewRecipeActivity extends AppCompatActivity
 
         ImageView recipeImage = findViewById(R.id.recipe_image);
         DownloadImageTask downloadImageTask = new DownloadImageTask(recipeImage);
-        downloadImageTask.execute(selectedRecipe.getImageUrl().get(0));
+        downloadImageTask.execute(selectedRecipe.getImageURL().get(0));
 
         TextView recipeName = findViewById(R.id.recipe_name);
         recipeName.setText(selectedRecipe.getName());
