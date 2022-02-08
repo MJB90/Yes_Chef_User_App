@@ -50,7 +50,7 @@
             android:layout_width="match_parent"
             android:layout_height="30dp"
             app:iconifiedByDefault="false"
-            app:queryHint="Recipe Name"
+            app:queryHint="Recipe Name and Ingredients..."
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="parent"
