@@ -1,5 +1,6 @@
 package com.example.yeschefuserapp.activity;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -7,23 +8,28 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.example.yeschefuserapp.R;
 import com.example.yeschefuserapp.adapter.FilteredCustomListAdapter;
 import com.example.yeschefuserapp.listener.RecipeClickListener;
 import com.example.yeschefuserapp.model.Recipe;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.List;
 
-public class FilterResult extends AppCompatActivity {
-    private List<Recipe> recipes;
+public class FilterResult extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener{
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_filter_result);
 
-        recipes=(List<Recipe>) getIntent().getExtras().getSerializable("recipes");
+        BottomNavigationView bottonNavigationView=findViewById(R.id.bottom_nav_filter);
+        bottonNavigationView.setOnNavigationItemSelectedListener(this);
+
+        List<Recipe> recipes = (List<Recipe>) getIntent().getExtras().getSerializable("recipes");
 
         TextView searchResult=findViewById(R.id.filter_result_size);
         searchResult.setText(recipes.size()+" recipes");
@@ -44,5 +50,27 @@ public class FilterResult extends AppCompatActivity {
             recyclerView.setAdapter(adapter);
         }
     }
-
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        Intent intent = new Intent(this, MainActivity.class);
+        switch (id) {
+            case R.id.nav_home:
+                intent.putExtra("nav_item", R.id.nav_home);
+                break;
+            case R.id.nav_bookmarks:
+                intent.putExtra("nav_item", R.id.nav_bookmarks);
+                break;
+            case R.id.nav_advanced_filter:
+                intent.putExtra("nav_item", R.id.nav_advanced_filter);
+                break;
+            case R.id.nav_account:
+                intent.putExtra("nav_item", R.id.nav_account);
+                break;
+            default:
+                return false;
+        }
+        startActivity(intent);
+        return true;
+    }
 }

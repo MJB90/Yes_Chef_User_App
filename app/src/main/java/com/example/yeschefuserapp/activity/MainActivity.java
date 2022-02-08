@@ -21,19 +21,24 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         navigationBar();
     }
 
     private void navigationBar(){
         BottomNavigationView bottonNavigationView=findViewById(R.id.bottom_nav);
         bottonNavigationView.setOnNavigationItemSelectedListener(this);
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new HomeFragment()).commit();
+        int id= getIntent().getIntExtra("nav_item",0);
+        checkId(id);
     }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id=item.getItemId();
+        checkId(id);
+        return true;
+    }
+
+    public void checkId(int id){
         Fragment selectedFragment=null;
         switch (id){
             case R.id.nav_home:
@@ -49,9 +54,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 selectedFragment=new AccountFragment();
                 break;
             default:
-                return false;
+                selectedFragment=new HomeFragment();
         }
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,selectedFragment).commit();
-        return true;
     }
 }
