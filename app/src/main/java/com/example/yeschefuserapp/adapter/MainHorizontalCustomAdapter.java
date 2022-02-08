@@ -16,13 +16,13 @@ import com.example.yeschefuserapp.model.Recipe;
 
 import java.util.List;
 
-public class MainCustomAdapter extends RecyclerView.Adapter<MainCustomAdapter.MyViewHolder> {
+public class MainHorizontalCustomAdapter extends RecyclerView.Adapter<MainHorizontalCustomAdapter.MyViewHolder> {
     private int resourceId;
     private List<Recipe> recipes;
     private Context context;
     private ItemClickListener mItemListener;
 
-    public MainCustomAdapter(int resourceId, Context context, List<Recipe> recipes, ItemClickListener itemClickListener) {
+    public MainHorizontalCustomAdapter(int resourceId, Context context, List<Recipe> recipes, ItemClickListener itemClickListener) {
         this.resourceId = resourceId;
         this.context = context;
         this.recipes = recipes;

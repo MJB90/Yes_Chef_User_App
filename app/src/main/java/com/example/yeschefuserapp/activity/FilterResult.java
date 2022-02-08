@@ -7,18 +7,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.yeschefuserapp.R;
 import com.example.yeschefuserapp.adapter.FilteredCustomListAdapter;
-import com.example.yeschefuserapp.adapter.MainCustomAdapter;
 import com.example.yeschefuserapp.model.Recipe;
-
-import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -40,7 +33,7 @@ public class FilterResult extends AppCompatActivity {
                 recipe -> {
                     //Click on a recipe
                     Intent intent = new Intent(this, ViewRecipeActivity.class);
-                    intent.putExtra("recipeId", recipe);
+                    intent.putExtra("recipe", recipe);
                     startActivity(intent);
                 });
 

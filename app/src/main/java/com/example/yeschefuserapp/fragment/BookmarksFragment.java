@@ -18,7 +18,7 @@ import com.android.volley.Request;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.example.yeschefuserapp.R;
 import com.example.yeschefuserapp.activity.ViewRecipeActivity;
-import com.example.yeschefuserapp.adapter.MainCustomAdapter;
+import com.example.yeschefuserapp.adapter.MainHorizontalCustomAdapter;
 import com.example.yeschefuserapp.model.Recipe;
 import com.example.yeschefuserapp.utility.MySingleton;
 import com.google.gson.Gson;
@@ -40,7 +40,7 @@ public class BookmarksFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_bookmarks, container, false);
 
-        MainCustomAdapter adapter = new MainCustomAdapter(R.layout.bookmark_item, view.getContext(), bookmarkList, recipe -> {
+        MainHorizontalCustomAdapter adapter = new MainHorizontalCustomAdapter(R.layout.bookmark_item, view.getContext(), bookmarkList, recipe -> {
             //Click on a recipe
             Intent intent = new Intent(view.getContext(), ViewRecipeActivity.class);
             intent.putExtra("recipeId", recipe.getId());
@@ -53,7 +53,7 @@ public class BookmarksFragment extends Fragment {
         return view;
     }
 
-    private void fetchData(MainCustomAdapter adapter, View view, String email) {
+    private void fetchData(MainHorizontalCustomAdapter adapter, View view, String email) {
         JsonArrayRequest objectRequest = new JsonArrayRequest(
                 Request.Method.GET,
                 String.format("http://10.0.2.2:8090/api/user/bookmarks/%s", email),
@@ -76,7 +76,7 @@ public class BookmarksFragment extends Fragment {
         MySingleton.getInstance(view.getContext()).addToRequestQueue(objectRequest);
     }
 
-    private void initView(MainCustomAdapter adapter, View view, RecyclerView recyclerView) {
+    private void initView(MainHorizontalCustomAdapter adapter, View view, RecyclerView recyclerView) {
         if (recyclerView != null) {
             LinearLayoutManager layoutManager = new LinearLayoutManager(view.getContext(), LinearLayoutManager.VERTICAL, false);
             recyclerView.setLayoutManager(layoutManager);
