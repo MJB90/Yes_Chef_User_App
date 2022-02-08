@@ -31,8 +31,6 @@ import com.example.yeschefuserapp.utility.MySingleton;
 
 public class ViewRecipeActivity extends AppCompatActivity
         implements View.OnClickListener, BottomNavigationView.OnNavigationItemSelectedListener {
-    private String recipeId;
-    private String recipeImgUrl;
     private Recipe selectedRecipe = new Recipe();
     private Integer reviewNo;
     private Long ratingAvg;
@@ -47,8 +45,6 @@ public class ViewRecipeActivity extends AppCompatActivity
 
         Intent intent = getIntent();
         selectedRecipe = (Recipe) intent.getSerializableExtra("recipe");
-//        recipeId = intent.getStringExtra("recipeId");
-//        recipeImgUrl = intent.getStringExtra("recipeImgUrl");
         String uri = String.format("http://10.0.2.2:8090/api/user/all_recipes/%s", selectedRecipe.getId());
 
         fetchSelectedRecipe(uri);
@@ -97,25 +93,9 @@ public class ViewRecipeActivity extends AppCompatActivity
 
         Button addBookmark = findViewById(R.id.add_bookmark_btn);
         // TODO: Change to real user id
-        BookmarkListener bookmarkListener = new BookmarkListener(this, "xxx@gmail.com", recipeId);
+        BookmarkListener bookmarkListener = new BookmarkListener(this, "xxx@gmail.com", selectedRecipe.getId());
         addBookmark.setOnClickListener(bookmarkListener);
     }
-
-//    public void fetchSelectedRecipe(String uri){
-//        JsonObjectRequest objectRequest = new JsonObjectRequest(
-//                Request.Method.GET,
-//                uri,
-//                null,
-//                response -> {
-//                    Gson gson = new Gson();
-//                    selectedRecipe = gson.fromJson(response.toString(), Recipe.class);
-//                    Toast.makeText(this,response.toString(), Toast.LENGTH_LONG).show();
-//                },
-//                error -> Toast.makeText(ViewRecipeActivity.this, error.toString(), Toast.LENGTH_LONG).show()
-//        );
-//        MySingleton.getInstance(this).addToRequestQueue(objectRequest);
-//
-//    }
 
     public void getAvgRating() {
         for (UserReview ur : selectedRecipe.getUserReviews()) {

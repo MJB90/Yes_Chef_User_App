@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.yeschefuserapp.listener.ItemClickListener;
 import com.example.yeschefuserapp.utility.DownloadImageTask;
 import com.example.yeschefuserapp.R;
 import com.example.yeschefuserapp.model.Recipe;
@@ -50,10 +51,6 @@ public class MainHorizontalCustomAdapter extends RecyclerView.Adapter<MainHorizo
     @Override
     public int getItemCount() {
         return recipes.size();
-    }
-
-    public interface ItemClickListener {
-        void onItemClick(Recipe recipe);
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
