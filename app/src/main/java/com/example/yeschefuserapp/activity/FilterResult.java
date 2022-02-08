@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.example.yeschefuserapp.R;
 import com.example.yeschefuserapp.adapter.FilteredCustomListAdapter;
+import com.example.yeschefuserapp.listener.RecipeClickListener;
 import com.example.yeschefuserapp.model.Recipe;
 
 import java.util.List;
@@ -27,15 +28,11 @@ public class FilterResult extends AppCompatActivity {
         TextView searchResult=findViewById(R.id.filter_result_size);
         searchResult.setText(recipes.size()+" recipes");
 
+        RecipeClickListener onClickListener = new RecipeClickListener(this);
         FilteredCustomListAdapter adapter = new FilteredCustomListAdapter(R.layout.filter_result_row,
                 this,
                 recipes,
-                recipe -> {
-                    //Click on a recipe
-                    Intent intent = new Intent(this, ViewRecipeActivity.class);
-                    intent.putExtra("recipe", recipe);
-                    startActivity(intent);
-                });
+                onClickListener);
 
 
         RecyclerView recyclerView=findViewById(R.id.filtered_result_recycler_view);

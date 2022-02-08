@@ -129,6 +129,12 @@
         android:layout_marginLeft="20dp"
         android:text="step 1"/>
 
+    <Button
+        android:id="@+id/add_bookmark_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/add_to_bookmark" />
+
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_nav"
         app:layout_constraintHeight_percent="0.09"
@@ -137,9 +143,4 @@
         android:background="#fff"
         app:menu="@menu/bottom_menu" />
 
-    <Button
-        android:id="@+id/add_bookmark_btn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="add to bookmark" />
 </LinearLayout>
