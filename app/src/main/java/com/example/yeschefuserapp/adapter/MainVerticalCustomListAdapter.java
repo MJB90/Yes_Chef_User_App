@@ -20,6 +20,7 @@ import com.example.yeschefuserapp.model.Recipe;
 import com.example.yeschefuserapp.model.RecipeCategoryList;
 import com.example.yeschefuserapp.utility.MySingleton;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.util.Arrays;
 import java.util.List;
@@ -78,7 +79,7 @@ public class MainVerticalCustomListAdapter extends RecyclerView.Adapter<MainVert
                 url,
                 null,
                 response -> {
-                    Gson gson = new Gson();
+                    Gson gson = new GsonBuilder().serializeNulls().create();
                     Recipe[] tmpArray = gson.fromJson(response.toString(), Recipe[].class);
                     // The recipes should be the same reference
                     list.addAll(Arrays.asList(tmpArray.clone()));

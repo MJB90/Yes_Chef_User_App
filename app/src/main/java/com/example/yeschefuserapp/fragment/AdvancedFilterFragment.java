@@ -13,7 +13,9 @@ import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
+import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.yeschefuserapp.R;
@@ -33,6 +35,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -47,6 +51,7 @@ public class AdvancedFilterFragment extends Fragment implements View.OnClickList
     private ExpandableListView expandableListView;
     private ExpandableListAdapter expandableListAdapter;
     private AdvancedFilterTags advancedFilterTags;
+    private JSONArray object=null;
 
     public AdvancedFilterFragment() {
         // Required empty public constructor
@@ -148,19 +153,18 @@ public class AdvancedFilterFragment extends Fragment implements View.OnClickList
     public void onClick(View view) {
         Gson gson = new GsonBuilder().serializeNulls().create();
         String json = gson.toJson(advancedFilterTags);
-        JSONArray object=null;
-        try {
+        /*try {
             JSONObject jObject = new JSONObject(json);
             object=new JSONArray();
             object.put(jObject);
         } catch (JSONException e) {
             e.printStackTrace();
-        }
+        }*/
         List<Recipe> recipes = new ArrayList<>();
         JsonArrayRequest objectRequest = new JsonArrayRequest(
                 Request.Method.POST,
                 "http://10.0.2.2:8090/api/user/advanced_filter",
-                object,
+                null,
                 response -> {
                     Recipe[] tmpArray = gson.fromJson(response.toString(), Recipe[].class);
                     recipes.addAll(Arrays.asList(tmpArray.clone()));
@@ -169,7 +173,29 @@ public class AdvancedFilterFragment extends Fragment implements View.OnClickList
                     startActivity(intent);
                 },
                 error -> Toast.makeText(view.getContext(), error.toString(), Toast.LENGTH_LONG).show()
-        );
+        ){
+            @Override
+            public String getBodyContentType() {
+                return "application/json; charset=utf-8";
+            }
+
+            @Override
+            public byte[] getBody() {
+                try {
+                    return json == null ? null : json.getBytes("utf-8");
+                } catch (UnsupportedEncodingException uee) {
+                    VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", json, "utf-8");
+                    return null;
+                }
+            }
+
+            /*@Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Authorization",Token);
+                return headers;
+            }*/
+        };;
         MySingleton.getInstance(view.getContext()).addToRequestQueue(objectRequest);
 
     }

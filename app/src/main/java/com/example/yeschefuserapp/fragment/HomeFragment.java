@@ -14,12 +14,22 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.Request;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.example.yeschefuserapp.R;
+import com.example.yeschefuserapp.activity.FilterResult;
 import com.example.yeschefuserapp.adapter.MainVerticalCustomListAdapter;
 import com.example.yeschefuserapp.model.Recipe;
 import com.example.yeschefuserapp.model.RecipeCategoryList;
+import com.example.yeschefuserapp.utility.MySingleton;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
+import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class HomeFragment extends Fragment {
@@ -51,6 +61,23 @@ public class HomeFragment extends Fragment {
                 @Override
                 public boolean onQueryTextSubmit(String s) {
                     Toast.makeText(view.getContext(),"Search",Toast.LENGTH_SHORT).show();
+
+                    Gson gson = new GsonBuilder().serializeNulls().create();
+                    List<Recipe> recipeSearch = new ArrayList<>();
+                    JsonArrayRequest objectRequest = new JsonArrayRequest(
+                            Request.Method.GET,
+                            "http://10.0.2.2:8090/api/user/advanced_filter/search/"+s,
+                            null,
+                            response -> {
+                                Recipe[] tmpArray = gson.fromJson(response.toString(), Recipe[].class);
+                                recipeSearch.addAll(Arrays.asList(tmpArray.clone()));
+                                Intent intent = new Intent(view.getContext(), FilterResult.class);
+                                intent.putExtra("recipes", (Serializable) recipeSearch);
+                                startActivity(intent);
+                            },
+                            error -> Toast.makeText(view.getContext(), error.toString(), Toast.LENGTH_LONG).show()
+                    );
+                    MySingleton.getInstance(view.getContext()).addToRequestQueue(objectRequest);
                     return true;
                 }
 
