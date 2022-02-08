@@ -1,18 +1,16 @@
 package com.example.yeschefuserapp.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
 import com.android.volley.toolbox.JsonArrayRequest;
@@ -28,6 +26,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class BookmarksFragment extends Fragment {
+    MainHorizontalCustomAdapter adapter;
     private final List<Recipe> bookmarkList = new ArrayList<>();
 
     public BookmarksFragment() {
@@ -42,15 +41,23 @@ public class BookmarksFragment extends Fragment {
 
 
         RecipeClickListener onClickListener = new RecipeClickListener(view.getContext());
-        MainHorizontalCustomAdapter adapter = new MainHorizontalCustomAdapter(R.layout.bookmark_item, view.getContext(), bookmarkList, onClickListener);
+        adapter = new MainHorizontalCustomAdapter(R.layout.bookmark_item, view.getContext(), bookmarkList, onClickListener);
 
         // TODO: Change to real email
-        fetchData(adapter, view, "xxx@gmail.com");
-        initView(adapter, view, view.findViewById(R.id.bookmark_recycler_view));
+        fetchData("xxx@gmail.com");
+        initView(view.findViewById(R.id.bookmark_recycler_view));
         return view;
     }
 
-    private void fetchData(MainHorizontalCustomAdapter adapter, View view, String email) {
+    @Override
+    public void onResume() {
+        super.onResume();
+        // TODO: Change to real email
+        fetchData("xxx@gmail.com");
+    }
+
+
+    private void fetchData(String email) {
         JsonArrayRequest objectRequest = new JsonArrayRequest(
                 Request.Method.GET,
                 String.format("http://10.0.2.2:8090/api/user/bookmarks/%s", email),
@@ -59,6 +66,7 @@ public class BookmarksFragment extends Fragment {
                     Gson gson = new Gson();
                     Recipe[] tmpArray = gson.fromJson(response.toString(), Recipe[].class);
                     // The recipes should be the same reference
+                    bookmarkList.clear();
                     bookmarkList.addAll(Arrays.asList(tmpArray.clone()));
 
                     // Need to notify the adapter after updating the recipes
@@ -67,15 +75,15 @@ public class BookmarksFragment extends Fragment {
                 },
                 error -> {
                     Log.e("BookmarksFragment", "FetchData failed", error);
-                    Toast.makeText(view.getContext(), error.toString(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(this.getContext(), error.toString(), Toast.LENGTH_LONG).show();
                 }
         );
-        MySingleton.getInstance(view.getContext()).addToRequestQueue(objectRequest);
+        MySingleton.getInstance(this.getContext()).addToRequestQueue(objectRequest);
     }
 
-    private void initView(MainHorizontalCustomAdapter adapter, View view, RecyclerView recyclerView) {
+    private void initView(RecyclerView recyclerView) {
         if (recyclerView != null) {
-            LinearLayoutManager layoutManager = new LinearLayoutManager(view.getContext(), LinearLayoutManager.VERTICAL, false);
+            LinearLayoutManager layoutManager = new LinearLayoutManager(this.getContext(), LinearLayoutManager.VERTICAL, false);
             recyclerView.setLayoutManager(layoutManager);
             recyclerView.setItemAnimator(new DefaultItemAnimator());
             recyclerView.setAdapter(adapter);
