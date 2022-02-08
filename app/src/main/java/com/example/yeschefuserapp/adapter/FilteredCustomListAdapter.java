@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.yeschefuserapp.R;
+import com.example.yeschefuserapp.listener.ItemClickListener;
 import com.example.yeschefuserapp.model.Recipe;
 import com.example.yeschefuserapp.utility.DownloadImageTask;
 import com.google.android.material.card.MaterialCardView;
@@ -25,13 +26,9 @@ public class FilteredCustomListAdapter extends RecyclerView.Adapter<FilteredCust
     private int resourceId;
     private final Context context;
     private List<Recipe> recipes;
-    private RecipeClickListener mItemListener;
+    private ItemClickListener mItemListener;
 
-    public interface RecipeClickListener {
-        void onCardClick(Recipe recipe);
-    }
-
-    public FilteredCustomListAdapter(int resourceId, Context context, List<Recipe> recipes, RecipeClickListener itemClickListener) {
+    public FilteredCustomListAdapter(int resourceId, Context context, List<Recipe> recipes, ItemClickListener itemClickListener) {
             this.resourceId = resourceId;
             this.context = context;
             this.recipes = recipes;
@@ -110,7 +107,7 @@ public class FilteredCustomListAdapter extends RecyclerView.Adapter<FilteredCust
             }
         }
         holder.card.setOnClickListener(view ->{
-            mItemListener.onCardClick(recipes.get(pos));
+            mItemListener.onItemClick(recipes.get(pos));
         });
     }
 

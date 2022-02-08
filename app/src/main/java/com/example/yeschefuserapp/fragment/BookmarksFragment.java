@@ -17,8 +17,8 @@ import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.example.yeschefuserapp.R;
-import com.example.yeschefuserapp.activity.ViewRecipeActivity;
 import com.example.yeschefuserapp.adapter.MainHorizontalCustomAdapter;
+import com.example.yeschefuserapp.listener.RecipeClickListener;
 import com.example.yeschefuserapp.model.Recipe;
 import com.example.yeschefuserapp.utility.MySingleton;
 import com.google.gson.Gson;
@@ -40,12 +40,9 @@ public class BookmarksFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_bookmarks, container, false);
 
-        MainHorizontalCustomAdapter adapter = new MainHorizontalCustomAdapter(R.layout.bookmark_item, view.getContext(), bookmarkList, recipe -> {
-            //Click on a recipe
-            Intent intent = new Intent(view.getContext(), ViewRecipeActivity.class);
-            intent.putExtra("recipe", recipe);
-            startActivity(intent);
-        });
+
+        RecipeClickListener onClickListener = new RecipeClickListener(view.getContext());
+        MainHorizontalCustomAdapter adapter = new MainHorizontalCustomAdapter(R.layout.bookmark_item, view.getContext(), bookmarkList, onClickListener);
 
         // TODO: Change to real email
         fetchData(adapter, view, "xxx@gmail.com");
