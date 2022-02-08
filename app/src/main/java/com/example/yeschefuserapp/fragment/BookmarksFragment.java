@@ -43,7 +43,7 @@ public class BookmarksFragment extends Fragment {
         MainHorizontalCustomAdapter adapter = new MainHorizontalCustomAdapter(R.layout.bookmark_item, view.getContext(), bookmarkList, recipe -> {
             //Click on a recipe
             Intent intent = new Intent(view.getContext(), ViewRecipeActivity.class);
-            intent.putExtra("recipeId", recipe.getId());
+            intent.putExtra("recipe", recipe);
             startActivity(intent);
         });
 
