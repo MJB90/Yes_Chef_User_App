@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -51,9 +52,24 @@ public class HomeFragment extends Fragment {
         createRecipeCategoryList();
 
         mainVerticalCustomListAdapter=new MainVerticalCustomListAdapter(viewContext,recipeCategoryLists);
-
         initView(mainVerticalCustomListAdapter, view, view.findViewById(R.id.recycler_view));
 
+        SearchView searchView=view.findViewById(R.id.search_bar);
+        if (searchView!=null){
+            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String s) {
+                    Toast.makeText(view.getContext(),"Search",Toast.LENGTH_SHORT).show();
+                    return true;
+                }
+
+                @Override
+                public boolean onQueryTextChange(String s) {
+                    Toast.makeText(view.getContext(),s,Toast.LENGTH_SHORT).show();
+                    return true;
+                }
+            });
+        }
 
         return view;
     }

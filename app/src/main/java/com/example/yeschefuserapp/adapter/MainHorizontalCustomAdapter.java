@@ -5,7 +5,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
+import androidx.appcompat.widget.SearchView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -45,6 +48,8 @@ public class MainHorizontalCustomAdapter extends RecyclerView.Adapter<MainHorizo
         downloadImageTask.execute(recipe.getImageURL().get(0));
         holder.recipeName.setText(recipe.getName());
         holder.itemView.setOnClickListener(view -> mItemListener.onItemClick(recipe));
+        //holder.ratingBar.setRating((float)4.5);
+        //holder.recipeCuisineType.setText(recipe.getCuisineType().get(0));
     }
 
     @Override
@@ -59,11 +64,14 @@ public class MainHorizontalCustomAdapter extends RecyclerView.Adapter<MainHorizo
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         ImageView recipeImage;
         TextView recipeName;
-
+        TextView recipeCuisineType;
+        RatingBar ratingBar;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             recipeImage = itemView.findViewById(R.id.recipe_image);
             recipeName = itemView.findViewById(R.id.recipe_name);
+            //recipeCuisineType=itemView.findViewById(R.id.recipe_cuisineType);
+            //ratingBar=itemView.findViewById(R.id.recipe_rating);
         }
     }
 
