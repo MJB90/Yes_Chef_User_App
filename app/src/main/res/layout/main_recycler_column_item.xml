@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="260dp"
+android:layout_height="170dp"
+android:id="@+id/filter_card"
+android:layout_gravity="center"
+android:layout_margin="15dp"
+android:foreground="?attr/selectableItemBackgroundBorderless"
+android:clickable="true"
+app:cardCornerRadius="20dp"
+app:cardElevation="20dp">
+
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="1.5dp"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/recipe_image"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:layout_gravity="center"
+        android:src="@mipmap/ic_launcher"
+        tools:ignore="ContentDescription" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+        android:layout_below="@+id/recipe_image"
+        android:layout_marginTop="1dp"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="149dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/recipe_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="Recipe Name"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/recipe_cuisineType"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="Cuisine Type"
+                android:textSize="11sp" />
+
+            <TextView
+                android:id="@+id/recipe_prepTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Prepareation Time"
+                android:textSize="11sp" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/recipe_calories"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Calories"
+            android:textSize="11sp" />
+
+        <!--<RatingBar
+            android:id="@+id/filter_rating_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:isIndicator="true"
+            android:foregroundGravity="bottom"
+            android:numStars="5"
+            android:scaleX=".4"
+            android:scaleY=".4"
+            android:stepSize="0.1"
+            android:transformPivotX="0dp"
+            android:translationX="100dp" />-->
+    </LinearLayout>
+
+</RelativeLayout>
+
+</com.google.android.material.card.MaterialCardView>
