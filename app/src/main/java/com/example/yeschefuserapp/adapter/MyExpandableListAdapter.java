@@ -32,6 +32,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class MyExpandableListAdapter extends BaseExpandableListAdapter{
     private Context context;
@@ -269,7 +271,14 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter{
                 advancedFilterTags.setTags(tags);
             }
             else if(selections.get(i)=="Calories"){
-                advancedFilterTags.setMaxCalories(Double.parseDouble(item.substring(6,9)));
+                Matcher matcher = Pattern.compile("\\d+").matcher(item);
+
+                List<Integer> numbers = new ArrayList<>();
+                while (matcher.find()) {
+                    numbers.add(Integer.valueOf(matcher.group()));
+                }
+                advancedFilterTags.setMaxCalories((double)numbers.get(1));
+                advancedFilterTags.setMinCalories((double)numbers.get(0));
             }
             else if(selections.get(i)=="Difficulty"){
                 if (advancedFilterTags.getDifficulty()==null) {
@@ -283,13 +292,33 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter{
                 advancedFilterTags.setDifficulty(difficulty);
             }
             else if(selections.get(i)=="Preparation Time") {
-                switch (item.substring(7,8)){
-                    case "0":
-                        advancedFilterTags.setMaxPrepTime(Integer.parseInt(item.substring(6,8))*60);
-                        break;
-                    default:
-                        advancedFilterTags.setMaxPrepTime(Integer.parseInt(item.substring(6,7))*3600);
-                        break;
+                Matcher matcher = Pattern.compile("\\d+").matcher(item);
+
+                List<Integer> prepTime = new ArrayList<>();
+                while (matcher.find()) {
+                    prepTime.add(Integer.valueOf(matcher.group()));
+                }
+                int minPrepTime=prepTime.get(0);
+                int maxPrepTime=prepTime.get(1);
+                if (minPrepTime==1 && maxPrepTime==10){
+                    advancedFilterTags.setMaxPrepTime(600);
+                    advancedFilterTags.setMinPrepTime(60);
+                }
+                else if (minPrepTime==10 && maxPrepTime==30){
+                    advancedFilterTags.setMaxPrepTime(1800);
+                    advancedFilterTags.setMinPrepTime(600);
+                }
+                else if (minPrepTime==0 && maxPrepTime==5 && prepTime.get(2)==1){
+                    advancedFilterTags.setMaxPrepTime(3600);
+                    advancedFilterTags.setMinPrepTime(1800);
+                }
+                else if (minPrepTime==1 && maxPrepTime==5){
+                    advancedFilterTags.setMaxPrepTime(18000);
+                    advancedFilterTags.setMinPrepTime(3600);
+                }
+                else if (minPrepTime==5 && maxPrepTime==10){
+                    advancedFilterTags.setMaxPrepTime(36000);
+                    advancedFilterTags.setMinPrepTime(18000);
                 }
             }
             else if (selections.get(i)=="Course Type")

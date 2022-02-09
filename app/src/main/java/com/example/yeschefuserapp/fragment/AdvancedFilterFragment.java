@@ -128,20 +128,21 @@ public class AdvancedFilterFragment extends Fragment implements View.OnClickList
             else if (category.equals("Calories")) {
                 Double maxCalorie = filterTags.getMaxCalories();
                 childList = new ArrayList<>();
-                    int i=100;
+                childList.add("1 to 100 kcals");
+                int i=100;
                     for (; i <= maxCalorie; i*=2) {
-                        childList.add("Under " + i + "kcals");
+                        childList.add(i + " to " + i*2 + "kcals");
                     }
-                    childList.add("Under " + i + "kcals");
+                    childList.add(i + " to " + i*2 + "kcals");
             }
             else if (category.equals("Difficulty")) childList = filterTags.getDifficulty();
             else if (category.equals("Preparation Time")) {
                 childList = new ArrayList<>();
-                childList.add("Under 10 minutes");
-                childList.add("Under 30 minutes");
-                childList.add("Under 1 hour");
-                childList.add("Under 4 hour");
-                childList.add("Under 9 hour");
+                childList.add("1 to 10 minutes");
+                childList.add("10 to 30 minutes");
+                childList.add("0.5 to 1 hour");
+                childList.add("1 to 5 hours");
+                childList.add("5 to 10 hours");
             } else if (category.equals("Course Type")) childList = filterTags.getCourseType();
             else if (category.equals("Cuisine Type")) childList = filterTags.getCuisineType();
 
@@ -153,13 +154,7 @@ public class AdvancedFilterFragment extends Fragment implements View.OnClickList
     public void onClick(View view) {
         Gson gson = new GsonBuilder().serializeNulls().create();
         String json = gson.toJson(advancedFilterTags);
-        /*try {
-            JSONObject jObject = new JSONObject(json);
-            object=new JSONArray();
-            object.put(jObject);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }*/
+
         List<Recipe> recipes = new ArrayList<>();
         JsonArrayRequest objectRequest = new JsonArrayRequest(
                 Request.Method.POST,
