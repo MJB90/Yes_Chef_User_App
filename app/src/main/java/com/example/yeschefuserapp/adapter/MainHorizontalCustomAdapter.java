@@ -13,6 +13,8 @@ import androidx.appcompat.widget.SearchView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.yeschefuserapp.listener.ItemClickListener;
 import com.example.yeschefuserapp.utility.DownloadImageTask;
 import com.example.yeschefuserapp.R;
@@ -44,9 +46,16 @@ public class MainHorizontalCustomAdapter extends RecyclerView.Adapter<MainHorizo
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         Recipe recipe = recipes.get(position);
-        DownloadImageTask downloadImageTask = new DownloadImageTask(holder.recipeImage);
-        // TODO: replace to real photo
-        downloadImageTask.execute(recipe.getImageURL().get(0));
+        //DownloadImageTask downloadImageTask = new DownloadImageTask(holder.recipeImage);
+        //downloadImageTask.execute(recipe.getImageURL().get(0));
+        Glide.with(holder.itemView)
+                .load(recipe.getImageURL().get(0))
+                .centerCrop()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .placeholder(R.drawable.ic_launcher_background)
+                .into(holder.recipeImage);
+
+
         holder.recipeName.setText(recipe.getName());
         holder.itemView.setOnClickListener(view -> mItemListener.onItemClick(recipe));
         //holder.ratingBar.setRating((float)4.5);

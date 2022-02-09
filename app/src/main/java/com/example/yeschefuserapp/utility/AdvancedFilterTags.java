@@ -11,7 +11,9 @@ import lombok.Data;
 @Data
 public class AdvancedFilterTags {
     private Double maxCalories;
+    private Double minCalories;
     private Integer maxPrepTime;
+    private Integer minPrepTime;
     private Integer maxNoServings;
     private List<String> tags;
     private List<String> difficulty;

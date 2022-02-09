@@ -20,6 +20,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.android.volley.Request;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.yeschefuserapp.R;
 import com.example.yeschefuserapp.adapter.MainHorizontalCustomAdapter;
 import com.example.yeschefuserapp.listener.BookmarkListener;
@@ -61,13 +63,19 @@ public class ViewRecipeActivity extends AppCompatActivity
 
         Intent intent = getIntent();
         selectedRecipe = (Recipe) intent.getSerializableExtra("recipe");
-        String uri = String.format("http://10.0.2.2:8090/api/user/all_recipes/%s", selectedRecipe.getId());
+        //String uri = String.format("http://10.0.2.2:8090/api/user/all_recipes/%s", selectedRecipe.getId());
 
-        fetchSelectedRecipe(uri);
+        //fetchSelectedRecipe(uri);
 
         ImageView recipeImage = findViewById(R.id.recipe_image);
-        DownloadImageTask downloadImageTask = new DownloadImageTask(recipeImage);
-        downloadImageTask.execute(selectedRecipe.getImageURL().get(0));
+        Glide.with(this)
+                .load(selectedRecipe.getImageURL().get(0))
+                .centerCrop()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .placeholder(R.drawable.ic_launcher_background)
+                .into(recipeImage);
+        //DownloadImageTask downloadImageTask = new DownloadImageTask(recipeImage);
+        //downloadImageTask.execute(selectedRecipe.getImageURL().get(0));
 
         TextView recipeName = findViewById(R.id.recipe_name);
         recipeName.setText(selectedRecipe.getName());
