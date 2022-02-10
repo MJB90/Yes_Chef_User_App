@@ -6,6 +6,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,11 +21,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.yeschefuserapp.R;
 import com.example.yeschefuserapp.activity.FilterResult;
+import com.example.yeschefuserapp.adapter.MainHorizontalCustomAdapter;
 import com.example.yeschefuserapp.adapter.MainVerticalCustomListAdapter;
+import com.example.yeschefuserapp.listener.RecipeClickListener;
 import com.example.yeschefuserapp.model.Recipe;
-import com.example.yeschefuserapp.model.RecipeCategoryList;
+import com.example.yeschefuserapp.utility.RecommendedRecipes;
+import com.example.yeschefuserapp.utility.RecommendedRecipesDescription;
 import com.example.yeschefuserapp.utility.MySingleton;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -45,8 +50,8 @@ import java.util.Locale;
 public class HomeFragment extends Fragment {
 
     private MainVerticalCustomListAdapter mainVerticalCustomListAdapter;
-    private List<RecipeCategoryList> recipeCategoryLists = new ArrayList<>();
     private String country;
+    private RecommendedRecipes recommendedRecipes;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -61,10 +66,8 @@ public class HomeFragment extends Fragment {
         Context viewContext = view.getContext();
 
         //creating a list of recipe category list
-        createRecipeCategoryList(viewContext);
+        fetchRecommendedRecipes(viewContext, view, view.findViewById(R.id.recycler_view));
 
-        mainVerticalCustomListAdapter=new MainVerticalCustomListAdapter(viewContext,recipeCategoryLists);
-        initView(mainVerticalCustomListAdapter, view, view.findViewById(R.id.recycler_view));
 
         SearchView searchView=view.findViewById(R.id.search_bar);
         if (searchView!=null){
@@ -112,13 +115,11 @@ public class HomeFragment extends Fragment {
         }
     }
 
-    private void createRecipeCategoryList(Context context) {
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");//To get the current time
+    private void fetchRecommendedRecipes(Context context, View view, RecyclerView recyclerView) {
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH");//Get the current time
         LocalTime now = LocalTime.now();
         String time=dtf.format(now).toString();
-
-
-
+        //Get the user location
         try{
             FusedLocationProviderClient fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context);
             fusedLocationProviderClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>(){
@@ -144,13 +145,28 @@ public class HomeFragment extends Fragment {
         catch(SecurityException e){
             e.printStackTrace();
         }
+        //fetch recipe
+        JsonObjectRequest objectRequest = new JsonObjectRequest(
+                Request.Method.GET,
+                "http://10.0.2.2:8090/api/user/recommended_recipes/manasborah90@gmail.com/singapore/"+time+"/20",
+                null,
+                response -> {
+                    Gson gson = new GsonBuilder().serializeNulls().create();
+                    recommendedRecipes=gson.fromJson(String.valueOf(response),RecommendedRecipes.class);
 
-        recipeCategoryLists.add(new RecipeCategoryList("Malaysian Food", new ArrayList<Recipe>(), "http://10.0.2.2:8090/api/user/all_recipes"));
-        recipeCategoryLists.add(new RecipeCategoryList("Singapore Food", new ArrayList<Recipe>(), "http://10.0.2.2:8090/api/user/all_recipes"));
-        recipeCategoryLists.add(new RecipeCategoryList("Thailand Food", new ArrayList<Recipe>(), "http://10.0.2.2:8090/api/user/all_recipes"));
-    }
-
-    private void getLocation() {
-
+                    mainVerticalCustomListAdapter=new MainVerticalCustomListAdapter(context, recommendedRecipes);
+                    if (recyclerView != null) {
+                        LinearLayoutManager layoutManager = new LinearLayoutManager(view.getContext(), LinearLayoutManager.VERTICAL, false);
+                        recyclerView.setLayoutManager(layoutManager);
+                        recyclerView.setItemAnimator(new DefaultItemAnimator());
+                        recyclerView.setAdapter(mainVerticalCustomListAdapter);
+                    }
+                },
+                error -> {
+                    Log.e("HomeFragment", "FetchData failed", error);
+                    Toast.makeText(context, error.toString(), Toast.LENGTH_LONG).show();
+                }
+        );
+        MySingleton.getInstance(context).addToRequestQueue(objectRequest);
     }
 }

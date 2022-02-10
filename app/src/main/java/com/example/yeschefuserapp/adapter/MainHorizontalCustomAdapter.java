@@ -48,12 +48,15 @@ public class MainHorizontalCustomAdapter extends RecyclerView.Adapter<MainHorizo
         Recipe recipe = recipes.get(position);
         //DownloadImageTask downloadImageTask = new DownloadImageTask(holder.recipeImage);
         //downloadImageTask.execute(recipe.getImageURL().get(0));
-        Glide.with(holder.itemView)
-                .load(recipe.getImageURL().get(0))
-                .centerCrop()
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .placeholder(R.drawable.ic_launcher_background)
-                .into(holder.recipeImage);
+        if (recipe.getImageURL().size()!=0){
+            Glide.with(holder.itemView)
+                    .load(recipe.getImageURL().get(0))
+                    .centerCrop()
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .placeholder(R.drawable.ic_launcher_background)
+                    .into(holder.recipeImage);
+        }
+
 
 
         holder.recipeName.setText(recipe.getName());

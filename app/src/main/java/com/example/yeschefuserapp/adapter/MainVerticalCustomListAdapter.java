@@ -14,24 +14,28 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.yeschefuserapp.R;
 import com.example.yeschefuserapp.listener.RecipeClickListener;
 import com.example.yeschefuserapp.model.Recipe;
-import com.example.yeschefuserapp.model.RecipeCategoryList;
+import com.example.yeschefuserapp.utility.RecommendedRecipes;
+import com.example.yeschefuserapp.utility.RecommendedRecipesDescription;
 import com.example.yeschefuserapp.utility.MySingleton;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class MainVerticalCustomListAdapter extends RecyclerView.Adapter<MainVerticalCustomListAdapter.MainViewHolder> {
     private Context context;
-    private List<RecipeCategoryList> recipeCategoryList;
+    private String url;
+    private RecommendedRecipes recommendedRecipes;
 
-    public MainVerticalCustomListAdapter(Context context, List<RecipeCategoryList> recipeCategoryList) {
+    public MainVerticalCustomListAdapter(Context context, RecommendedRecipes recommendedRecipes) {
         this.context = context;
-        this.recipeCategoryList = recipeCategoryList;
+        this.recommendedRecipes = recommendedRecipes;
     }
 
     @NonNull
@@ -43,13 +47,18 @@ public class MainVerticalCustomListAdapter extends RecyclerView.Adapter<MainVert
 
     @Override
     public void onBindViewHolder(@NonNull MainViewHolder holder, int position) {
-        holder.recipeListTitle.setText(recipeCategoryList.get(position).getName());
-        setRecipeRecycler(holder.itemRecycler, recipeCategoryList.get(position).getRecipeList(), position, holder.itemView);
+        holder.recipeListTitle.setText(recommendedRecipes.getRecommendedRecipes().get(position).getName());
+        setRecipeRecycler(holder.itemRecycler, recommendedRecipes.getRecommendedRecipes().get(position).getRecommendedRecipeData(), position, holder.itemView);
+
+        RecipeClickListener onClickListener = new RecipeClickListener(context);
+        MainHorizontalCustomAdapter adapter = new MainHorizontalCustomAdapter(R.layout.main_recycler_column_item, context, recommendedRecipes.getRecommendedRecipes().get(position).getRecommendedRecipeData(), onClickListener);
+        holder.itemRecycler.setLayoutManager(new LinearLayoutManager(context, RecyclerView.HORIZONTAL, false));
+        holder.itemRecycler.setAdapter(adapter);
     }
 
     @Override
     public int getItemCount() {
-        return recipeCategoryList.size();
+        return recommendedRecipes.getRecommendedRecipes().size();
     }
 
     public static final class MainViewHolder extends RecyclerView.ViewHolder {
@@ -64,35 +73,14 @@ public class MainVerticalCustomListAdapter extends RecyclerView.Adapter<MainVert
     }
 
     private void setRecipeRecycler(RecyclerView recyclerView, List<Recipe> recipes, int position, View view) {
-        RecipeClickListener onClickListener = new RecipeClickListener(view.getContext());
-        MainHorizontalCustomAdapter adapter = new MainHorizontalCustomAdapter(R.layout.main_recycler_column_item, context, recipes, onClickListener);
-
-        fetchData(adapter, view, recipeCategoryList.get(position).getUrl(), recipeCategoryList.get(position).getRecipeList());
-
-        recyclerView.setLayoutManager(new LinearLayoutManager(context, RecyclerView.HORIZONTAL, false));
-        recyclerView.setAdapter(adapter);
-    }
-
-    private void fetchData(MainHorizontalCustomAdapter adapter, View view, String url, List<Recipe> list) {
-        JsonArrayRequest objectRequest = new JsonArrayRequest(
-                Request.Method.GET,
-                url,
-                null,
-                response -> {
-                    Gson gson = new GsonBuilder().serializeNulls().create();
-                    Recipe[] tmpArray = gson.fromJson(response.toString(), Recipe[].class);
-                    // The recipes should be the same reference
-                    list.addAll(Arrays.asList(tmpArray.clone()));
-
-                    // Need to notify the adapter after updating the recipes
-                    // ref: https://stackoverflow.com/a/48959184
-                    adapter.notifyDataSetChanged();
-                },
-                error -> {
-                    Log.e("HomeFragment", "FetchData failed", error);
-                    Toast.makeText(view.getContext(), error.toString(), Toast.LENGTH_LONG).show();
-                }
-        );
-        MySingleton.getInstance(view.getContext()).addToRequestQueue(objectRequest);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                RecipeClickListener onClickListener = new RecipeClickListener(view.getContext());
+                MainHorizontalCustomAdapter adapter = new MainHorizontalCustomAdapter(R.layout.main_recycler_column_item, context, recipes, onClickListener);
+                recyclerView.setLayoutManager(new LinearLayoutManager(context, RecyclerView.HORIZONTAL, false));
+                recyclerView.setAdapter(adapter);
+            }
+        }).start();
     }
 }
