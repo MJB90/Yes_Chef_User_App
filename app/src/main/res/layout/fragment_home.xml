@@ -4,27 +4,28 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FF5D37"
     android:orientation="vertical"
     tools:context=".fragment.HomeFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:background="#ff4500"
+        android:background="@drawable/login_image"
+        android:layout_weight="1.3"
         android:orientation="horizontal">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/userPicture"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_gravity="center"
             android:src="@drawable/ic_launcher_foreground"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/search_bar"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.05"
+            app:layout_constraintVertical_bias="0.5"
             app:civ_border_width="2dp"
             android:translationX="20dp"
             app:civ_border_color="#FF000000"/>
@@ -34,13 +35,12 @@
             android:layout_height="match_parent"
             android:id="@+id/title_name"
             android:fontFamily="@font/dancing_script_bold"
-            android:gravity="center"
             android:text="@string/project_name"
             android:textColor="#fff"
-            android:textSize="28sp"
+            android:textSize="38sp"
             android:textStyle="bold"
+            android:layout_marginTop="20dp"
             app:layout_constraintTop_toTopOf="parent"
-
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
@@ -48,7 +48,7 @@
         <androidx.appcompat.widget.SearchView
             android:id="@+id/search_bar"
             android:layout_width="match_parent"
-            android:layout_height="30dp"
+            android:layout_height="40dp"
             app:iconifiedByDefault="false"
             app:queryHint="Recipe Name and Ingredients..."
             app:layout_constraintTop_toTopOf="parent"
@@ -63,6 +63,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="4"
+        android:background="@drawable/login_page"
         android:orientation="vertical">
 
         <TextView
@@ -71,6 +72,7 @@
             android:layout_height="wrap_content"
             android:textSize="18sp"
             android:textStyle="bold"
+            android:textColor="@color/black"
             android:layout_marginStart="20dp"
             android:layout_marginTop="15dp"
             android:layout_marginBottom="15dp"

@@ -16,6 +16,7 @@
         android:layout_gravity="start"
         android:layout_marginStart="20dp"
         android:text="Title"
+        android:textColor="@color/black"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"

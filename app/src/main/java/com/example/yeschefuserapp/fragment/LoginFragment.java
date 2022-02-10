@@ -36,27 +36,24 @@ public class LoginFragment extends Fragment {
         /*if (pref.contains("username") && pref.contains("password")) {
             boolean loginOk = logIn(pref.getString("username", "wrong"), pref.getString("password", "wrong"));
             if (loginOk) {
-                startProtectedAcvitity(view);
+                startProtectedActivity(view);
             }
         }*/
 
-        loginBtn.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                String username= emailText.getText().toString();
-                String password=passwordText.getText().toString();
-                if (logIn(username, password)) {
-                    SharedPreferences  pref=getActivity().getSharedPreferences("user_credentials",view.getContext().MODE_PRIVATE);
-                    SharedPreferences.Editor editor=pref.edit();
-                    editor.putString("username",username);
-                    editor.putString("password",password);
-                    editor.commit();
-                    Toast.makeText(view.getContext(),"Login successful!",Toast.LENGTH_SHORT).show();
-                    startProtectedAcvitity(view);
-                }
-                else{
-                    Toast.makeText(view.getContext(),"Credentials are not valid",Toast.LENGTH_SHORT).show();
-                }
+        loginBtn.setOnClickListener(v -> {
+            String username= emailText.getText().toString();
+            String password=passwordText.getText().toString();
+            if (logIn(username, password)) {
+                SharedPreferences  pref=getActivity().getSharedPreferences("user_credentials",view.getContext().MODE_PRIVATE);
+                SharedPreferences.Editor editor=pref.edit();
+                editor.putString("username",username);
+                editor.putString("password",password);
+                editor.commit();
+                Toast.makeText(view.getContext(),"Login successful!",Toast.LENGTH_SHORT).show();
+                startProtectedAcvitity(view);
+            }
+            else{
+                Toast.makeText(view.getContext(),"Credentials are not valid",Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -64,10 +61,7 @@ public class LoginFragment extends Fragment {
     }
 
     private boolean logIn(String username, String password) {
-        if (username.equals("") && password.equals("")) {
-            return true;
-        }
-        return false;
+        return username.equals("") && password.equals("");
     }
     private void startProtectedAcvitity(View view){
         Intent intent= new Intent(view.getContext(), MainActivity.class);
