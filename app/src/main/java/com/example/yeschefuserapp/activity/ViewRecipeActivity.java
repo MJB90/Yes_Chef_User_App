@@ -38,6 +38,7 @@ import com.google.gson.JsonArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -46,7 +47,7 @@ public class ViewRecipeActivity extends AppCompatActivity
         implements View.OnClickListener, BottomNavigationView.OnNavigationItemSelectedListener {
     private Recipe selectedRecipe = new Recipe();
     private Integer reviewNo;
-    private Long ratingAvg;
+    private Double ratingAvg;
     private Integer ratingTotal;
     private String ingredients="";
     private String preparationSteps="";
@@ -126,11 +127,14 @@ public class ViewRecipeActivity extends AppCompatActivity
     }
 
     public void getAvgRating() {
+        ratingTotal=0;
         for (UserReview ur : selectedRecipe.getUserReviews()) {
             ratingTotal += ur.getRating();
         }
         reviewNo = selectedRecipe.getUserReviews().size();
-        ratingAvg = Long.valueOf(ratingTotal / reviewNo);
+        DecimalFormat formatter = new DecimalFormat("#0.0");
+        ratingAvg = Double.valueOf(ratingTotal / reviewNo);
+        formatter.format(ratingAvg);
     }
 
     public void fetchSelectedRecipe(String uri) {
