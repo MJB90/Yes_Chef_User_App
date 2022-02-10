@@ -52,13 +52,13 @@ import com.google.gson.GsonBuilder;
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener{
 
     private String country;
+    private final static int REQ_LOCATION=44;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        grantPermission();
         checkLocationIsEnabledOrNot();
-        navigationBar();
+        grantPermission();
     }
 
     private void checkLocationIsEnabledOrNot() {
@@ -68,6 +68,11 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
         try{
             gpsEnabled=lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        try{
             networkEnabled=lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
         }
         catch (Exception e){
@@ -87,8 +92,10 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     }
 
     private void grantPermission() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)!= PackageManager.PERMISSION_GRANTED){
-            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},44);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)!= PackageManager.PERMISSION_GRANTED)
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, REQ_LOCATION);
+        else{
+            navigationBar();
         }
     }
 
@@ -97,6 +104,17 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         bottonNavigationView.setOnNavigationItemSelectedListener(this);
         int id= getIntent().getIntExtra("nav_item",0);
         checkId(id);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQ_LOCATION) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                navigationBar();
+            else
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, REQ_LOCATION);
+        }
     }
 
     @Override
