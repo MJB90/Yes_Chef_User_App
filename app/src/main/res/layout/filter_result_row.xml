@@ -27,7 +27,7 @@
             android:src="@mipmap/ic_launcher"
             tools:ignore="ContentDescription" />
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="75dp"
             android:layout_below="@+id/filter_imageView"
@@ -35,16 +35,20 @@
             android:orientation="horizontal">
 
             <LinearLayout
-                android:layout_width="149dp"
+                android:id="@+id/recipe_cuisine_prep_time"
+                android:layout_width="240dp"
                 android:layout_height="match_parent"
-                android:layout_weight="2"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="@id/filter_rating_bar"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintHorizontal_bias="0.1">
 
                 <TextView
                     android:id="@+id/filter_textview_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
                     android:text="Recipe Name"
                     android:textSize="14sp"
                     android:textStyle="bold" />
@@ -53,7 +57,6 @@
                     android:id="@+id/filter_textview_cuisineType"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
                     android:layout_marginTop="2dp"
                     android:text="Cuisine Type"
                     android:textSize="11sp" />
@@ -62,24 +65,26 @@
                     android:id="@+id/filter_textview_prepTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Prepareation Time"
+                    android:text="Preparation Time"
                     android:textSize="11sp" />
 
             </LinearLayout>
 
             <RatingBar
                 android:id="@+id/filter_rating_bar"
+                style="@style/Widget.AppCompat.RatingBar.Small"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:isIndicator="true"
-                android:foregroundGravity="bottom"
                 android:numStars="5"
-                android:scaleX=".4"
-                android:scaleY=".4"
                 android:stepSize="0.1"
-                android:transformPivotX="0dp"
-                android:translationX="100dp" />
-        </LinearLayout>
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/recipe_cuisine_prep_time"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintVertical_bias="0"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </RelativeLayout>
 

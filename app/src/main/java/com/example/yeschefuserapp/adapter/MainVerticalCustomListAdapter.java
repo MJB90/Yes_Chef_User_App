@@ -54,6 +54,7 @@ public class MainVerticalCustomListAdapter extends RecyclerView.Adapter<MainVert
         MainHorizontalCustomAdapter adapter = new MainHorizontalCustomAdapter(R.layout.main_recycler_column_item, context, recommendedRecipes.getRecommendedRecipes().get(position).getRecommendedRecipeData(), onClickListener);
         holder.itemRecycler.setLayoutManager(new LinearLayoutManager(context, RecyclerView.HORIZONTAL, false));
         holder.itemRecycler.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
     }
 
     @Override

@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
@@ -167,6 +168,7 @@ public class HomeFragment extends Fragment {
                     Toast.makeText(context, error.toString(), Toast.LENGTH_LONG).show();
                 }
         );
+        objectRequest.setRetryPolicy(new DefaultRetryPolicy(0,0,DefaultRetryPolicy.DEFAULT_TIMEOUT_MS));
         MySingleton.getInstance(context).addToRequestQueue(objectRequest);
     }
 }

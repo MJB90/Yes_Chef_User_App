@@ -42,7 +42,6 @@ public class MainHorizontalCustomAdapter extends RecyclerView.Adapter<MainHorizo
         return new MyViewHolder(view);
     }
 
-
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         Recipe recipe = recipes.get(position);
