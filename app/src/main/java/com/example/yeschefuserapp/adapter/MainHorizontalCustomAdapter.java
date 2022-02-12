@@ -49,9 +49,9 @@ public class MainHorizontalCustomAdapter extends RecyclerView.Adapter<MainHorizo
         //downloadImageTask.execute(recipe.getImageURL().get(0));
         if (recipe.getImageURL().size()!=0){
             Glide.with(holder.itemView)
-                    .load(recipe.getImageURL().get(0))
+                    .load(recipe.getResizedImageURL().get(0))
                     .centerCrop()
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                     .placeholder(R.drawable.ic_launcher_background)
                     .into(holder.recipeImage);
         }

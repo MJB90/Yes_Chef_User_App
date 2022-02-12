@@ -68,13 +68,11 @@ public class ViewRecipeActivity extends AppCompatActivity
 
         ImageView recipeImage = findViewById(R.id.recipe_image);
         Glide.with(this)
-                .load(selectedRecipe.getImageURL().get(0))
+                .load(selectedRecipe.getResizedImageURL().get(0))
                 .centerCrop()
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                 .placeholder(R.drawable.ic_launcher_background)
                 .into(recipeImage);
-        //DownloadImageTask downloadImageTask = new DownloadImageTask(recipeImage);
-        //downloadImageTask.execute(selectedRecipe.getImageURL().get(0));
 
         TextView recipeName = findViewById(R.id.recipe_name);
         recipeName.setText(selectedRecipe.getName());

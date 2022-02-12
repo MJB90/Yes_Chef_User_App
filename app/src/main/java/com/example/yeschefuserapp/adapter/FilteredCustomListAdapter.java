@@ -13,6 +13,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.yeschefuserapp.R;
 import com.example.yeschefuserapp.listener.ItemClickListener;
 import com.example.yeschefuserapp.model.Recipe;
@@ -47,8 +49,12 @@ public class FilteredCustomListAdapter extends RecyclerView.Adapter<FilteredCust
     public void onBindViewHolder(@NonNull FilteredCustomListAdapter.MyFilterViewHolder holder, int pos) {
         if (recipes!=null && holder.recipeImage!=null)
         {
-            DownloadImageTask downloadImageTask = new DownloadImageTask(holder.recipeImage);
-            downloadImageTask.execute(recipes.get(pos).getImageURL().get(0));
+            Glide.with(holder.itemView)
+                    .load(recipes.get(pos).getResizedImageURL().get(0))
+                    .centerCrop()
+                    .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                    .placeholder(R.drawable.ic_launcher_background)
+                    .into(holder.recipeImage);
         }
         if (holder.recipeName!=null){
             holder.recipeName.setText(recipes.get(pos).getName());

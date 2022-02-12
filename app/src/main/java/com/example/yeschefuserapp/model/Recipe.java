@@ -12,6 +12,7 @@ public class Recipe implements Serializable {
     private String name;
     private String description;
     private List<String> imageURL;
+    private List<String> resizedImageURL;
     private List<String> cuisineType;
     private String courseType;
     private List<String> difficulty;
