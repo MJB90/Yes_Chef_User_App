@@ -2,7 +2,6 @@ package com.example.yeschefuserapp.listener;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,12 +20,14 @@ public class LoginListener implements View.OnClickListener {
     private final UserContext userContext;
     private final TextView emailText;
     private final TextView pwdText;
+    private final CustomErrorListener errorListener;
 
     public LoginListener(Context context, TextView emailText, TextView pwdText) {
         this.context = context;
         this.userContext = new UserContext(context);
         this.emailText = emailText;
         this.pwdText = pwdText;
+        this.errorListener = new CustomErrorListener(TAG, context);
     }
 
     @Override
@@ -50,10 +51,7 @@ public class LoginListener implements View.OnClickListener {
                     Intent intent = new Intent(context, MainActivity.class);
                     context.startActivity(intent);
                 },
-                error -> {
-                    Log.e(TAG, "Login failed", error);
-                    Toast.makeText(context, "Credentials are not valid", Toast.LENGTH_SHORT).show();
-                }
+                errorListener
         ) {
             @Override
             public byte[] getBody() {
