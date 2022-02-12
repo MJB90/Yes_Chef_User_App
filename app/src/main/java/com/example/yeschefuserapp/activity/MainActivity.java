@@ -3,6 +3,7 @@ package com.example.yeschefuserapp.activity;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -22,8 +23,9 @@ import com.example.yeschefuserapp.fragment.BookmarksFragment;
 import com.example.yeschefuserapp.fragment.HomeFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener{
-    private final static int REQ_LOCATION=44;
+public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
+    private final static int REQ_LOCATION = 44;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,42 +35,40 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     }
 
     private void checkLocationIsEnabledOrNot() {
-        LocationManager lm=(LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        boolean gpsEnabled=false;
-        boolean networkEnabled=false;
+        LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        boolean gpsEnabled = false;
+        boolean networkEnabled = false;
 
-        try{
-            gpsEnabled=lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
-        }
-        catch (Exception e){
+        try {
+            gpsEnabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        try{
-            networkEnabled=lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-        }
-        catch (Exception e){
+        try {
+            networkEnabled = lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        if (!gpsEnabled && !networkEnabled){
+        if (!gpsEnabled && !networkEnabled) {
             new AlertDialog.Builder(this)
                     .setTitle("Enable GPS Service")
                     .setCancelable(false)
-                    .setPositiveButton("Enable", (dialogInterface, i) -> startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))).setNegativeButton("Cancel",null).show();
+                    .setPositiveButton("Enable", (dialogInterface, i) -> startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))).setNegativeButton("Cancel", null).show();
         }
     }
 
     private void grantPermission() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)!= PackageManager.PERMISSION_GRANTED)
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, REQ_LOCATION);
-        else{
+        else {
             navigationBar();
         }
     }
 
-    private void navigationBar(){
-        BottomNavigationView bottonNavigationView=findViewById(R.id.bottom_nav);
-        bottonNavigationView.setOnNavigationItemSelectedListener(this);
-        int id= getIntent().getIntExtra("nav_item",0);
+    private void navigationBar() {
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_nav);
+        bottomNavigationView.setOnNavigationItemSelectedListener(this);
+        int id = getIntent().getIntExtra("nav_item", 0);
         checkId(id);
     }
 
@@ -85,29 +85,31 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        int id=item.getItemId();
+        int id = item.getItemId();
         checkId(id);
         return true;
     }
 
-    public void checkId(int id){
+    public void checkId(int id) {
         Fragment selectedFragment;
-        switch (id){
-            case R.id.nav_home:
-                selectedFragment=new HomeFragment();
-                break;
+        switch (id) {
             case R.id.nav_bookmarks:
-                selectedFragment=new BookmarksFragment();
+                selectedFragment = new BookmarksFragment();
                 break;
             case R.id.nav_advanced_filter:
-                selectedFragment=new AdvancedFilterFragment();
+                selectedFragment = new AdvancedFilterFragment();
                 break;
             case R.id.nav_account:
-                selectedFragment=new AccountFragment();
+                selectedFragment = new AccountFragment();
                 break;
             default:
-                selectedFragment=new HomeFragment();
+                SharedPreferences pref = this.getSharedPreferences(this.getResources().getString(R.string.login_preference), Context.MODE_PRIVATE);
+                String email = pref.getString("EMAIL", "wrong");
+                Bundle bundle = new Bundle();
+                bundle.putString("EMAIL", email);
+                selectedFragment = new HomeFragment();
+                selectedFragment.setArguments(bundle);
         }
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,selectedFragment).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
     }
 }
