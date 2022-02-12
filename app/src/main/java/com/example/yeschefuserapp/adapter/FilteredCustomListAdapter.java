@@ -48,7 +48,6 @@ public class FilteredCustomListAdapter extends RecyclerView.Adapter<FilteredCust
         if (recipes!=null && holder.recipeImage!=null)
         {
             DownloadImageTask downloadImageTask = new DownloadImageTask(holder.recipeImage);
-            // TODO: replace to real photo
             downloadImageTask.execute(recipes.get(pos).getImageURL().get(0));
         }
         if (holder.recipeName!=null){
