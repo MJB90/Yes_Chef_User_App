@@ -12,5 +12,6 @@
     <string name="delete_from_bookmark">delete from bookmark</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="login_preference">login_preference</string>
 
 </resources>

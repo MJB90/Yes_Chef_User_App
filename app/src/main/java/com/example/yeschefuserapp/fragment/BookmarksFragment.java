@@ -16,6 +16,7 @@ import com.android.volley.Request;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.example.yeschefuserapp.R;
 import com.example.yeschefuserapp.adapter.MainHorizontalCustomAdapter;
+import com.example.yeschefuserapp.context.UserContext;
 import com.example.yeschefuserapp.listener.RecipeClickListener;
 import com.example.yeschefuserapp.model.Recipe;
 import com.example.yeschefuserapp.utility.MySingleton;
@@ -28,6 +29,7 @@ import java.util.List;
 public class BookmarksFragment extends Fragment {
     MainHorizontalCustomAdapter adapter;
     private final List<Recipe> bookmarkList = new ArrayList<>();
+    private UserContext userContext;
 
     public BookmarksFragment() {
         // Required empty public constructor
@@ -38,13 +40,12 @@ public class BookmarksFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_bookmarks, container, false);
-
+        this.userContext = new UserContext(view.getContext());
 
         RecipeClickListener onClickListener = new RecipeClickListener(view.getContext());
         adapter = new MainHorizontalCustomAdapter(R.layout.bookmark_item, view.getContext(), bookmarkList, onClickListener);
 
-        // TODO: Change to real email
-        fetchData("xxx@gmail.com");
+        fetchData(this.userContext.getEmail());
         initView(view.findViewById(R.id.bookmark_recycler_view));
         return view;
     }
@@ -52,8 +53,7 @@ public class BookmarksFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        // TODO: Change to real email
-        fetchData("xxx@gmail.com");
+        fetchData(this.userContext.getEmail());
     }
 
 

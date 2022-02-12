@@ -25,13 +25,11 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.yeschefuserapp.R;
 import com.example.yeschefuserapp.activity.FilterResult;
-import com.example.yeschefuserapp.adapter.MainHorizontalCustomAdapter;
 import com.example.yeschefuserapp.adapter.MainVerticalCustomListAdapter;
-import com.example.yeschefuserapp.listener.RecipeClickListener;
+import com.example.yeschefuserapp.context.UserContext;
 import com.example.yeschefuserapp.model.Recipe;
-import com.example.yeschefuserapp.utility.RecommendedRecipes;
-import com.example.yeschefuserapp.utility.RecommendedRecipesDescription;
 import com.example.yeschefuserapp.utility.MySingleton;
+import com.example.yeschefuserapp.utility.RecommendedRecipes;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -53,6 +51,7 @@ public class HomeFragment extends Fragment {
     private MainVerticalCustomListAdapter mainVerticalCustomListAdapter;
     private String country;
     private RecommendedRecipes recommendedRecipes;
+    private UserContext userContext;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -65,23 +64,24 @@ public class HomeFragment extends Fragment {
 
         int rowItemResourceId = R.layout.main_recycler_column_item;
         Context viewContext = view.getContext();
+        this.userContext = new UserContext(viewContext);
 
         //creating a list of recipe category list
         fetchRecommendedRecipes(viewContext, view, view.findViewById(R.id.recycler_view));
 
 
-        SearchView searchView=view.findViewById(R.id.search_bar);
-        if (searchView!=null){
+        SearchView searchView = view.findViewById(R.id.search_bar);
+        if (searchView != null) {
             searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                 @Override
                 public boolean onQueryTextSubmit(String s) {
-                    Toast.makeText(view.getContext(),"Search",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(view.getContext(), "Search", Toast.LENGTH_SHORT).show();
 
                     Gson gson = new GsonBuilder().serializeNulls().create();
                     List<Recipe> recipeSearch = new ArrayList<>();
                     JsonArrayRequest objectRequest = new JsonArrayRequest(
                             Request.Method.GET,
-                            "http://10.0.2.2:8090/api/user/search/"+s,
+                            "http://10.0.2.2:8090/api/user/search/" + s,
                             null,
                             response -> {
                                 Recipe[] tmpArray = gson.fromJson(response.toString(), Recipe[].class);
@@ -119,20 +119,20 @@ public class HomeFragment extends Fragment {
     private void fetchRecommendedRecipes(Context context, View view, RecyclerView recyclerView) {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH");//Get the current time
         LocalTime now = LocalTime.now();
-        String time=dtf.format(now).toString();
+        String time = dtf.format(now);
         //Get the user location
-        try{
+        try {
             FusedLocationProviderClient fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context);
-            fusedLocationProviderClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>(){
+            fusedLocationProviderClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
                 @Override
-                public void onComplete(@NonNull Task<Location> task){
-                    Location location=task.getResult();
-                    if (location!=null){
+                public void onComplete(@NonNull Task<Location> task) {
+                    Location location = task.getResult();
+                    if (location != null) {
 
-                        Geocoder geocoder=new Geocoder(context.getApplicationContext(), Locale.getDefault());
-                        List<Address> address= null;
+                        Geocoder geocoder = new Geocoder(context.getApplicationContext(), Locale.getDefault());
+                        List<Address> address = null;
                         try {
-                            address = geocoder.getFromLocation(location.getLatitude(),location.getLongitude(), 1);
+                            address = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
                             country = address.get(0).getCountryName();
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -142,20 +142,19 @@ public class HomeFragment extends Fragment {
                     }
                 }
             });
-        }
-        catch(SecurityException e){
+        } catch (SecurityException e) {
             e.printStackTrace();
         }
         //fetch recipe
         JsonObjectRequest objectRequest = new JsonObjectRequest(
                 Request.Method.GET,
-                "http://10.0.2.2:8090/api/user/recommended_recipes/manasborah90@gmail.com/singapore/"+time+"/20",
+                String.format("http://10.0.2.2:8090/api/user/recommended_recipes/%s/singapore/%s/20", this.userContext.getEmail(), time),
                 null,
                 response -> {
                     Gson gson = new GsonBuilder().serializeNulls().create();
-                    recommendedRecipes=gson.fromJson(String.valueOf(response),RecommendedRecipes.class);
+                    recommendedRecipes = gson.fromJson(String.valueOf(response), RecommendedRecipes.class);
 
-                    mainVerticalCustomListAdapter=new MainVerticalCustomListAdapter(context, recommendedRecipes);
+                    mainVerticalCustomListAdapter = new MainVerticalCustomListAdapter(context, recommendedRecipes);
                     if (recyclerView != null) {
                         LinearLayoutManager layoutManager = new LinearLayoutManager(view.getContext(), LinearLayoutManager.VERTICAL, false);
                         recyclerView.setLayoutManager(layoutManager);
@@ -168,7 +167,7 @@ public class HomeFragment extends Fragment {
                     Toast.makeText(context, error.toString(), Toast.LENGTH_LONG).show();
                 }
         );
-        objectRequest.setRetryPolicy(new DefaultRetryPolicy(0,0,DefaultRetryPolicy.DEFAULT_TIMEOUT_MS));
+        objectRequest.setRetryPolicy(new DefaultRetryPolicy(0, 0, DefaultRetryPolicy.DEFAULT_TIMEOUT_MS));
         MySingleton.getInstance(context).addToRequestQueue(objectRequest);
     }
 }

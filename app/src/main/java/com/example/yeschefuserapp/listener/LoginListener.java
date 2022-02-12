@@ -10,6 +10,7 @@ import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
 import com.example.yeschefuserapp.activity.MainActivity;
+import com.example.yeschefuserapp.context.UserContext;
 import com.example.yeschefuserapp.model.AppUser;
 import com.example.yeschefuserapp.utility.MySingleton;
 import com.google.gson.Gson;
@@ -17,11 +18,13 @@ import com.google.gson.Gson;
 public class LoginListener implements View.OnClickListener {
     private static final String TAG = "LoginListener";
     private final Context context;
+    private final UserContext userContext;
     private final TextView emailText;
     private final TextView pwdText;
 
     public LoginListener(Context context, TextView emailText, TextView pwdText) {
         this.context = context;
+        this.userContext = new UserContext(context);
         this.emailText = emailText;
         this.pwdText = pwdText;
     }
@@ -42,6 +45,7 @@ public class LoginListener implements View.OnClickListener {
                 Request.Method.POST,
                 "http://10.0.2.2:8090/api/user/login",
                 response -> {
+                    userContext.setUserInfo(email, password);
                     Toast.makeText(context, "Login successful!", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(context, MainActivity.class);
                     context.startActivity(intent);
