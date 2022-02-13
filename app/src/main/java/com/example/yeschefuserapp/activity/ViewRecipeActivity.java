@@ -31,6 +31,7 @@ import com.example.yeschefuserapp.model.UserReview;
 import com.example.yeschefuserapp.utility.MySingleton;
 import com.example.yeschefuserapp.utility.ReviewCommunicationModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 import com.google.gson.Gson;
 
 import org.json.JSONObject;
@@ -41,7 +42,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class ViewRecipeActivity extends AppCompatActivity
-        implements View.OnClickListener, BottomNavigationView.OnNavigationItemSelectedListener {
+        implements View.OnClickListener, NavigationBarView.OnItemSelectedListener {
     private Recipe selectedRecipe = new Recipe();
     private Integer reviewNo;
     private Double ratingAvg;
@@ -280,9 +281,8 @@ public class ViewRecipeActivity extends AppCompatActivity
 
 
     private void navigationBar() {
-        BottomNavigationView bottonNavigationView = findViewById(R.id.bottom_nav);
-        bottonNavigationView.setOnNavigationItemSelectedListener(this);
-        //getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new HomeFragment()).commit();
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_nav);
+        bottomNavigationView.setOnItemSelectedListener(this);
     }
 
     @Override
