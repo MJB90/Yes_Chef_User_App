@@ -1,0 +1,76 @@
+package com.example.yeschefuserapp.adapter;
+
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.RatingBar;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.yeschefuserapp.R;
+import com.example.yeschefuserapp.model.UserReview;
+
+import java.util.List;
+
+public class ReviewListAdapter extends RecyclerView.Adapter<ReviewListAdapter.MyReviewViewHolder> {
+    private int resourceId;
+    private final Context context;
+    private List<UserReview> mUserReviews;
+
+    public ReviewListAdapter(int resourceId, Context context, List<UserReview> mUserReviews) {
+        this.resourceId = resourceId;
+        this.context = context;
+        this.mUserReviews = mUserReviews;
+    }
+
+    @NonNull
+    @Override
+    public MyReviewViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+        View reviewView = inflater.inflate(this.resourceId,parent,false);
+        return new MyReviewViewHolder(reviewView);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull MyReviewViewHolder holder, int position) {
+        UserReview userReview = mUserReviews.get(position);
+        //TODO to change profile image to real image
+        holder.profileImage.setImageResource(R.drawable.ic_launcher_background);
+
+        holder.username.setText(userReview.getUserEmail());
+        holder.ratingBar.setRating(userReview.getRating().floatValue());
+
+        //TODO Once review Date in model, change review date to real date.
+        holder.dateReview.setText("1 Jan 2020");
+
+        holder.reviewDesc.setText(userReview.getDescription());
+    }
+
+
+    @Override
+    public int getItemCount() {
+        return mUserReviews.size();
+    }
+
+    public static class MyReviewViewHolder extends RecyclerView.ViewHolder {
+        ImageView profileImage;
+        TextView username;
+        RatingBar ratingBar;
+        TextView dateReview;
+        TextView reviewDesc;
+
+        public MyReviewViewHolder(@NonNull View itemView) {
+            super(itemView);
+            profileImage = itemView.findViewById(R.id.profile_image);
+            username = itemView.findViewById(R.id.user_name);
+            ratingBar = itemView.findViewById(R.id.view_rating_bar);
+            dateReview = itemView.findViewById(R.id.review_date);
+            reviewDesc= itemView.findViewById(R.id.review_desc);
+
+        }
+    }
+}

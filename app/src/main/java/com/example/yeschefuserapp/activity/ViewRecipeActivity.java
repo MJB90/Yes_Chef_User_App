@@ -11,11 +11,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
 import com.android.volley.toolbox.JsonArrayRequest;
@@ -23,6 +27,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.yeschefuserapp.R;
+import com.example.yeschefuserapp.adapter.ReviewListAdapter;
 import com.example.yeschefuserapp.context.UserContext;
 import com.example.yeschefuserapp.listener.BookmarkListener;
 import com.example.yeschefuserapp.model.Ingredient;
@@ -55,6 +60,7 @@ public class ViewRecipeActivity extends AppCompatActivity
 
     AlertDialog myPopUpReviewDialog;
     EditText inputReview;
+    RatingBar submitRatingBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,16 +81,15 @@ public class ViewRecipeActivity extends AppCompatActivity
         TextView recipeName = findViewById(R.id.recipe_name);
         recipeName.setText(selectedRecipe.getName());
 
-        TextView bookmark = findViewById(R.id.bookmark_this);
-        bookmark.setOnClickListener(this);
-
         TextView prepTime = findViewById(R.id.prep_time);
         prepTime.setText("Prep time : " + String.valueOf(selectedRecipe.getPrepTime() / 60) + "min");
 
         TextView rating = findViewById(R.id.rating);
+        RatingBar viewRatingBar = findViewById(R.id.view_rating_bar);
         if (selectedRecipe.getUserReviews() != null) {
             getAvgRating();
             rating.setText(String.valueOf(ratingAvg) + "/5.0 (" + reviewNo.toString() + " reviews)");
+            viewRatingBar.setRating(ratingAvg.floatValue());
         } else
             rating.setText("O reviews");
 
@@ -107,7 +112,14 @@ public class ViewRecipeActivity extends AppCompatActivity
         getSteps();
         steps.setText(preparationSteps);
 
-        //downloadImageTask.execute("https://lh3.googleusercontent.com/Js7QBBDQumvLixXwk7wnmyArHjN7SZbOElZHwzmZrR7mjA_ElR_p2tNGAMqcmr4Ru2ei47Gi8EvX7mDZd3ii=s640-c-rw-v1-e365");
+        ReviewListAdapter adapter = new ReviewListAdapter(R.layout.review_item_row,this,selectedRecipe.getUserReviews());
+        RecyclerView reviewRecyclerView = findViewById(R.id.recycler_review);
+        if(reviewRecyclerView != null){
+            LinearLayoutManager layoutManager = new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
+            reviewRecyclerView.setLayoutManager(layoutManager);
+            reviewRecyclerView.setItemAnimator(new DefaultItemAnimator());
+            reviewRecyclerView.setAdapter(adapter);
+        }
 
         Button bookmarkBtn = findViewById(R.id.add_bookmark_btn);
         this.userContext = new UserContext(this);
@@ -151,7 +163,7 @@ public class ViewRecipeActivity extends AppCompatActivity
     private void reviewToJson() {
         ReviewCommunicationModel review = new ReviewCommunicationModel();
         review.setRecipeId(selectedRecipe.getId());
-        review.setRating(5);
+        review.setRating(Math.round(submitRatingBar.getRating()));
         review.setUserEmail(this.userContext.getEmail());
         review.setDescription(inputReview.getText().toString());
 
@@ -239,6 +251,7 @@ public class ViewRecipeActivity extends AppCompatActivity
         TextView header = myPopUpReview.findViewById(R.id.writeReviewHead);
         header.setText("Write A Review");
 
+        RatingBar submitRatingBar = findViewById(R.id.submit_rating_bar);
         inputReview = myPopUpReview.findViewById(R.id.writeReviewText);
 
         Button submitBtn = myPopUpReview.findViewById(R.id.submitBtn);
@@ -251,7 +264,7 @@ public class ViewRecipeActivity extends AppCompatActivity
             cancelBtn.setOnClickListener(this);
         }
         myPopUpReviewDialog.show();
-        //if rating!=null, submit enable
+        //TODO if rating!=null, submit enable
     }
 
     @Override
@@ -268,12 +281,11 @@ public class ViewRecipeActivity extends AppCompatActivity
             myPopUpReviewDialog.dismiss();
         }
 
-        if (id == R.id.bookmark_this) {
+        //if (id == R.id.bookmark_this) {
 
             //
-        }
+        //}
         if (id == R.id.write_a_review) {
-            //TODO: send an intent to write
             PopUpWriteReview();
 
         }
