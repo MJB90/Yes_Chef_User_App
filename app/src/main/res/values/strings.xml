@@ -6,11 +6,14 @@
     <string name="nav_bookmarks">Bookmarks</string>
     <string name="nav_advanced_filter">Advanced Filter</string>
     <string name="nav_account">Account</string>
+    <string name="nav_view_recipe">Recipe</string>
+    <string name="nav_filtered_result">Results</string>
 
     <string name="filter">Filter</string>
     <string name="add_to_bookmark">add to bookmark</string>
     <string name="delete_from_bookmark">delete from bookmark</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="login_preference">login_preference</string>
 
 </resources>

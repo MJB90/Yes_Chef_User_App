@@ -23,19 +23,17 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.yeschefuserapp.R;
-import com.example.yeschefuserapp.adapter.MainHorizontalCustomAdapter;
+import com.example.yeschefuserapp.context.UserContext;
 import com.example.yeschefuserapp.listener.BookmarkListener;
 import com.example.yeschefuserapp.model.Ingredient;
 import com.example.yeschefuserapp.model.Recipe;
 import com.example.yeschefuserapp.model.UserReview;
-import com.example.yeschefuserapp.utility.DownloadImageTask;
+import com.example.yeschefuserapp.utility.MySingleton;
 import com.example.yeschefuserapp.utility.ReviewCommunicationModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 import com.google.gson.Gson;
-import com.example.yeschefuserapp.utility.MySingleton;
-import com.google.gson.JsonArray;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.DecimalFormat;
@@ -44,15 +42,16 @@ import java.util.Arrays;
 import java.util.List;
 
 public class ViewRecipeActivity extends AppCompatActivity
-        implements View.OnClickListener, BottomNavigationView.OnNavigationItemSelectedListener {
+        implements View.OnClickListener, NavigationBarView.OnItemSelectedListener {
     private Recipe selectedRecipe = new Recipe();
     private Integer reviewNo;
     private Double ratingAvg;
     private Integer ratingTotal;
-    private String ingredients="";
-    private String preparationSteps="";
+    private String ingredients = "";
+    private String preparationSteps = "";
     private int counter = 0;
     private JSONObject reviewJsonObject;
+    private UserContext userContext;
 
     AlertDialog myPopUpReviewDialog;
     EditText inputReview;
@@ -64,19 +63,14 @@ public class ViewRecipeActivity extends AppCompatActivity
 
         Intent intent = getIntent();
         selectedRecipe = (Recipe) intent.getSerializableExtra("recipe");
-        //String uri = String.format("http://10.0.2.2:8090/api/user/all_recipes/%s", selectedRecipe.getId());
-
-        //fetchSelectedRecipe(uri);
 
         ImageView recipeImage = findViewById(R.id.recipe_image);
         Glide.with(this)
-                .load(selectedRecipe.getImageURL().get(0))
+                .load(selectedRecipe.getResizedImageURL().get(0))
                 .centerCrop()
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                 .placeholder(R.drawable.ic_launcher_background)
                 .into(recipeImage);
-        //DownloadImageTask downloadImageTask = new DownloadImageTask(recipeImage);
-        //downloadImageTask.execute(selectedRecipe.getImageURL().get(0));
 
         TextView recipeName = findViewById(R.id.recipe_name);
         recipeName.setText(selectedRecipe.getName());
@@ -116,8 +110,8 @@ public class ViewRecipeActivity extends AppCompatActivity
         //downloadImageTask.execute("https://lh3.googleusercontent.com/Js7QBBDQumvLixXwk7wnmyArHjN7SZbOElZHwzmZrR7mjA_ElR_p2tNGAMqcmr4Ru2ei47Gi8EvX7mDZd3ii=s640-c-rw-v1-e365");
 
         Button bookmarkBtn = findViewById(R.id.add_bookmark_btn);
-        // TODO: Change to real user id
-        String userEmail = "xxx@gmail.com";
+        this.userContext = new UserContext(this);
+        String userEmail = this.userContext.getEmail();
         BookmarkListener bookmarkListener = new BookmarkListener(this, userEmail, selectedRecipe.getId(), bookmarkBtn, false);
         bookmarkBtn.setOnClickListener(bookmarkListener);
         fetchBookmarkData(bookmarkBtn, bookmarkListener, userEmail);
@@ -127,7 +121,7 @@ public class ViewRecipeActivity extends AppCompatActivity
     }
 
     public void getAvgRating() {
-        ratingTotal=0;
+        ratingTotal = 0;
         for (UserReview ur : selectedRecipe.getUserReviews()) {
             ratingTotal += ur.getRating();
         }
@@ -154,11 +148,11 @@ public class ViewRecipeActivity extends AppCompatActivity
         MySingleton.getInstance(this).addToRequestQueue(objectRequest);
     }
 
-    private void reviewToJson(){
+    private void reviewToJson() {
         ReviewCommunicationModel review = new ReviewCommunicationModel();
         review.setRecipeId(selectedRecipe.getId());
         review.setRating(5);
-        review.setUserEmail("xxx@gmail.com");
+        review.setUserEmail(this.userContext.getEmail());
         review.setDescription(inputReview.getText().toString());
 
         Gson gson = new Gson();
@@ -171,7 +165,7 @@ public class ViewRecipeActivity extends AppCompatActivity
         }
     }
 
-    private void submitReview(){
+    private void submitReview() {
         JsonObjectRequest objectRequest = new JsonObjectRequest(
                 Request.Method.POST,
                 String.format("http://10.0.2.2:8090/api/user/post_review"),
@@ -221,7 +215,7 @@ public class ViewRecipeActivity extends AppCompatActivity
             counter++;
             ingredients += counter + ". " + i.toString() + "\n";
         }
-        counter=0;
+        counter = 0;
     }
 
     public void getSteps() {
@@ -286,11 +280,11 @@ public class ViewRecipeActivity extends AppCompatActivity
     }
 
 
-    private void navigationBar(){
-        BottomNavigationView bottonNavigationView=findViewById(R.id.bottom_nav);
-        bottonNavigationView.setOnNavigationItemSelectedListener(this);
-        //getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new HomeFragment()).commit();
+    private void navigationBar() {
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_nav);
+        bottomNavigationView.setOnItemSelectedListener(this);
     }
+
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
