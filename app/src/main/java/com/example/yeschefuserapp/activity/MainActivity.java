@@ -22,9 +22,11 @@ import com.example.yeschefuserapp.fragment.AdvancedFilterFragment;
 import com.example.yeschefuserapp.fragment.BookmarksFragment;
 import com.example.yeschefuserapp.fragment.HomeFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 
-public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener {
     private final static int REQ_LOCATION = 44;
+    private BottomNavigationView bottomNavigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,9 +68,10 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     }
 
     private void navigationBar() {
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_nav);
-        bottomNavigationView.setOnNavigationItemSelectedListener(this);
+        bottomNavigationView = findViewById(R.id.bottom_nav);
+        bottomNavigationView.setOnItemSelectedListener(this);
         int id = getIntent().getIntExtra("nav_item", 0);
+        bottomNavigationView.setSelectedItemId(id);
         checkId(id);
     }
 
@@ -110,6 +113,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 selectedFragment = new HomeFragment();
                 selectedFragment.setArguments(bundle);
         }
+        //bottomNavigationView.setSelectedItemId(id);
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
     }
 }

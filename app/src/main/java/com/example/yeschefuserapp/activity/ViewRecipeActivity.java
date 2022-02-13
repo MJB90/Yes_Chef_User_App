@@ -62,9 +62,6 @@ public class ViewRecipeActivity extends AppCompatActivity
 
         Intent intent = getIntent();
         selectedRecipe = (Recipe) intent.getSerializableExtra("recipe");
-        //String uri = String.format("http://10.0.2.2:8090/api/user/all_recipes/%s", selectedRecipe.getId());
-
-        //fetchSelectedRecipe(uri);
 
         ImageView recipeImage = findViewById(R.id.recipe_image);
         Glide.with(this)
