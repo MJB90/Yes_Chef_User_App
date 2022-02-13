@@ -6,6 +6,8 @@
     <string name="nav_bookmarks">Bookmarks</string>
     <string name="nav_advanced_filter">Advanced Filter</string>
     <string name="nav_account">Account</string>
+    <string name="nav_view_recipe">Recipe</string>
+    <string name="nav_filtered_result">Results</string>
 
     <string name="filter">Filter</string>
     <string name="add_to_bookmark">add to bookmark</string>

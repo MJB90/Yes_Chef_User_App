@@ -56,6 +56,7 @@ public class FilterResult extends AppCompatActivity implements NavigationBarView
         int id = item.getItemId();
         Intent intent = new Intent(this, MainActivity.class);
         switch (id) {
+
             case R.id.nav_home:
                 intent.putExtra("nav_item", R.id.nav_home);
                 break;
