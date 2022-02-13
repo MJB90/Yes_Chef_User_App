@@ -14,7 +14,7 @@
         android:layout_height="570dp">
 <LinearLayout
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical">
     <ImageView
         android:id="@+id/recipe_image"
@@ -42,12 +42,14 @@
                 android:layout_height="wrap_content"
                 android:layout_column="2" />
 
-            <TextView
-                android:id="@+id/bookmark_this"
+            <RatingBar
+                android:id="@+id/view_rating_bar"
+                style="@style/Widget.AppCompat.RatingBar.Small"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_column="3"
-                android:text="Bookmark this recipe" />
+                android:layout_height="match_parent"
+                android:isIndicator="true"
+                android:numStars="5"
+                android:stepSize="1" />
         </TableRow>
         //row2
 
