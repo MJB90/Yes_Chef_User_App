@@ -27,11 +27,16 @@ import com.google.android.material.navigation.NavigationBarView;
 public class MainActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener {
     private final static int REQ_LOCATION = 44;
     private BottomNavigationView bottomNavigationView;
+    private Fragment selectedFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        /*if (savedInstanceState!=null){
+            selectedFragment = getSupportFragmentManager().getFragment(savedInstanceState, "selectedFragment");
+        }*/
+
         checkLocationIsEnabledOrNot();
         grantPermission();
     }
@@ -94,7 +99,6 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     }
 
     public void checkId(int id) {
-        Fragment selectedFragment;
         switch (id) {
             case R.id.nav_bookmarks:
                 selectedFragment = new BookmarksFragment();
@@ -113,7 +117,13 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
                 selectedFragment = new HomeFragment();
                 selectedFragment.setArguments(bundle);
         }
-        //bottomNavigationView.setSelectedItemId(id);
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
     }
+
+    /*@Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        getSupportFragmentManager().putFragment(outState, "selectedFragment", selectedFragment);
+    }*/
 }

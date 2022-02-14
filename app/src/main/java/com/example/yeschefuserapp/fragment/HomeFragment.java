@@ -7,6 +7,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,6 +48,7 @@ import java.util.Locale;
 public class HomeFragment extends Fragment {
 
     private MainVerticalCustomListAdapter mainVerticalCustomListAdapter;
+    private RecyclerView recyclerView;
     private String country;
     private RecommendedRecipes recommendedRecipes;
     private UserContext userContext;
@@ -62,11 +64,12 @@ public class HomeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         Context viewContext = view.getContext();
         this.userContext = new UserContext(viewContext);
+        recyclerView=view.findViewById(R.id.recycler_view);
 
         if (getArguments() != null) email = getArguments().getString("EMAIL");
 
         //creating a list of recipe category list
-        getUserLocationAndTime(viewContext, view.findViewById(R.id.recycler_view));
+        getUserLocationAndTime(viewContext);
 
 
         SearchView searchView = view.findViewById(R.id.search_bar);
@@ -105,7 +108,7 @@ public class HomeFragment extends Fragment {
         return view;
     }
 
-    private void getUserLocationAndTime(Context context, RecyclerView recyclerView) {
+    private void getUserLocationAndTime(Context context) {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH");//Get the current time
         LocalTime now = LocalTime.now();
         String time = dtf.format(now);
@@ -120,7 +123,7 @@ public class HomeFragment extends Fragment {
                     try {
                         List<Address> address = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
                         country = address.get(0).getCountryName();
-                        fetchDataOrCacheData(context, recyclerView, country, time);
+                        fetchDataOrCacheData(context, country, time);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -155,7 +158,7 @@ public class HomeFragment extends Fragment {
         MySingleton.getInstance(context).addToRequestQueue(objectRequest);
     }
 
-    public void fetchDataOrCacheData(Context context, RecyclerView recyclerView, String country, String hour){
+    public void fetchDataOrCacheData(Context context, String country, String hour){
         SharedPreferences pref= context.getSharedPreferences("recommended_recipes_cache",Context.MODE_PRIVATE);
         Gson gson = new GsonBuilder().serializeNulls().create();
         //caching
@@ -166,7 +169,7 @@ public class HomeFragment extends Fragment {
 
             String json = pref.getString("RecommendedRecipes", "");
             recommendedRecipes = gson.fromJson(json, RecommendedRecipes.class);
-            createVerticalRecycleView(context,recyclerView,recommendedRecipes);
+            createVerticalRecycleView(context, recommendedRecipes);
         }
         else{
             JsonObjectRequest objectRequest = new JsonObjectRequest(
@@ -175,7 +178,7 @@ public class HomeFragment extends Fragment {
                     null,
                     response -> {
                         recommendedRecipes = gson.fromJson(String.valueOf(response), RecommendedRecipes.class);
-                        createVerticalRecycleView(context,recyclerView,recommendedRecipes);
+                        createVerticalRecycleView(context, recommendedRecipes);
                         SharedPreferences.Editor editor=pref.edit();
                         editor.putString("Email",email);
                         editor.putString("Country",country);
@@ -193,7 +196,7 @@ public class HomeFragment extends Fragment {
         }
     }
 
-    public void createVerticalRecycleView(Context context, RecyclerView recyclerView, RecommendedRecipes object){
+    public void createVerticalRecycleView(Context context, RecommendedRecipes object){
         mainVerticalCustomListAdapter = new MainVerticalCustomListAdapter(context, object);
         if (recyclerView != null) {
             LinearLayoutManager layoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
@@ -202,4 +205,19 @@ public class HomeFragment extends Fragment {
             recyclerView.setAdapter(mainVerticalCustomListAdapter);
         }
     }
+
+   /*@Override
+    public void onSaveInstanceState(Bundle outState){
+        super.onSaveInstanceState(outState);
+        outState.putParcelable("home_layout_state",recyclerView.getLayoutManager().onSaveInstanceState());
+    }
+    @Override
+    public void onViewStateRestored(Bundle savedInstanceState){
+        super.onViewStateRestored(savedInstanceState);
+        if (savedInstanceState!=null){
+            Parcelable savedRecyclerLayoutState = savedInstanceState.getParcelable("home_layout_state");
+            recyclerView.getLayoutManager().onRestoreInstanceState(savedRecyclerLayoutState);
+        }
+    }*/
+
 }
