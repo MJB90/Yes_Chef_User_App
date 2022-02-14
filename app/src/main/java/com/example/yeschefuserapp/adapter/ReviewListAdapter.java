@@ -45,6 +45,9 @@ public class ReviewListAdapter extends RecyclerView.Adapter<ReviewListAdapter.My
         holder.ratingBar.setRating(userReview.getRating().floatValue());
 
         //TODO Once review Date in model, change review date to real date.
+//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-YYYY hh:mm a z");
+//        String reviewDate = formatter.format(userReview.getReviewDate());
+//        holder.dateReview.setText(reviewDate);
         holder.dateReview.setText("1 Jan 2020");
 
         holder.reviewDesc.setText(userReview.getDescription());
@@ -53,7 +56,9 @@ public class ReviewListAdapter extends RecyclerView.Adapter<ReviewListAdapter.My
 
     @Override
     public int getItemCount() {
+        if(mUserReviews!=null)
         return mUserReviews.size();
+        return 0;
     }
 
     public static class MyReviewViewHolder extends RecyclerView.ViewHolder {

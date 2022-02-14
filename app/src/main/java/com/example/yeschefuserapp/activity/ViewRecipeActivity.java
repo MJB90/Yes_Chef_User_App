@@ -99,8 +99,6 @@ public class ViewRecipeActivity extends AppCompatActivity
         } else
             calories.setText("No calories info found");
 
-        TextView writeAReview = findViewById(R.id.write_a_review);
-        writeAReview.setOnClickListener(this);
 
         TextView ingredientsHeader = findViewById(R.id.ingredients_header);
         TextView ingredientsView = findViewById(R.id.ingredients);
@@ -120,6 +118,9 @@ public class ViewRecipeActivity extends AppCompatActivity
             reviewRecyclerView.setItemAnimator(new DefaultItemAnimator());
             reviewRecyclerView.setAdapter(adapter);
         }
+
+        Button writeAReview = findViewById(R.id.write_a_review);
+        writeAReview.setOnClickListener(this);
 
         Button bookmarkBtn = findViewById(R.id.add_bookmark_btn);
         this.userContext = new UserContext(this);
@@ -251,7 +252,7 @@ public class ViewRecipeActivity extends AppCompatActivity
         TextView header = myPopUpReview.findViewById(R.id.writeReviewHead);
         header.setText("Write A Review");
 
-        RatingBar submitRatingBar = findViewById(R.id.submit_rating_bar);
+        submitRatingBar = myPopUpReview.findViewById(R.id.submit_rating_bar);
         inputReview = myPopUpReview.findViewById(R.id.writeReviewText);
 
         Button submitBtn = myPopUpReview.findViewById(R.id.submitBtn);
