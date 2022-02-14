@@ -9,28 +9,7 @@ public class UserReview implements Serializable {
     private String userEmail;
     private Integer rating;
     private String description;
+    //TODO deserialize date and make a utility deserializer
+//    private Date reviewDate;
 
-    public String getUserEmail() {
-        return userEmail;
-    }
-
-    public void setUserEmail(String userEmail) {
-        this.userEmail = userEmail;
-    }
-
-    public Integer getRating() {
-        return rating;
-    }
-
-    public void setRating(Integer rating) {
-        this.rating = rating;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
 }

@@ -20,10 +20,17 @@
         android:id="@+id/recipe_image"
         android:layout_width="match_parent"
         android:layout_height="200dp" />
-
+    <TextView
+        android:id="@+id/recipe_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="25sp"
+        android:layout_gravity="center"
+        android:text="Recipe Name" />
     <TableLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:stretchColumns="*">
         //row 1
 
         <TableRow
@@ -31,26 +38,31 @@
             android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/recipe_name"
+                android:id="@+id/calories"
+                android:layout_gravity="center"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_column="1"
-                android:text="Recipe Name" />
+                android:layout_height="match_parent"
+                android:layout_column="0"
+                android:gravity="center"
+                android:text="Calories" />
 
             <TextView
+                android:id="@+id/prep_time"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_column="2" />
+                android:layout_height="match_parent"
+                android:layout_column="1"
+                android:gravity="center"
+                android:text="Duration" />
 
             <RatingBar
                 android:id="@+id/view_rating_bar"
                 style="@style/Widget.AppCompat.RatingBar.Indicator"
-                android:scaleX="0.7"
-                android:scaleY="0.7"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:isIndicator="true"
                 android:numStars="5"
+                android:scaleX="0.5"
+                android:scaleY="0.5"
                 android:stepSize="1" />
         </TableRow>
         //row2
@@ -60,22 +72,11 @@
             android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/prep_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_column="1"
-                android:text="Duration" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_column="2" />
-
-            <TextView
                 android:id="@+id/rating"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_column="3"
+                android:layout_column="2"
+                android:layout_gravity="center"
                 android:text="4/5(120 reviews)" />
         </TableRow>
         //row 3
@@ -84,53 +85,35 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/calories"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_column="1"
-                android:text="Calories" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_column="2" />
-
-            <TextView
-                android:id="@+id/write_a_review"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_column="3"
-                android:text="Write A Review" />
         </TableRow>
     </TableLayout>
 
     <TextView
-    android:id="@+id/ingredients_header"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="Ingredients"
-    android:textAlignment="center"
-    android:textSize="25sp"
-    android:textColor="@color/black"/>
+        android:id="@+id/ingredients_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Ingredients"
+        android:layout_marginTop="5dp"
+        android:textAlignment="center"
+        android:textSize="22sp"
+        android:textColor="@color/black"/>
 
     <TextView
         android:id="@+id/ingredients"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:text="ingredient 1"/>
-
-
 
     <TextView
         android:id="@+id/steps_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
         android:text="Preparation Steps"
         android:textAlignment="center"
-        android:textSize="25sp"
+        android:textSize="22sp"
         android:textColor="@color/black"/>
 
     <TextView
@@ -138,9 +121,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:text="step 1"/>
 
     <androidx.recyclerview.widget.RecyclerView
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:id="@+id/recycler_review"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
@@ -148,11 +134,24 @@
 </LinearLayout>
     </ScrollView>
 
-    <Button
-        android:id="@+id/add_bookmark_btn"
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/add_to_bookmark" />
+        android:layout_gravity="center">
+
+        <Button
+            android:id="@+id/write_a_review"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Write A Review" />
+        <Button
+            android:id="@+id/add_bookmark_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="50dp"
+            android:text="@string/add_to_bookmark" />
+    </LinearLayout>
+
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_nav"
