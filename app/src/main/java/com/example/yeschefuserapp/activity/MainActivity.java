@@ -7,7 +7,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.provider.Settings;
 import android.view.MenuItem;
 
@@ -125,9 +124,9 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
                 break;
             default:
                 SharedPreferences pref = this.getSharedPreferences(this.getResources().getString(R.string.login_preference), Context.MODE_PRIVATE);
-                String email = pref.getString("EMAIL", "wrong");
+                String email = pref.getString("email", "wrong");
                 Bundle bundle = new Bundle();
-                bundle.putString("EMAIL", email);
+                bundle.putString("email", email);
                 homeFragment.setArguments(bundle);
                 fragmentManager.beginTransaction().hide(activeFragment).show(homeFragment).commit();
                 activeFragment=homeFragment;
