@@ -44,9 +44,11 @@
 
             <RatingBar
                 android:id="@+id/view_rating_bar"
-                style="@style/Widget.AppCompat.RatingBar.Small"
+                style="@style/Widget.AppCompat.RatingBar.Indicator"
+                android:scaleX="0.7"
+                android:scaleY="0.7"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:isIndicator="true"
                 android:numStars="5"
                 android:stepSize="1" />
@@ -138,6 +140,10 @@
         android:layout_marginLeft="20dp"
         android:text="step 1"/>
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_review"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
 </LinearLayout>
     </ScrollView>

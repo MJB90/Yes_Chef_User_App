@@ -39,11 +39,11 @@
                 android:layout_width="240dp"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="@id/filter_rating_bar"
-                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintHorizontal_bias="0.1">
+                app:layout_constraintEnd_toEndOf="@id/filter_rating_bar"
+                app:layout_constraintHorizontal_bias="0.1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
                 <TextView
                     android:id="@+id/filter_textview_name"
@@ -78,12 +78,12 @@
                 android:isIndicator="true"
                 android:numStars="5"
                 android:stepSize="0.1"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@id/recipe_cuisine_prep_time"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintVertical_bias="0"/>
+                app:layout_constraintStart_toEndOf="@id/recipe_cuisine_prep_time"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </RelativeLayout>
