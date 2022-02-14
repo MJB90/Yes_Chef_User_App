@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.provider.Settings;
 import android.view.MenuItem;
 
@@ -15,6 +16,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.example.yeschefuserapp.R;
 import com.example.yeschefuserapp.fragment.AccountFragment;
@@ -27,18 +29,27 @@ import com.google.android.material.navigation.NavigationBarView;
 public class MainActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener {
     private final static int REQ_LOCATION = 44;
     private BottomNavigationView bottomNavigationView;
-    private Fragment selectedFragment;
+    private Fragment homeFragment=new HomeFragment();
+    private Fragment bookmarksFragment=new BookmarksFragment();
+    private Fragment advancedFilterFragment=new AdvancedFilterFragment();
+    private Fragment accountFragment=new AccountFragment();
+    private FragmentManager fragmentManager=getSupportFragmentManager();
+    private Fragment activeFragment=homeFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        /*if (savedInstanceState!=null){
-            selectedFragment = getSupportFragmentManager().getFragment(savedInstanceState, "selectedFragment");
-        }*/
-
+        createFragment();
         checkLocationIsEnabledOrNot();
         grantPermission();
+    }
+
+    private void createFragment() {
+        fragmentManager.beginTransaction().add(R.id.fragment_container,homeFragment,"HomeFragment").hide(homeFragment).
+                add(R.id.fragment_container,bookmarksFragment, "BookmarksFragment").hide(bookmarksFragment).
+                add(R.id.fragment_container,advancedFilterFragment, "AdvancedFilterFragment").hide(advancedFilterFragment).
+                add(R.id.fragment_container,accountFragment, "AccountFragment").hide(accountFragment).commit();
     }
 
     private void checkLocationIsEnabledOrNot() {
@@ -101,29 +112,27 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     public void checkId(int id) {
         switch (id) {
             case R.id.nav_bookmarks:
-                selectedFragment = new BookmarksFragment();
+                fragmentManager.beginTransaction().hide(activeFragment).show(bookmarksFragment).commit();
+                activeFragment=bookmarksFragment;
                 break;
             case R.id.nav_advanced_filter:
-                selectedFragment = new AdvancedFilterFragment();
+                fragmentManager.beginTransaction().hide(activeFragment).show(advancedFilterFragment).commit();
+                activeFragment=advancedFilterFragment;
                 break;
             case R.id.nav_account:
-                selectedFragment = new AccountFragment();
+                fragmentManager.beginTransaction().hide(activeFragment).show(accountFragment).commit();
+                activeFragment=accountFragment;
                 break;
             default:
                 SharedPreferences pref = this.getSharedPreferences(this.getResources().getString(R.string.login_preference), Context.MODE_PRIVATE);
                 String email = pref.getString("EMAIL", "wrong");
                 Bundle bundle = new Bundle();
                 bundle.putString("EMAIL", email);
-                selectedFragment = new HomeFragment();
-                selectedFragment.setArguments(bundle);
+                homeFragment.setArguments(bundle);
+                fragmentManager.beginTransaction().hide(activeFragment).show(homeFragment).commit();
+                activeFragment=homeFragment;
         }
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
     }
 
-    /*@Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
 
-        getSupportFragmentManager().putFragment(outState, "selectedFragment", selectedFragment);
-    }*/
 }

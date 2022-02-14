@@ -7,8 +7,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
-import android.widget.Toast;
-import androidx.appcompat.widget.SearchView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.yeschefuserapp.listener.ItemClickListener;
-import com.example.yeschefuserapp.utility.DownloadImageTask;
 import com.example.yeschefuserapp.R;
 import com.example.yeschefuserapp.model.Recipe;
 
@@ -42,11 +39,11 @@ public class MainHorizontalCustomAdapter extends RecyclerView.Adapter<MainHorizo
         return new MyViewHolder(view);
     }
 
+
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         Recipe recipe = recipes.get(position);
-        //DownloadImageTask downloadImageTask = new DownloadImageTask(holder.recipeImage);
-        //downloadImageTask.execute(recipe.getImageURL().get(0));
+
         if (recipe.getImageURL().size()!=0){
             Glide.with(holder.itemView)
                     .load(recipe.getResizedImageURL().get(0))

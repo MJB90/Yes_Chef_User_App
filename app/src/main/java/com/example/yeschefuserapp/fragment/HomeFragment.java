@@ -7,7 +7,6 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -61,6 +60,7 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         Context viewContext = view.getContext();
         this.userContext = new UserContext(viewContext);
@@ -109,8 +109,8 @@ public class HomeFragment extends Fragment {
     }
 
     private void getUserLocationAndTime(Context context) {
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH");//Get the current time
-        LocalTime now = LocalTime.now();
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH");
+        LocalTime now = LocalTime.now(); //Get the current time
         String time = dtf.format(now);
         //Get the user location
         try {
@@ -205,19 +205,4 @@ public class HomeFragment extends Fragment {
             recyclerView.setAdapter(mainVerticalCustomListAdapter);
         }
     }
-
-   /*@Override
-    public void onSaveInstanceState(Bundle outState){
-        super.onSaveInstanceState(outState);
-        outState.putParcelable("home_layout_state",recyclerView.getLayoutManager().onSaveInstanceState());
-    }
-    @Override
-    public void onViewStateRestored(Bundle savedInstanceState){
-        super.onViewStateRestored(savedInstanceState);
-        if (savedInstanceState!=null){
-            Parcelable savedRecyclerLayoutState = savedInstanceState.getParcelable("home_layout_state");
-            recyclerView.getLayoutManager().onRestoreInstanceState(savedRecyclerLayoutState);
-        }
-    }*/
-
 }

@@ -13,6 +13,7 @@ import com.example.yeschefuserapp.R;
 import com.example.yeschefuserapp.listener.RecipeClickListener;
 import com.example.yeschefuserapp.model.Recipe;
 import com.example.yeschefuserapp.utility.RecommendedRecipes;
+
 import java.util.List;
 
 public class MainVerticalCustomListAdapter extends RecyclerView.Adapter<MainVerticalCustomListAdapter.MainViewHolder> {
@@ -55,10 +56,10 @@ public class MainVerticalCustomListAdapter extends RecyclerView.Adapter<MainVert
 
     private void setRecipeRecycler(RecyclerView recyclerView, List<Recipe> recipes, View view) {
         new Thread(() -> {
-            RecipeClickListener onClickListener = new RecipeClickListener(view.getContext());
-            MainHorizontalCustomAdapter adapter = new MainHorizontalCustomAdapter(R.layout.main_recycler_column_item, context, recipes, onClickListener);
-            recyclerView.setLayoutManager(new LinearLayoutManager(context, RecyclerView.HORIZONTAL, false));
-            recyclerView.setAdapter(adapter);
+                RecipeClickListener onClickListener = new RecipeClickListener(view.getContext());
+                MainHorizontalCustomAdapter adapter = new MainHorizontalCustomAdapter(R.layout.main_recycler_column_item, context, recipes, onClickListener);
+                recyclerView.setLayoutManager(new LinearLayoutManager(context, RecyclerView.HORIZONTAL, false));
+                recyclerView.setAdapter(adapter);
         }).start();
     }
 }
