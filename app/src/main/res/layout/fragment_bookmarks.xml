@@ -13,10 +13,11 @@
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:text="Bookmarks"
+            android:layout_height="80dp"
+            android:text="YesChef"
+            android:fontFamily="@font/dancing_script_bold"
             android:textColor="#fff"
-            android:background="#ff4500"
+            android:background="@drawable/login_image"
             android:textSize="30sp"
             android:textStyle="italic"
             android:gravity="center"

@@ -10,18 +10,35 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:text="YesChef"
+            android:fontFamily="@font/dancing_script_bold"
+            android:textColor="#fff"
+            android:background="@drawable/login_image"
+            android:textSize="30sp"
+            android:textStyle="italic"
+            android:gravity="center"
+            />
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Account"
-            android:textSize="30sp" />
+            android:layout_height="100dp"
+            android:text="Account Settings"
+            android:gravity="left"
+            android:textSize="20sp" />
 
         <Button
             android:id="@+id/logout_btn"
-            android:layout_width="match_parent"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:text="Logout" />
+            android:text="Logout"
+            android:textStyle="bold"
+            android:textColor="#fff"
+            android:textSize="20dp"
+            android:background="#ff5500"
+            android:layout_marginLeft="120dp"/>
     </LinearLayout>
 
 </FrameLayout>
