@@ -8,6 +8,7 @@ import com.example.yeschefuserapp.R;
 public class UserContext {
     private static final String EMAIL = "email";
     private static final String PWD = "password";
+    private static final String TOKEN = "token";
 
     private final SharedPreferences sharedPreferences;
 
@@ -15,10 +16,11 @@ public class UserContext {
         this.sharedPreferences = context.getSharedPreferences(context.getResources().getString(R.string.login_preference), Context.MODE_PRIVATE);
     }
 
-    public void setUserInfo(String email, String password) {
+    public void setUserInfo(String email, String password, String token, boolean isChecked) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(EMAIL, email);
-        editor.putString(PWD, password);
+        if (isChecked) editor.putString(PWD, password);
+        editor.putString(TOKEN, token);
         editor.apply();
     }
 
@@ -28,5 +30,15 @@ public class UserContext {
 
     public String getPwd() {
         return this.sharedPreferences.getString(PWD, "wrong");
+    }
+
+    public String getToken() {
+        return this.sharedPreferences.getString(TOKEN, "token");
+    }
+
+    public void clearLoginPreferences() {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.clear();
+        editor.apply();
     }
 }

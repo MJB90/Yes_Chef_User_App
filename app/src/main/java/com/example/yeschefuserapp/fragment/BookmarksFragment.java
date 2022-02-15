@@ -1,5 +1,6 @@
 package com.example.yeschefuserapp.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,9 +13,11 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.example.yeschefuserapp.R;
+import com.example.yeschefuserapp.activity.LoginActivity;
 import com.example.yeschefuserapp.adapter.MainHorizontalCustomAdapter;
 import com.example.yeschefuserapp.context.UserContext;
 import com.example.yeschefuserapp.listener.RecipeClickListener;
@@ -24,12 +27,15 @@ import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class BookmarksFragment extends Fragment {
     MainHorizontalCustomAdapter adapter;
     private final List<Recipe> bookmarkList = new ArrayList<>();
     private UserContext userContext;
+    private String ACCESS_TOKEN;
 
     public BookmarksFragment() {
         // Required empty public constructor
@@ -41,7 +47,7 @@ public class BookmarksFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_bookmarks, container, false);
         this.userContext = new UserContext(view.getContext());
-
+        ACCESS_TOKEN=userContext.getToken();
         RecipeClickListener onClickListener = new RecipeClickListener(view.getContext());
         adapter = new MainHorizontalCustomAdapter(R.layout.bookmark_item, view.getContext(), bookmarkList, onClickListener);
 
@@ -60,7 +66,7 @@ public class BookmarksFragment extends Fragment {
     private void fetchData(String email) {
         JsonArrayRequest objectRequest = new JsonArrayRequest(
                 Request.Method.GET,
-                String.format("http://10.0.2.2:8090/api/user/bookmarks/%s", email),
+                String.format(getString(R.string.domain_name)+"api/user/bookmarks/%s", email),
                 null,
                 response -> {
                     Gson gson = new Gson();
@@ -74,10 +80,20 @@ public class BookmarksFragment extends Fragment {
                     adapter.notifyDataSetChanged();
                 },
                 error -> {
-                    Log.e("BookmarksFragment", "FetchData failed", error);
-                    Toast.makeText(this.getContext(), error.toString(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(this.getContext(), "You are Logged out", Toast.LENGTH_LONG).show();
+                    userContext.clearLoginPreferences();
+                    Intent intent = new Intent(this.getContext(), LoginActivity.class);
+                    this.getContext().startActivity(intent);
                 }
-        );
+        ){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headerMap = new HashMap<String, String>();
+                headerMap.put("Content-Type", "application/json");
+                headerMap.put("Authorization", "Bearer " + ACCESS_TOKEN);
+                return headerMap;
+            }
+        };
         MySingleton.getInstance(this.getContext()).addToRequestQueue(objectRequest);
     }
 

@@ -1,6 +1,7 @@
 package com.example.yeschefuserapp.fragment;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.yeschefuserapp.R;
 import com.example.yeschefuserapp.activity.MainActivity;
+import com.example.yeschefuserapp.context.UserContext;
 import com.example.yeschefuserapp.listener.LoginListener;
 
 public class LoginFragment extends Fragment {
@@ -34,34 +36,22 @@ public class LoginFragment extends Fragment {
         rememberMe = view.findViewById(R.id.remember_me);
 
         // TODO: Add back remember me feature
-//        SharedPreferences pref = getActivity().getSharedPreferences("user_credentials", view.getContext().MODE_PRIVATE);
-//        if (pref.contains("username") && pref.contains("password")) {
-//            boolean loginOk = logIn(pref.getString("username", "wrong"), pref.getString("password", "wrong"));
-//            if (loginOk) {
-//                startProtectedActivity(view);
-//            }
-//        }
+        UserContext userContext=new UserContext(view.getContext());
+        if (userContext.getEmail().contains("EMAIL") && userContext.getPwd().contains("PWD") && userContext.getToken().contains("TOKEN")) {
+           boolean loginOk = logIn(userContext.getEmail(), userContext.getPwd(),userContext.getToken());
+            if (loginOk) {
+                startProtectedActivity(view);
+           }
+        }
 
-//        loginBtn.setOnClickListener(v -> {
-//            String username = emailText.getText().toString();
-//            String password = passwordText.getText().toString();
-//            if (logIn(username, password)) {
-//                if (rememberMe.isChecked()) {
-//                    SharedPreferences.Editor editor = pref.edit();
-//                    editor.putString("username", username);
-//                    editor.putString("password", password);
-//                    editor.commit();
-//                }
-//                Toast.makeText(view.getContext(), "Login successful!", Toast.LENGTH_SHORT).show();
-//                startProtectedActivity(view);
-//            } else {
-//                Toast.makeText(view.getContext(), "Credentials are not valid", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-        LoginListener listener = new LoginListener(this.getContext(), emailText, passwordText);
+        LoginListener listener = new LoginListener(this.getContext(), emailText, passwordText, rememberMe);
         loginBtn.setOnClickListener(listener);
 
         return view;
+    }
+
+    private boolean logIn(String email, String password, String token ){
+        return false;
     }
 
     private void startProtectedActivity(View view) {

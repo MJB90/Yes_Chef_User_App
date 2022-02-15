@@ -19,14 +19,17 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.yeschefuserapp.R;
 import com.example.yeschefuserapp.activity.FilterResult;
+import com.example.yeschefuserapp.activity.LoginActivity;
 import com.example.yeschefuserapp.adapter.MainVerticalCustomListAdapter;
 import com.example.yeschefuserapp.context.UserContext;
+import com.example.yeschefuserapp.listener.LogoutListener;
 import com.example.yeschefuserapp.model.Recipe;
 import com.example.yeschefuserapp.utility.MySingleton;
 import com.example.yeschefuserapp.utility.RecommendedRecipes;
@@ -41,8 +44,10 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public class HomeFragment extends Fragment {
 
@@ -52,6 +57,7 @@ public class HomeFragment extends Fragment {
     private RecommendedRecipes recommendedRecipes;
     private UserContext userContext;
     private String email;
+    private String ACCESS_TOKEN;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -65,6 +71,8 @@ public class HomeFragment extends Fragment {
         Context viewContext = view.getContext();
         this.userContext = new UserContext(viewContext);
         recyclerView=view.findViewById(R.id.recycler_view);
+
+        ACCESS_TOKEN=userContext.getToken();
 
         if (getArguments() != null) email = getArguments().getString("email");
 
@@ -83,7 +91,7 @@ public class HomeFragment extends Fragment {
                     List<Recipe> recipeSearch = new ArrayList<>();
                     JsonArrayRequest objectRequest = new JsonArrayRequest(
                             Request.Method.GET,
-                            "http://10.0.2.2:8090/api/user/search/" + s,
+                            getString(R.string.domain_name)+"api/user/search/" + s,
                             null,
                             response -> {
                                 Recipe[] tmpArray = gson.fromJson(response.toString(), Recipe[].class);
@@ -92,8 +100,21 @@ public class HomeFragment extends Fragment {
                                 intent.putExtra("recipes", (Serializable) recipeSearch);
                                 startActivity(intent);
                             },
-                            error -> Toast.makeText(view.getContext(), error.toString(), Toast.LENGTH_LONG).show()
-                    );
+                            error -> {
+                                Toast.makeText(view.getContext(), "You are Logged out", Toast.LENGTH_LONG).show();
+                                userContext.clearLoginPreferences();
+                                Intent intent = new Intent(view.getContext(), LoginActivity.class);
+                                view.getContext().startActivity(intent);
+                            }
+                    ){
+                        @Override
+                        public Map<String, String> getHeaders() throws AuthFailureError {
+                            Map<String, String> headerMap = new HashMap<String, String>();
+                            headerMap.put("Content-Type", "application/json");
+                            headerMap.put("Authorization", "Bearer " + ACCESS_TOKEN);
+                            return headerMap;
+                        }
+                    };
                     MySingleton.getInstance(view.getContext()).addToRequestQueue(objectRequest);
                     return true;
                 }
@@ -132,30 +153,7 @@ public class HomeFragment extends Fragment {
         } catch (SecurityException e) {
             e.printStackTrace();
         }
-        //fetch recipe
-        JsonObjectRequest objectRequest = new JsonObjectRequest(
-                Request.Method.GET,
-                String.format("http://10.0.2.2:8090/api/user/recommended_recipes/%s/singapore/%s/20", this.userContext.getEmail(), time),
-                null,
-                response -> {
-                    Gson gson = new GsonBuilder().serializeNulls().create();
-                    recommendedRecipes = gson.fromJson(String.valueOf(response), RecommendedRecipes.class);
-
-                    mainVerticalCustomListAdapter = new MainVerticalCustomListAdapter(context, recommendedRecipes);
-                    if (recyclerView != null) {
-                        LinearLayoutManager layoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
-                        recyclerView.setLayoutManager(layoutManager);
-                        recyclerView.setItemAnimator(new DefaultItemAnimator());
-                        recyclerView.setAdapter(mainVerticalCustomListAdapter);
-                    }
-                },
-                error -> {
-                    Log.e("HomeFragment", "FetchData failed", error);
-                    Toast.makeText(context, error.toString(), Toast.LENGTH_LONG).show();
-                }
-        );
-        objectRequest.setRetryPolicy(new DefaultRetryPolicy(0, 0, DefaultRetryPolicy.DEFAULT_TIMEOUT_MS));
-        MySingleton.getInstance(context).addToRequestQueue(objectRequest);
+        fetchDataOrCacheData(context,country,time);
     }
 
     public void fetchDataOrCacheData(Context context, String country, String hour){
@@ -174,7 +172,7 @@ public class HomeFragment extends Fragment {
         else{
             JsonObjectRequest objectRequest = new JsonObjectRequest(
                     Request.Method.GET,
-                    String.format("http://10.0.2.2:8090/api/user/recommended_recipes/%s/singapore/%s/20", this.userContext.getEmail(), hour),
+                    String.format(getString(R.string.domain_name)+"api/user/recommended_recipes/%s/singapore/%s/20", this.userContext.getEmail(), hour),
                     null,
                     response -> {
                         recommendedRecipes = gson.fromJson(String.valueOf(response), RecommendedRecipes.class);
@@ -187,10 +185,20 @@ public class HomeFragment extends Fragment {
                         editor.apply();
                     },
                     error -> {
-                        Log.e("HomeFragment", "FetchData failed", error);
-                        Toast.makeText(context, error.toString(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(context, "You are Logged out", Toast.LENGTH_LONG).show();
+                        userContext.clearLoginPreferences();
+                        Intent intent = new Intent(context, LoginActivity.class);
+                        context.startActivity(intent);
                     }
-            );
+            ){
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    Map<String, String> headerMap = new HashMap<String, String>();
+                    headerMap.put("Content-Type", "application/json");
+                    headerMap.put("Authorization", "Bearer " + ACCESS_TOKEN);
+                    return headerMap;
+                }
+            };
             objectRequest.setRetryPolicy(new DefaultRetryPolicy(0, 0, DefaultRetryPolicy.DEFAULT_TIMEOUT_MS));
             MySingleton.getInstance(context).addToRequestQueue(objectRequest);
         }

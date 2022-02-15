@@ -1,12 +1,16 @@
 package com.example.yeschefuserapp.listener;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
+import com.example.yeschefuserapp.R;
+import com.example.yeschefuserapp.activity.LoginActivity;
+import com.example.yeschefuserapp.activity.MainActivity;
 import com.example.yeschefuserapp.model.AppUser;
 import com.example.yeschefuserapp.utility.MySingleton;
 import com.google.gson.Gson;
@@ -40,8 +44,12 @@ public class SignupListener implements View.OnClickListener {
 
         StringRequest objectRequest = new StringRequest(
                 Request.Method.POST,
-                "http://10.0.2.2:8090/api/user/signup",
-                response -> Toast.makeText(context, "Signup successful!", Toast.LENGTH_SHORT).show(),
+                context.getString(R.string.domain_name)+"api/user/signup",
+                response -> {
+                    Toast.makeText(context, "Signup successful!", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(context, LoginActivity.class);
+                    context.startActivity(intent);
+                },
                 errorListener
         ) {
             @Override
