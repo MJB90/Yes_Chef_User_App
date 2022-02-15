@@ -1,6 +1,10 @@
 package com.example.yeschefuserapp.model;
 
+import com.example.yeschefuserapp.utility.LocalDataTimeGsonAdapter;
+import com.google.gson.annotations.JsonAdapter;
+
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 import lombok.Data;
 
@@ -10,6 +14,7 @@ public class UserReview implements Serializable {
     private Integer rating;
     private String description;
     //TODO deserialize date and make a utility deserializer
-//    private Date reviewDate;
+    @JsonAdapter(LocalDataTimeGsonAdapter.class)
+    private LocalDateTime reviewDateTime;
 
 }

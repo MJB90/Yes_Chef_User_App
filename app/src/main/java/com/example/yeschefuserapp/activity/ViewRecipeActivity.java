@@ -130,7 +130,7 @@ public class ViewRecipeActivity extends AppCompatActivity
         Button bookmarkBtn = findViewById(R.id.add_bookmark_btn);
         this.userContext = new UserContext(this);
         String userEmail = this.userContext.getEmail();
-        BookmarkListener bookmarkListener = new BookmarkListener(this, userEmail, selectedRecipe.getId(), bookmarkBtn, false);
+        BookmarkListener bookmarkListener = new BookmarkListener(this, selectedRecipe.getId(), bookmarkBtn, false);
         bookmarkBtn.setOnClickListener(bookmarkListener);
         fetchBookmarkData(bookmarkBtn, bookmarkListener, userEmail);
 
