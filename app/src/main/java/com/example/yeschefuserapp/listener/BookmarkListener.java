@@ -10,6 +10,7 @@ import com.android.volley.Request;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.example.yeschefuserapp.R;
+import com.example.yeschefuserapp.context.UserContext;
 import com.example.yeschefuserapp.model.BookmarkCommunicationModel;
 import com.example.yeschefuserapp.utility.MySingleton;
 import com.google.gson.Gson;
@@ -17,10 +18,14 @@ import com.google.gson.Gson;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class BookmarkListener implements View.OnClickListener {
     private static final String TAG = "BookmarkListener";
 
     private final Context context;
+    private final UserContext userContext;
     private final String userEmail;
     private final String recipeId;
     private final Button btn;
@@ -28,6 +33,7 @@ public class BookmarkListener implements View.OnClickListener {
 
     public BookmarkListener(Context context, String userEmail, String recipeId, Button btn, boolean isAdded) {
         this.context = context;
+        this.userContext = new UserContext(context);
         this.userEmail = userEmail;
         this.recipeId = recipeId;
         this.btn = btn;
@@ -67,7 +73,14 @@ public class BookmarkListener implements View.OnClickListener {
                     Log.e(TAG, "Add bookmark failed", error);
                     Toast.makeText(context, "Add failed", Toast.LENGTH_LONG).show();
                 }
-        );
+        ) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headerMap = new HashMap<String, String>();
+                headerMap.put("Authorization", "Bearer " + userContext.getToken());
+                return headerMap;
+            }
+        };
         MySingleton.getInstance(context).addToRequestQueue(objectRequest);
     }
 
@@ -84,7 +97,14 @@ public class BookmarkListener implements View.OnClickListener {
                     Log.e(TAG, "Delete bookmark failed", error);
                     Toast.makeText(context, "Delete failed", Toast.LENGTH_LONG).show();
                 }
-        );
+        ) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headerMap = new HashMap<String, String>();
+                headerMap.put("Authorization", "Bearer " + userContext.getToken());
+                return headerMap;
+            }
+        };
         MySingleton.getInstance(context).addToRequestQueue(objectRequest);
     }
 }
