@@ -1,5 +1,6 @@
 package com.example.yeschefuserapp.fragment;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -9,10 +10,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.example.yeschefuserapp.R;
+import com.example.yeschefuserapp.activity.ForgetPasswordActivity;
 import com.example.yeschefuserapp.activity.MainActivity;
 import com.example.yeschefuserapp.context.UserContext;
 import com.example.yeschefuserapp.listener.LoginListener;
@@ -22,6 +26,7 @@ public class LoginFragment extends Fragment {
     EditText emailText;
     EditText passwordText;
     CheckBox rememberMe;
+    TextView forgetPassword;
 
     public LoginFragment() {
     }
@@ -34,29 +39,25 @@ public class LoginFragment extends Fragment {
         emailText = view.findViewById(R.id.email);
         passwordText = view.findViewById(R.id.password);
         rememberMe = view.findViewById(R.id.remember_me);
+        forgetPassword = view.findViewById(R.id.forget_password);
+        UserContext userContext = new UserContext(view.getContext());
 
-        // TODO: Add back remember me feature
-        UserContext userContext=new UserContext(view.getContext());
+        //Auto login
         if (userContext.getEmail().contains("EMAIL") && userContext.getPwd().contains("PWD") && userContext.getToken().contains("TOKEN")) {
-           boolean loginOk = logIn(userContext.getEmail(), userContext.getPwd(),userContext.getToken());
-            if (loginOk) {
-                startProtectedActivity(view);
-           }
+            Intent intent = new Intent(view.getContext(), MainActivity.class);
+            startActivity(intent);
         }
-
         LoginListener listener = new LoginListener(this.getContext(), emailText, passwordText, rememberMe);
         loginBtn.setOnClickListener(listener);
 
+        forgetPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(view.getContext(), ForgetPasswordActivity.class);
+                startActivity(intent);
+            }
+        });
         return view;
-    }
-
-    private boolean logIn(String email, String password, String token ){
-        return false;
-    }
-
-    private void startProtectedActivity(View view) {
-        Intent intent = new Intent(view.getContext(), MainActivity.class);
-        startActivity(intent);
     }
 
 }

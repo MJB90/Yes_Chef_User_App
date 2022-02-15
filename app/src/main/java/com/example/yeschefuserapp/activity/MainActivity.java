@@ -28,12 +28,12 @@ import com.google.android.material.navigation.NavigationBarView;
 public class MainActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener {
     private final static int REQ_LOCATION = 44;
     private BottomNavigationView bottomNavigationView;
-    private Fragment homeFragment=new HomeFragment();
-    private Fragment bookmarksFragment=new BookmarksFragment();
-    private Fragment advancedFilterFragment=new AdvancedFilterFragment();
-    private Fragment accountFragment=new AccountFragment();
-    private FragmentManager fragmentManager=getSupportFragmentManager();
-    private Fragment activeFragment=homeFragment;
+    private Fragment homeFragment = new HomeFragment();
+    private Fragment bookmarksFragment = new BookmarksFragment();
+    private Fragment advancedFilterFragment = new AdvancedFilterFragment();
+    private Fragment accountFragment = new AccountFragment();
+    private FragmentManager fragmentManager = getSupportFragmentManager();
+    private Fragment activeFragment = homeFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,10 +45,10 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     }
 
     private void createFragment() {
-        fragmentManager.beginTransaction().add(R.id.fragment_container,homeFragment,"HomeFragment").hide(homeFragment).
-                add(R.id.fragment_container,bookmarksFragment, "BookmarksFragment").hide(bookmarksFragment).
-                add(R.id.fragment_container,advancedFilterFragment, "AdvancedFilterFragment").hide(advancedFilterFragment).
-                add(R.id.fragment_container,accountFragment, "AccountFragment").hide(accountFragment).commit();
+        fragmentManager.beginTransaction().add(R.id.fragment_container, homeFragment, "HomeFragment").hide(homeFragment).
+                add(R.id.fragment_container, bookmarksFragment, "BookmarksFragment").hide(bookmarksFragment).
+                add(R.id.fragment_container, advancedFilterFragment, "AdvancedFilterFragment").hide(advancedFilterFragment).
+                add(R.id.fragment_container, accountFragment, "AccountFragment").hide(accountFragment).commit();
     }
 
     private void checkLocationIsEnabledOrNot() {
@@ -112,15 +112,15 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         switch (id) {
             case R.id.nav_bookmarks:
                 fragmentManager.beginTransaction().hide(activeFragment).show(bookmarksFragment).commit();
-                activeFragment=bookmarksFragment;
+                activeFragment = bookmarksFragment;
                 break;
             case R.id.nav_advanced_filter:
                 fragmentManager.beginTransaction().hide(activeFragment).show(advancedFilterFragment).commit();
-                activeFragment=advancedFilterFragment;
+                activeFragment = advancedFilterFragment;
                 break;
             case R.id.nav_account:
                 fragmentManager.beginTransaction().hide(activeFragment).show(accountFragment).commit();
-                activeFragment=accountFragment;
+                activeFragment = accountFragment;
                 break;
             default:
                 SharedPreferences pref = this.getSharedPreferences(this.getResources().getString(R.string.login_preference), Context.MODE_PRIVATE);
@@ -129,7 +129,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
                 bundle.putString("email", email);
                 homeFragment.setArguments(bundle);
                 fragmentManager.beginTransaction().hide(activeFragment).show(homeFragment).commit();
-                activeFragment=homeFragment;
+                activeFragment = homeFragment;
         }
     }
 

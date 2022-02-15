@@ -1,12 +1,14 @@
 package com.example.yeschefuserapp.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.viewpager.widget.ViewPager;
 
 import android.os.Bundle;
 
 import com.example.yeschefuserapp.R;
 import com.example.yeschefuserapp.adapter.LoginAdapter;
+import com.example.yeschefuserapp.fragment.LoginFragment;
 import com.google.android.material.tabs.TabLayout;
 
 public class LoginActivity extends AppCompatActivity {

@@ -70,8 +70,8 @@ public class ViewRecipeActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_recipe);
-        userContext=new UserContext(this);
-        ACCESS_TOKEN=userContext.getToken();
+        userContext = new UserContext(this);
+        ACCESS_TOKEN = userContext.getToken();
         Intent intent = getIntent();
         selectedRecipe = (Recipe) intent.getSerializableExtra("recipe");
 
@@ -115,10 +115,10 @@ public class ViewRecipeActivity extends AppCompatActivity
         getSteps();
         steps.setText(preparationSteps);
 
-        ReviewListAdapter adapter = new ReviewListAdapter(R.layout.review_item_row,this,selectedRecipe.getUserReviews());
+        ReviewListAdapter adapter = new ReviewListAdapter(R.layout.review_item_row, this, selectedRecipe.getUserReviews());
         RecyclerView reviewRecyclerView = findViewById(R.id.recycler_review);
-        if(reviewRecyclerView != null){
-            LinearLayoutManager layoutManager = new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
+        if (reviewRecyclerView != null) {
+            LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
             reviewRecyclerView.setLayoutManager(layoutManager);
             reviewRecyclerView.setItemAnimator(new DefaultItemAnimator());
             reviewRecyclerView.setAdapter(adapter);
@@ -164,7 +164,7 @@ public class ViewRecipeActivity extends AppCompatActivity
                     Intent intent = new Intent(this, LoginActivity.class);
                     startActivity(intent);
                 }
-        ){
+        ) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> headerMap = new HashMap<String, String>();
@@ -196,7 +196,7 @@ public class ViewRecipeActivity extends AppCompatActivity
     private void submitReview() {
         JsonObjectRequest objectRequest = new JsonObjectRequest(
                 Request.Method.POST,
-                String.format(getString(R.string.domain_name)+"api/user/post_review"),
+                String.format(getString(R.string.domain_name) + "api/user/post_review"),
                 reviewJsonObject,
                 response -> {
                     //TODO go to review page
@@ -210,7 +210,7 @@ public class ViewRecipeActivity extends AppCompatActivity
                     Intent intent = new Intent(this, LoginActivity.class);
                     startActivity(intent);*/
                 }
-        ){
+        ) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> headerMap = new HashMap<String, String>();
@@ -225,7 +225,7 @@ public class ViewRecipeActivity extends AppCompatActivity
     private void fetchBookmarkData(Button bookmarkBtn, BookmarkListener bookmarkListener, String email) {
         JsonArrayRequest objectRequest = new JsonArrayRequest(
                 Request.Method.GET,
-                String.format(getString(R.string.domain_name)+"api/user/bookmarks/%s", email),
+                String.format(getString(R.string.domain_name) + "api/user/bookmarks/%s", email),
                 null,
                 response -> {
                     Gson gson = new Gson();
@@ -249,7 +249,7 @@ public class ViewRecipeActivity extends AppCompatActivity
                     Intent intent = new Intent(this, LoginActivity.class);
                     startActivity(intent);
                 }
-        ){
+        ) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> headerMap = new HashMap<String, String>();
@@ -322,7 +322,7 @@ public class ViewRecipeActivity extends AppCompatActivity
 
         //if (id == R.id.bookmark_this) {
 
-            //
+        //
         //}
         if (id == R.id.write_a_review) {
             PopUpWriteReview();

@@ -47,7 +47,7 @@ public class BookmarksFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_bookmarks, container, false);
         this.userContext = new UserContext(view.getContext());
-        ACCESS_TOKEN=userContext.getToken();
+        ACCESS_TOKEN = userContext.getToken();
         RecipeClickListener onClickListener = new RecipeClickListener(view.getContext());
         adapter = new MainHorizontalCustomAdapter(R.layout.bookmark_item, view.getContext(), bookmarkList, onClickListener);
 
@@ -66,7 +66,7 @@ public class BookmarksFragment extends Fragment {
     private void fetchData(String email) {
         JsonArrayRequest objectRequest = new JsonArrayRequest(
                 Request.Method.GET,
-                String.format(getString(R.string.domain_name)+"api/user/bookmarks/%s", email),
+                String.format(getString(R.string.domain_name) + "api/user/bookmarks/%s", email),
                 null,
                 response -> {
                     Gson gson = new Gson();
@@ -85,7 +85,7 @@ public class BookmarksFragment extends Fragment {
                     Intent intent = new Intent(this.getContext(), LoginActivity.class);
                     this.getContext().startActivity(intent);
                 }
-        ){
+        ) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> headerMap = new HashMap<String, String>();
