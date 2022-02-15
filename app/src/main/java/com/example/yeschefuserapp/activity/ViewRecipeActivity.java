@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
@@ -44,7 +45,9 @@ import org.json.JSONObject;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ViewRecipeActivity extends AppCompatActivity
         implements View.OnClickListener, NavigationBarView.OnItemSelectedListener {
@@ -57,6 +60,7 @@ public class ViewRecipeActivity extends AppCompatActivity
     private int counter = 0;
     private JSONObject reviewJsonObject;
     private UserContext userContext;
+    private String ACCESS_TOKEN;
 
     AlertDialog myPopUpReviewDialog;
     EditText inputReview;
@@ -66,7 +70,8 @@ public class ViewRecipeActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_recipe);
-
+        userContext=new UserContext(this);
+        ACCESS_TOKEN=userContext.getToken();
         Intent intent = getIntent();
         selectedRecipe = (Recipe) intent.getSerializableExtra("recipe");
 
@@ -154,10 +159,20 @@ public class ViewRecipeActivity extends AppCompatActivity
                     selectedRecipe = gson.fromJson(response.toString(), Recipe.class);
                 },
                 error -> {
-                    Log.e("ViewRecipeActivity", "FetchSelectedRecipe failed", error);
-                    Toast.makeText(ViewRecipeActivity.this, error.toString(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "You are Logged out", Toast.LENGTH_LONG).show();
+                    userContext.clearLoginPreferences();
+                    Intent intent = new Intent(this, LoginActivity.class);
+                    startActivity(intent);
                 }
-        );
+        ){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headerMap = new HashMap<String, String>();
+                headerMap.put("Content-Type", "application/json");
+                headerMap.put("Authorization", "Bearer " + ACCESS_TOKEN);
+                return headerMap;
+            }
+        };
         MySingleton.getInstance(this).addToRequestQueue(objectRequest);
     }
 
@@ -181,23 +196,36 @@ public class ViewRecipeActivity extends AppCompatActivity
     private void submitReview() {
         JsonObjectRequest objectRequest = new JsonObjectRequest(
                 Request.Method.POST,
-                String.format("http://10.0.2.2:8090/api/user/post_review"),
+                String.format(getString(R.string.domain_name)+"api/user/post_review"),
                 reviewJsonObject,
                 response -> {
                     //TODO go to review page
 //                    Intent intent = new Intent(view.getContext(), FilterResult.class);
 //                    startActivity(intent);
                 },
-                error -> Toast.makeText(this, error.toString(), Toast.LENGTH_LONG).show()
-
-        );
+                error -> {
+                    //TODO uncomment the below codes after you are done with this function
+                    /*Toast.makeText(this, "You are Logged out", Toast.LENGTH_LONG).show();
+                    userContext.clearLoginPreferences();
+                    Intent intent = new Intent(this, LoginActivity.class);
+                    startActivity(intent);*/
+                }
+        ){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headerMap = new HashMap<String, String>();
+                headerMap.put("Content-Type", "application/json");
+                headerMap.put("Authorization", "Bearer " + ACCESS_TOKEN);
+                return headerMap;
+            }
+        };
         MySingleton.getInstance(this).addToRequestQueue(objectRequest);
     }
 
     private void fetchBookmarkData(Button bookmarkBtn, BookmarkListener bookmarkListener, String email) {
         JsonArrayRequest objectRequest = new JsonArrayRequest(
                 Request.Method.GET,
-                String.format("http://10.0.2.2:8090/api/user/bookmarks/%s", email),
+                String.format(getString(R.string.domain_name)+"api/user/bookmarks/%s", email),
                 null,
                 response -> {
                     Gson gson = new Gson();
@@ -216,10 +244,20 @@ public class ViewRecipeActivity extends AppCompatActivity
                     bookmarkBtn.setText(textId);
                 },
                 error -> {
-                    Log.e("ViewRecipeActivity", "FetchData failed", error);
-                    Toast.makeText(this, error.toString(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "You are Logged out", Toast.LENGTH_LONG).show();
+                    userContext.clearLoginPreferences();
+                    Intent intent = new Intent(this, LoginActivity.class);
+                    startActivity(intent);
                 }
-        );
+        ){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headerMap = new HashMap<String, String>();
+                headerMap.put("Content-Type", "application/json");
+                headerMap.put("Authorization", "Bearer " + ACCESS_TOKEN);
+                return headerMap;
+            }
+        };
         MySingleton.getInstance(this).addToRequestQueue(objectRequest);
     }
 

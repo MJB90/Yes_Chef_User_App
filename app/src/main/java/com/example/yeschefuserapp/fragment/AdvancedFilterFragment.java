@@ -20,7 +20,9 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.yeschefuserapp.R;
 import com.example.yeschefuserapp.activity.FilterResult;
+import com.example.yeschefuserapp.activity.LoginActivity;
 import com.example.yeschefuserapp.adapter.MyExpandableListAdapter;
+import com.example.yeschefuserapp.context.UserContext;
 import com.example.yeschefuserapp.model.Recipe;
 import com.example.yeschefuserapp.utility.AdvancedFilterTags;
 import com.example.yeschefuserapp.utility.MySingleton;
@@ -51,7 +53,9 @@ public class AdvancedFilterFragment extends Fragment implements View.OnClickList
     private ExpandableListView expandableListView;
     private ExpandableListAdapter expandableListAdapter;
     private AdvancedFilterTags advancedFilterTags;
-    private JSONArray object=null;
+
+    private UserContext userContext;
+    private String ACCESS_TOKEN;
 
     public AdvancedFilterFragment() {
         // Required empty public constructor
@@ -62,7 +66,8 @@ public class AdvancedFilterFragment extends Fragment implements View.OnClickList
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_advanced_filter, container, false);
-
+        this.userContext = new UserContext(view.getContext());
+        ACCESS_TOKEN=userContext.getToken();
         createCategoriesList();
         createProperties(view);
 
@@ -88,7 +93,7 @@ public class AdvancedFilterFragment extends Fragment implements View.OnClickList
     public void createProperties(View view) {
         JsonObjectRequest objectRequest = new JsonObjectRequest(
                 Request.Method.GET,
-                "http://10.0.2.2:8090/api/user/filter_properties",
+                getString(R.string.domain_name)+"api/user/filter_properties",
                 null,
                 response -> {
                     Gson gson = new Gson();
@@ -114,10 +119,21 @@ public class AdvancedFilterFragment extends Fragment implements View.OnClickList
                         }
                     });
                 },
-                error -> Toast.makeText(view.getContext(), error.toString(), Toast.LENGTH_LONG).show()
-
-
-        );
+                error -> {
+                    Toast.makeText(view.getContext(), "You are Logged out", Toast.LENGTH_LONG).show();
+                    userContext.clearLoginPreferences();
+                    Intent intent = new Intent(view.getContext(), LoginActivity.class);
+                    view.getContext().startActivity(intent);
+                }
+        ){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headerMap = new HashMap<String, String>();
+                headerMap.put("Content-Type", "application/json");
+                headerMap.put("Authorization", "Bearer " + ACCESS_TOKEN);
+                return headerMap;
+            }
+        };
         MySingleton.getInstance(view.getContext()).addToRequestQueue(objectRequest);
     }
 
@@ -167,7 +183,12 @@ public class AdvancedFilterFragment extends Fragment implements View.OnClickList
                     intent.putExtra("recipes", (Serializable) recipes);
                     startActivity(intent);
                 },
-                error -> Toast.makeText(view.getContext(), error.toString(), Toast.LENGTH_LONG).show()
+                error-> {
+                    Toast.makeText(view.getContext(), "You are Logged out", Toast.LENGTH_LONG).show();
+                    userContext.clearLoginPreferences();
+                    Intent intent = new Intent(view.getContext(), LoginActivity.class);
+                    view.getContext().startActivity(intent);
+                }
         ){
             @Override
             public String getBodyContentType() {
@@ -184,13 +205,14 @@ public class AdvancedFilterFragment extends Fragment implements View.OnClickList
                 }
             }
 
-            /*@Override
+            @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> headers = new HashMap<String, String>();
-                headers.put("Authorization",Token);
-                return headers;
-            }*/
-        };;
+                Map<String, String> headerMap = new HashMap<String, String>();
+                headerMap.put("Content-Type", "application/json");
+                headerMap.put("Authorization", "Bearer " + ACCESS_TOKEN);
+                return headerMap;
+            }
+        };
         MySingleton.getInstance(view.getContext()).addToRequestQueue(objectRequest);
 
     }
