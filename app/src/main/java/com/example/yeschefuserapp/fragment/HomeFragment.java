@@ -35,6 +35,7 @@ import com.example.yeschefuserapp.utility.MySingleton;
 import com.example.yeschefuserapp.utility.RecommendedRecipes;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.Task;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -137,8 +138,8 @@ public class HomeFragment extends Fragment {
         try {
             FusedLocationProviderClient fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context);
             if (fusedLocationProviderClient.getLastLocation()!=null) {
-                fusedLocationProviderClient.getLastLocation().addOnCompleteListener(task -> {
-                    Location location = task.getResult();
+                fusedLocationProviderClient.getLastLocation().addOnSuccessListener(task -> {
+                    Location location = task;
                     if (location != null) {
                         Geocoder geocoder = new Geocoder(context.getApplicationContext(), Locale.getDefault());
                         try {
@@ -147,13 +148,15 @@ public class HomeFragment extends Fragment {
                             fetchDataOrCacheData(context, country, time);
                         } catch (IOException e) {
                             e.printStackTrace();
+                            fetchDataOrCacheData(context, "Singapore", time);
                         }
                     }
+
                 });
             }
-            else{
-                fetchDataOrCacheData(context, "Singapore", time);
-            }
+//            else{
+//                fetchDataOrCacheData(context, "Singapore", time);
+//            }
         } catch (SecurityException e) {
             e.printStackTrace();
         }

@@ -66,11 +66,15 @@
                 style="@style/Widget.AppCompat.RatingBar.Indicator"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_column="2"
+                android:gravity="left"
                 android:isIndicator="true"
-                android:numStars="5"
-                android:scaleX="0.5"
-                android:scaleY="0.5"
-                android:stepSize="1" />
+                android:numStars="4"
+                android:scaleX=".5"
+                android:scaleY=".5"
+                android:stepSize="1"
+                android:transformPivotX="10dp"
+                android:transformPivotY="10dp" />
         </TableRow>
         <!--row2-->
 
