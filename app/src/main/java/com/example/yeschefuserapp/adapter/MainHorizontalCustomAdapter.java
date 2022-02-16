@@ -57,8 +57,10 @@ public class MainHorizontalCustomAdapter extends RecyclerView.Adapter<MainHorizo
 
         holder.recipeName.setText(recipe.getName());
         holder.itemView.setOnClickListener(view -> mItemListener.onItemClick(recipe));
-        //holder.ratingBar.setRating((float)4.5);
-        //holder.recipeCuisineType.setText(recipe.getCuisineType().get(0));
+        if (holder.ratingBar!=null && holder.recipeCuisineType!=null){
+            holder.ratingBar.setRating((float)4.5);
+            holder.recipeCuisineType.setText(recipe.getCuisineType().get(0));
+        }
     }
 
     @Override
@@ -75,8 +77,8 @@ public class MainHorizontalCustomAdapter extends RecyclerView.Adapter<MainHorizo
             super(itemView);
             recipeImage = itemView.findViewById(R.id.recipe_image);
             recipeName = itemView.findViewById(R.id.recipe_name);
-            //recipeCuisineType=itemView.findViewById(R.id.recipe_cuisineType);
-            //ratingBar=itemView.findViewById(R.id.recipe_rating);
+            recipeCuisineType=itemView.findViewById(R.id.recipe_cuisineType);
+            ratingBar=itemView.findViewById(R.id.recipe_rating);
         }
     }
 

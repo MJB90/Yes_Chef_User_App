@@ -39,7 +39,6 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        createFragment();
         checkLocationIsEnabledOrNot();
         grantPermission();
     }
@@ -78,6 +77,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, REQ_LOCATION);
         else {
+            createFragment();
             navigationBar();
         }
     }
@@ -94,8 +94,10 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == REQ_LOCATION) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                createFragment();
                 navigationBar();
+            }
             else
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, REQ_LOCATION);
         }

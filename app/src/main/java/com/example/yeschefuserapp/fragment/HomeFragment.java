@@ -154,7 +154,6 @@ public class HomeFragment extends Fragment {
         } catch (SecurityException e) {
             e.printStackTrace();
         }
-        fetchDataOrCacheData(context,country,time);
     }
 
     public void fetchDataOrCacheData(Context context, String country, String hour){
