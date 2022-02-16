@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
@@ -219,6 +220,7 @@ public class ViewRecipeActivity extends AppCompatActivity
                 return headerMap;
             }
         };
+        objectRequest.setRetryPolicy(new DefaultRetryPolicy(0, 0, DefaultRetryPolicy.DEFAULT_TIMEOUT_MS));
         MySingleton.getInstance(this).addToRequestQueue(objectRequest);
     }
 
@@ -258,6 +260,7 @@ public class ViewRecipeActivity extends AppCompatActivity
                 return headerMap;
             }
         };
+        objectRequest.setRetryPolicy(new DefaultRetryPolicy(0, 0, DefaultRetryPolicy.DEFAULT_TIMEOUT_MS));
         MySingleton.getInstance(this).addToRequestQueue(objectRequest);
     }
 

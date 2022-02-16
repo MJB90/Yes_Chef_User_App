@@ -14,6 +14,7 @@ import android.widget.ExpandableListView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonArrayRequest;
@@ -134,6 +135,7 @@ public class AdvancedFilterFragment extends Fragment implements View.OnClickList
                 return headerMap;
             }
         };
+        objectRequest.setRetryPolicy(new DefaultRetryPolicy(0, 0, DefaultRetryPolicy.DEFAULT_TIMEOUT_MS));
         MySingleton.getInstance(view.getContext()).addToRequestQueue(objectRequest);
     }
 
@@ -213,6 +215,7 @@ public class AdvancedFilterFragment extends Fragment implements View.OnClickList
                 return headerMap;
             }
         };
+        objectRequest.setRetryPolicy(new DefaultRetryPolicy(0, 0, DefaultRetryPolicy.DEFAULT_TIMEOUT_MS));
         MySingleton.getInstance(view.getContext()).addToRequestQueue(objectRequest);
 
     }

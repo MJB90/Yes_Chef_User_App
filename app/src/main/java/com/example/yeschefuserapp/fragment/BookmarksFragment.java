@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.example.yeschefuserapp.R;
@@ -94,6 +95,7 @@ public class BookmarksFragment extends Fragment {
                 return headerMap;
             }
         };
+        objectRequest.setRetryPolicy(new DefaultRetryPolicy(0, 0, DefaultRetryPolicy.DEFAULT_TIMEOUT_MS));
         MySingleton.getInstance(this.getContext()).addToRequestQueue(objectRequest);
     }
 

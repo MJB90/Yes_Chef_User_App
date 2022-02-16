@@ -43,10 +43,7 @@ public class LoginFragment extends Fragment {
         UserContext userContext = new UserContext(view.getContext());
 
         //Auto login
-        if (userContext.getEmail().contains("EMAIL") && userContext.getPwd().contains("PWD") && userContext.getToken().contains("TOKEN")) {
-            Intent intent = new Intent(view.getContext(), MainActivity.class);
-            startActivity(intent);
-        }
+
         LoginListener listener = new LoginListener(this.getContext(), emailText, passwordText, rememberMe);
         loginBtn.setOnClickListener(listener);
 

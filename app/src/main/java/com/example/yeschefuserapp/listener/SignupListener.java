@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
 import com.example.yeschefuserapp.R;
@@ -62,6 +63,7 @@ public class SignupListener implements View.OnClickListener {
                 return "application/json";
             }
         };
+        objectRequest.setRetryPolicy(new DefaultRetryPolicy(0, 0, DefaultRetryPolicy.DEFAULT_TIMEOUT_MS));
         MySingleton.getInstance(context).addToRequestQueue(objectRequest);
     }
 }

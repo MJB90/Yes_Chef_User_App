@@ -115,6 +115,7 @@ public class HomeFragment extends Fragment {
                             return headerMap;
                         }
                     };
+                    objectRequest.setRetryPolicy(new DefaultRetryPolicy(0, 0, DefaultRetryPolicy.DEFAULT_TIMEOUT_MS));
                     MySingleton.getInstance(view.getContext()).addToRequestQueue(objectRequest);
                     return true;
                 }
@@ -172,7 +173,7 @@ public class HomeFragment extends Fragment {
         else{
             JsonObjectRequest objectRequest = new JsonObjectRequest(
                     Request.Method.GET,
-                    String.format(getString(R.string.domain_name)+"api/user/recommended_recipes/%s/singapore/%s/20", this.userContext.getEmail(), hour),
+                    String.format(getString(R.string.domain_name)+"api/user/recommended_recipes/%s/%s/%s/20", this.userContext.getEmail(), country, hour),
                     null,
                     response -> {
                         recommendedRecipes = gson.fromJson(String.valueOf(response), RecommendedRecipes.class);

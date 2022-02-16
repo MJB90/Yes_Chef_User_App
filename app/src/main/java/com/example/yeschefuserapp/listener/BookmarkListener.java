@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
@@ -79,6 +80,7 @@ public class BookmarkListener implements View.OnClickListener {
                 return headerMap;
             }
         };
+        objectRequest.setRetryPolicy(new DefaultRetryPolicy(0, 0, DefaultRetryPolicy.DEFAULT_TIMEOUT_MS));
         MySingleton.getInstance(context).addToRequestQueue(objectRequest);
     }
 
@@ -103,6 +105,7 @@ public class BookmarkListener implements View.OnClickListener {
                 return headerMap;
             }
         };
+        objectRequest.setRetryPolicy(new DefaultRetryPolicy(0, 0, DefaultRetryPolicy.DEFAULT_TIMEOUT_MS));
         MySingleton.getInstance(context).addToRequestQueue(objectRequest);
     }
 }
