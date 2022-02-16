@@ -73,13 +73,11 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
 
     public class ViewHolder extends RecyclerView.ViewHolder{
         TextView text;
-        ImageView image;
         MaterialCardView card;
         MaterialCardView selectedCard;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             text=itemView.findViewById(R.id.child_item);
-            image=itemView.findViewById(R.id.categoryImage);
             card=itemView.findViewById(R.id.categoryCard);
         }
     }

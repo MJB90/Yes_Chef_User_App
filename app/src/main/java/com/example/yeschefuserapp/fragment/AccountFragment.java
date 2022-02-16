@@ -5,14 +5,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
 import com.example.yeschefuserapp.R;
+import com.example.yeschefuserapp.context.UserContext;
 import com.example.yeschefuserapp.listener.LogoutListener;
 
 public class AccountFragment extends Fragment {
-
+    private TextView userEmail;
+    private Button logoutBtn;
+    UserContext userContext;
 
     public AccountFragment() {
         // Required empty public constructor
@@ -23,8 +27,12 @@ public class AccountFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_account, container, false);
+        userContext = new UserContext(this.getContext());
 
-        Button logoutBtn = view.findViewById(R.id.logout_btn);
+        userEmail = view.findViewById(R.id.user_email);
+        userEmail.setText(userContext.getEmail());
+
+        logoutBtn = view.findViewById(R.id.logout_btn);
         LogoutListener logoutListener = new LogoutListener(this.getContext());
         logoutBtn.setOnClickListener(logoutListener);
 
