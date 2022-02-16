@@ -77,12 +77,14 @@ public class ViewRecipeActivity extends AppCompatActivity
         selectedRecipe = (Recipe) intent.getSerializableExtra("recipe");
 
         ImageView recipeImage = findViewById(R.id.recipe_image);
-        Glide.with(this)
-                .load(selectedRecipe.getResizedImageURL().get(0))
-                .centerCrop()
-                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                .placeholder(R.drawable.ic_launcher_background)
-                .into(recipeImage);
+        if (selectedRecipe.getResizedImageURL() != null && selectedRecipe.getResizedImageURL().size() != 0) {
+            Glide.with(this)
+                    .load(selectedRecipe.getResizedImageURL().get(0))
+                    .centerCrop()
+                    .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                    .placeholder(R.drawable.ic_launcher_background)
+                    .into(recipeImage);
+        }
 
         TextView recipeName = findViewById(R.id.recipe_name);
         recipeName.setText(selectedRecipe.getName());

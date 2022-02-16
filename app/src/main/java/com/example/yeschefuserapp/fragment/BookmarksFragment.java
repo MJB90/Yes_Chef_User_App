@@ -50,7 +50,7 @@ public class BookmarksFragment extends Fragment {
         this.userContext = new UserContext(view.getContext());
         ACCESS_TOKEN = userContext.getToken();
         RecipeClickListener onClickListener = new RecipeClickListener(view.getContext());
-        adapter = new MainHorizontalCustomAdapter(R.layout.bookmark_item, view.getContext(), bookmarkList, onClickListener);
+        adapter = new MainHorizontalCustomAdapter(R.layout.bookmark_item, bookmarkList, onClickListener);
 
         fetchData(this.userContext.getEmail());
         initView(view.findViewById(R.id.bookmark_recycler_view));

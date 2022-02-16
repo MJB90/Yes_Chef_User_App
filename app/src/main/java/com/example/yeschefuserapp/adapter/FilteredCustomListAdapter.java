@@ -18,9 +18,11 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.yeschefuserapp.R;
 import com.example.yeschefuserapp.listener.ItemClickListener;
 import com.example.yeschefuserapp.model.Recipe;
+import com.example.yeschefuserapp.model.UserReview;
 import com.example.yeschefuserapp.utility.DownloadImageTask;
 import com.google.android.material.card.MaterialCardView;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 
@@ -60,7 +62,7 @@ public class FilteredCustomListAdapter extends RecyclerView.Adapter<FilteredCust
             holder.recipeName.setText(recipes.get(pos).getName());
         }
         if (holder.review!=null){
-            holder.review.setRating((float)4.5);
+            holder.review.setRating(getAvgRating(recipes.get(pos)));
         }
         if (holder.cuisineType!=null){
             String words="";
@@ -137,5 +139,20 @@ public class FilteredCustomListAdapter extends RecyclerView.Adapter<FilteredCust
             prepTime=itemView.findViewById(R.id.filter_textview_prepTime);
             card=itemView.findViewById(R.id.filter_card);
         }
+    }
+    public float getAvgRating(Recipe recipe) {
+        float ratingTotal = 0;
+        float ratingAvg=0;
+        if (recipe.getUserReviews()!=null && recipe.getUserReviews().size()>0) {
+            for (UserReview ur : recipe.getUserReviews()) {
+                if (ur.getRating()!=null)
+                    ratingTotal += ur.getRating();
+            }
+            int reviewNo = recipe.getUserReviews().size();
+            DecimalFormat formatter = new DecimalFormat("#0.0");
+            ratingAvg = ratingTotal / reviewNo;
+            formatter.format(ratingAvg);
+        }
+        return ratingAvg;
     }
 }

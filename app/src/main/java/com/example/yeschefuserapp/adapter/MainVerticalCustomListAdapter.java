@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.yeschefuserapp.R;
+import com.example.yeschefuserapp.activity.MainActivity;
 import com.example.yeschefuserapp.listener.RecipeClickListener;
 import com.example.yeschefuserapp.model.Recipe;
 import com.example.yeschefuserapp.utility.RecommendedRecipes;
@@ -56,10 +57,12 @@ public class MainVerticalCustomListAdapter extends RecyclerView.Adapter<MainVert
 
     private void setRecipeRecycler(RecyclerView recyclerView, List<Recipe> recipes, View view) {
         new Thread(() -> {
+            ((MainActivity)view.getContext()).runOnUiThread(() -> {
                 RecipeClickListener onClickListener = new RecipeClickListener(view.getContext());
-                MainHorizontalCustomAdapter adapter = new MainHorizontalCustomAdapter(R.layout.main_recycler_column_item, context, recipes, onClickListener);
+                MainHorizontalCustomAdapter adapter = new MainHorizontalCustomAdapter(R.layout.main_recycler_column_item, recipes, onClickListener);
                 recyclerView.setLayoutManager(new LinearLayoutManager(context, RecyclerView.HORIZONTAL, false));
                 recyclerView.setAdapter(adapter);
+            });
         }).start();
     }
 }
