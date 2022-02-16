@@ -51,12 +51,14 @@ public class FilteredCustomListAdapter extends RecyclerView.Adapter<FilteredCust
     public void onBindViewHolder(@NonNull FilteredCustomListAdapter.MyFilterViewHolder holder, int pos) {
         if (recipes!=null && holder.recipeImage!=null)
         {
-            Glide.with(holder.itemView)
-                    .load(recipes.get(pos).getResizedImageURL().get(0))
-                    .centerCrop()
-                    .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                    .placeholder(R.drawable.ic_launcher_background)
-                    .into(holder.recipeImage);
+            if (recipes.get(pos).getResizedImageURL()!=null && recipes.get(pos).getResizedImageURL().size() !=0) {
+                Glide.with(holder.itemView)
+                        .load(recipes.get(pos).getResizedImageURL().get(0))
+                        .centerCrop()
+                        .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                        .placeholder(R.drawable.ic_launcher_background)
+                        .into(holder.recipeImage);
+            }
         }
         if (holder.recipeName!=null){
             holder.recipeName.setText(recipes.get(pos).getName());
