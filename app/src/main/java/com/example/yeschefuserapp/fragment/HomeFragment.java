@@ -48,6 +48,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.CountDownLatch;
 
 public class HomeFragment extends Fragment {
 
@@ -71,7 +72,6 @@ public class HomeFragment extends Fragment {
         Context viewContext = view.getContext();
         this.userContext = new UserContext(viewContext);
         recyclerView=view.findViewById(R.id.recycler_view);
-
         ACCESS_TOKEN=userContext.getToken();
 
         if (getArguments() != null) email = getArguments().getString("email");
@@ -126,7 +126,6 @@ public class HomeFragment extends Fragment {
                 }
             });
         }
-
         return view;
     }
 
@@ -137,20 +136,24 @@ public class HomeFragment extends Fragment {
         //Get the user location
         try {
             FusedLocationProviderClient fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context);
-            fusedLocationProviderClient.getLastLocation().addOnCompleteListener(task -> {
-                Location location = task.getResult();
-                if (location != null) {
-
-                    Geocoder geocoder = new Geocoder(context.getApplicationContext(), Locale.getDefault());
-                    try {
-                        List<Address> address = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
-                        country = address.get(0).getCountryName();
-                        fetchDataOrCacheData(context, country, time);
-                    } catch (IOException e) {
-                        e.printStackTrace();
+            if (fusedLocationProviderClient.getLastLocation()!=null) {
+                fusedLocationProviderClient.getLastLocation().addOnCompleteListener(task -> {
+                    Location location = task.getResult();
+                    if (location != null) {
+                        Geocoder geocoder = new Geocoder(context.getApplicationContext(), Locale.getDefault());
+                        try {
+                            List<Address> address = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+                            country = address.get(0).getCountryName();
+                            fetchDataOrCacheData(context, country, time);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
-                }
-            });
+                });
+            }
+            else{
+                fetchDataOrCacheData(context, "Singapore", time);
+            }
         } catch (SecurityException e) {
             e.printStackTrace();
         }

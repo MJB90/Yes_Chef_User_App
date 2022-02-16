@@ -57,12 +57,10 @@ public class MainVerticalCustomListAdapter extends RecyclerView.Adapter<MainVert
 
     private void setRecipeRecycler(RecyclerView recyclerView, List<Recipe> recipes, View view) {
         new Thread(() -> {
-            ((MainActivity)view.getContext()).runOnUiThread(() -> {
                 RecipeClickListener onClickListener = new RecipeClickListener(view.getContext());
                 MainHorizontalCustomAdapter adapter = new MainHorizontalCustomAdapter(R.layout.main_recycler_column_item, recipes, onClickListener);
                 recyclerView.setLayoutManager(new LinearLayoutManager(context, RecyclerView.HORIZONTAL, false));
                 recyclerView.setAdapter(adapter);
-            });
         }).start();
     }
 }

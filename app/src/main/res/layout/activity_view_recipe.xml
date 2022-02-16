@@ -1,17 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context=".activity.ViewRecipeActivity">
 
-    //find out how to show all images slider
+    <!--find out how to show all images slider-->
     <ScrollView
+        android:id="@+id/scroll_view"
         android:layout_width="match_parent"
-        android:layout_height="570dp">
+        android:layout_height="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/linearlayout_review_bookmarks">
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -26,12 +31,14 @@
         android:layout_height="wrap_content"
         android:textSize="25sp"
         android:layout_gravity="center"
+        android:textColor="@color/black"
+        android:fontFamily="@font/courier_prime_bold_italic"
         android:text="Recipe Name" />
     <TableLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:stretchColumns="*">
-        //row 1
+        <!--row 1-->
 
         <TableRow
             android:layout_width="match_parent"
@@ -65,7 +72,7 @@
                 android:scaleY="0.5"
                 android:stepSize="1" />
         </TableRow>
-        //row2
+        <!--row2-->
 
         <TableRow
             android:layout_width="match_parent"
@@ -79,7 +86,7 @@
                 android:layout_gravity="center"
                 android:text="4/5(120 reviews)" />
         </TableRow>
-        //row 3
+        <!--row 3-->
 
         <TableRow
             android:layout_width="match_parent"
@@ -95,6 +102,7 @@
         android:text="Ingredients"
         android:layout_marginTop="5dp"
         android:textAlignment="center"
+        android:fontFamily="@font/courier_prime_bold_italic"
         android:textSize="22sp"
         android:textColor="@color/black"/>
 
@@ -112,6 +120,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:text="Preparation Steps"
+        android:fontFamily="@font/courier_prime_bold_italic"
         android:textAlignment="center"
         android:textSize="22sp"
         android:textColor="@color/black"/>
@@ -137,18 +146,26 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center">
+        android:orientation="horizontal"
+        android:layout_gravity="center"
+        android:id="@+id/linearlayout_review_bookmarks"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/scroll_view"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_nav">
 
         <Button
             android:id="@+id/write_a_review"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/black"
             android:text="Write A Review" />
         <Button
             android:id="@+id/add_bookmark_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="50dp"
+            android:textColor="@color/black"
             android:text="@string/add_to_bookmark" />
     </LinearLayout>
 
@@ -157,7 +174,11 @@
         android:id="@+id/bottom_nav"
         app:layout_constraintHeight_percent="0.09"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="0dp"
         android:background="#fff"
-        app:menu="@menu/bottom_menu_view_recipe" />
-</LinearLayout>
+        app:menu="@menu/bottom_menu_view_recipe"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearlayout_review_bookmarks"
+        app:layout_constraintBottom_toBottomOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>
