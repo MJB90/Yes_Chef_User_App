@@ -2,6 +2,7 @@ package com.example.yeschefuserapp.activity;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -9,6 +10,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -18,6 +20,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.example.yeschefuserapp.R;
+import com.example.yeschefuserapp.context.UserContext;
 import com.example.yeschefuserapp.fragment.AccountFragment;
 import com.example.yeschefuserapp.fragment.AdvancedFilterFragment;
 import com.example.yeschefuserapp.fragment.BookmarksFragment;
@@ -34,13 +37,21 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     private Fragment accountFragment = new AccountFragment();
     private FragmentManager fragmentManager = getSupportFragmentManager();
     private Fragment activeFragment = homeFragment;
+    private Context context;
+    private UserContext userContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        context=this;
+        userContext = new UserContext(this);
+    }
+
+    @Override
+    public void onResume() {
         checkLocationIsEnabledOrNot();
-        grantPermission();
+        super.onResume();
     }
 
     private void createFragment() {
@@ -69,7 +80,20 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
             new AlertDialog.Builder(this)
                     .setTitle("Enable GPS Service")
                     .setCancelable(false)
-                    .setPositiveButton("Enable", (dialogInterface, i) -> startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))).setNegativeButton("Cancel", null).show();
+                    .setPositiveButton("Enable", (dialogInterface, i) -> startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))).setNegativeButton("Cancel",
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            Toast.makeText(context, "You are Logged out", Toast.LENGTH_SHORT).show();
+                            userContext.clearLoginPreferences();
+                            Intent intent = new Intent(context, LoginActivity.class);
+                            context.startActivity(intent);
+                        }
+                    }).show();
+        }
+        else
+        {
+            grantPermission();
         }
     }
 
@@ -135,6 +159,4 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
                 activeFragment = homeFragment;
         }
     }
-
-
 }

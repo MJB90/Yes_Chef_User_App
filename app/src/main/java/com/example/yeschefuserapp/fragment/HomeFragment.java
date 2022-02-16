@@ -138,8 +138,7 @@ public class HomeFragment extends Fragment {
         try {
             FusedLocationProviderClient fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context);
             if (fusedLocationProviderClient.getLastLocation()!=null) {
-                fusedLocationProviderClient.getLastLocation().addOnSuccessListener(task -> {
-                    Location location = task;
+                fusedLocationProviderClient.getLastLocation().addOnSuccessListener(location -> {
                     if (location != null) {
                         Geocoder geocoder = new Geocoder(context.getApplicationContext(), Locale.getDefault());
                         try {
@@ -151,12 +150,11 @@ public class HomeFragment extends Fragment {
                             fetchDataOrCacheData(context, "Singapore", time);
                         }
                     }
-
+                    else{
+                        fetchDataOrCacheData(context, "Singapore", time);
+                    }
                 });
             }
-//            else{
-//                fetchDataOrCacheData(context, "Singapore", time);
-//            }
         } catch (SecurityException e) {
             e.printStackTrace();
         }
