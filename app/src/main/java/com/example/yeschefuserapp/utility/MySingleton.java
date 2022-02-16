@@ -28,6 +28,7 @@ public class MySingleton {
         }
         return requestQueue;
     }
+
     public <T> void addToRequestQueue(Request<T> req) {
         getRequestQueue().add(req);
     }

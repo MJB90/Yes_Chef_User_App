@@ -44,7 +44,7 @@ public class MainHorizontalCustomAdapter extends RecyclerView.Adapter<MainHorizo
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         Recipe recipe = recipes.get(position);
 
-        if (recipe.getResizedImageURL().size()!=0){
+        if (recipe.getResizedImageURL()!=null && recipe.getResizedImageURL().size()!=0){
             Glide.with(holder.itemView)
                     .load(recipe.getResizedImageURL().get(0))
                     .centerCrop()
