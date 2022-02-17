@@ -148,7 +148,7 @@ public class ViewRecipeActivity extends AppCompatActivity
                     getSteps();
                     steps.setText(preparationSteps);
 
-                    ReviewListAdapter adapter = new ReviewListAdapter(R.layout.review_item_row, this, selectedRecipe.getUserReviews());
+                    ReviewListAdapter adapter = new ReviewListAdapter(R.layout.review_item_row, selectedRecipe.getUserReviews());
                     RecyclerView reviewRecyclerView = findViewById(R.id.recycler_review);
                     if (reviewRecyclerView != null) {
                         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
