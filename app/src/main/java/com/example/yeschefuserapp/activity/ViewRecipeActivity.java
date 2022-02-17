@@ -2,6 +2,7 @@ package com.example.yeschefuserapp.activity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -24,8 +25,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
+import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.yeschefuserapp.R;
@@ -43,6 +46,7 @@ import com.google.gson.Gson;
 
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -59,9 +63,11 @@ public class ViewRecipeActivity extends AppCompatActivity
     private String ingredients = "";
     private String preparationSteps = "";
     private int counter = 0;
+    private String selectedRecipeId;
     private JSONObject reviewJsonObject;
     private UserContext userContext;
     private String ACCESS_TOKEN;
+    private Context context;
 
     AlertDialog myPopUpReviewDialog;
     EditText inputReview;
@@ -74,70 +80,10 @@ public class ViewRecipeActivity extends AppCompatActivity
         userContext = new UserContext(this);
         ACCESS_TOKEN = userContext.getToken();
         Intent intent = getIntent();
-        selectedRecipe = (Recipe) intent.getSerializableExtra("recipe");
+        selectedRecipeId = (String)((Recipe) intent.getSerializableExtra("recipe")).getId();
 
-        ImageView recipeImage = findViewById(R.id.recipe_image);
-        if (selectedRecipe.getResizedImageURL() != null && selectedRecipe.getResizedImageURL().size() != 0) {
-            Glide.with(this)
-                    .load(selectedRecipe.getResizedImageURL().get(0))
-                    .centerCrop()
-                    .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                    .placeholder(R.drawable.ic_launcher_background)
-                    .into(recipeImage);
-        }
-
-        TextView recipeName = findViewById(R.id.recipe_name);
-        recipeName.setText(selectedRecipe.getName());
-
-        TextView prepTime = findViewById(R.id.prep_time);
-        prepTime.setText("Prep time : " + String.valueOf(selectedRecipe.getPrepTime() / 60) + "min");
-
-        TextView rating = findViewById(R.id.rating);
-        RatingBar viewRatingBar = findViewById(R.id.view_rating_bar);
-        if (selectedRecipe.getUserReviews() != null) {
-            getAvgRating();
-            rating.setText(String.valueOf(ratingAvg) + "/5.0 (" + reviewNo.toString() + " reviews)");
-            viewRatingBar.setRating(ratingAvg.floatValue());
-        } else
-            rating.setText("O reviews");
-
-        TextView calories = findViewById(R.id.calories);
-        if (selectedRecipe.getCalories() != null) {
-            calories.setText(selectedRecipe.getCalories().toString() + " kCal");
-        } else
-            calories.setText("No calories info found");
-
-
-        TextView ingredientsHeader = findViewById(R.id.ingredients_header);
-        TextView ingredientsView = findViewById(R.id.ingredients);
-        getIngredients();
-        ingredientsView.setText(ingredients);
-
-        TextView stepsHeader = findViewById(R.id.steps_header);
-        TextView steps = findViewById(R.id.steps);
-        getSteps();
-        steps.setText(preparationSteps);
-
-        ReviewListAdapter adapter = new ReviewListAdapter(R.layout.review_item_row, this, selectedRecipe.getUserReviews());
-        RecyclerView reviewRecyclerView = findViewById(R.id.recycler_review);
-        if (reviewRecyclerView != null) {
-            LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-            reviewRecyclerView.setLayoutManager(layoutManager);
-            reviewRecyclerView.setItemAnimator(new DefaultItemAnimator());
-            reviewRecyclerView.setAdapter(adapter);
-        }
-
-        Button writeAReview = findViewById(R.id.write_a_review);
-        writeAReview.setOnClickListener(this);
-
-        Button bookmarkBtn = findViewById(R.id.add_bookmark_btn);
-        this.userContext = new UserContext(this);
-        String userEmail = this.userContext.getEmail();
-        BookmarkListener bookmarkListener = new BookmarkListener(this, selectedRecipe.getId(), bookmarkBtn, false);
-        bookmarkBtn.setOnClickListener(bookmarkListener);
-        fetchBookmarkData(bookmarkBtn, bookmarkListener, userEmail);
-
-        navigationBar();
+        context = this;
+        fetchSelectedRecipe(selectedRecipeId);
 
     }
 
@@ -152,14 +98,77 @@ public class ViewRecipeActivity extends AppCompatActivity
         formatter.format(ratingAvg);
     }
 
-    public void fetchSelectedRecipe(String uri) {
+    public void fetchSelectedRecipe(String id) {
         JsonObjectRequest objectRequest = new JsonObjectRequest(
                 Request.Method.GET,
-                uri,
+                String.format(context.getString(R.string.domain_name) + "api/user/all_recipes/%s", id),
                 null,
                 response -> {
                     Gson gson = new Gson();
                     selectedRecipe = gson.fromJson(response.toString(), Recipe.class);
+
+                    ImageView recipeImage = findViewById(R.id.recipe_image);
+                    if (selectedRecipe.getResizedImageURL() != null && selectedRecipe.getResizedImageURL().size() != 0) {
+                        Glide.with(this)
+                                .load(selectedRecipe.getResizedImageURL().get(0))
+                                .centerCrop()
+                                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                                .placeholder(R.drawable.ic_launcher_background)
+                                .into(recipeImage);
+                    }
+
+                    TextView recipeName = findViewById(R.id.recipe_name);
+                    recipeName.setText(selectedRecipe.getName());
+
+                    TextView prepTime = findViewById(R.id.prep_time);
+                    prepTime.setText("Prep time : " + String.valueOf(selectedRecipe.getPrepTime() / 60) + "min");
+
+                    TextView rating = findViewById(R.id.rating);
+                    RatingBar viewRatingBar = findViewById(R.id.view_rating_bar);
+                    if (selectedRecipe.getUserReviews() != null) {
+                        getAvgRating();
+                        rating.setText(String.valueOf(ratingAvg) + "/5.0 (" + reviewNo.toString() + " reviews)");
+                        viewRatingBar.setRating(ratingAvg.floatValue());
+                    } else
+                        rating.setText("No reviews");
+
+                    TextView calories = findViewById(R.id.calories);
+                    if (selectedRecipe.getCalories() != null) {
+                        calories.setText(selectedRecipe.getCalories().toString() + " kCal");
+                    } else
+                        calories.setText("No calories info found");
+
+
+                    TextView ingredientsHeader = findViewById(R.id.ingredients_header);
+                    TextView ingredientsView = findViewById(R.id.ingredients);
+                    getIngredients();
+                    ingredientsView.setText(ingredients);
+
+                    TextView stepsHeader = findViewById(R.id.steps_header);
+                    TextView steps = findViewById(R.id.steps);
+                    getSteps();
+                    steps.setText(preparationSteps);
+
+                    ReviewListAdapter adapter = new ReviewListAdapter(R.layout.review_item_row, this, selectedRecipe.getUserReviews());
+                    RecyclerView reviewRecyclerView = findViewById(R.id.recycler_review);
+                    if (reviewRecyclerView != null) {
+                        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+                        reviewRecyclerView.setLayoutManager(layoutManager);
+                        reviewRecyclerView.setItemAnimator(new DefaultItemAnimator());
+                        reviewRecyclerView.setAdapter(adapter);
+                    }
+
+                    Button writeAReview = findViewById(R.id.write_a_review);
+                    writeAReview.setOnClickListener(this);
+
+                    Button bookmarkBtn = findViewById(R.id.add_bookmark_btn);
+                    this.userContext = new UserContext(this);
+                    String userEmail = this.userContext.getEmail();
+                    BookmarkListener bookmarkListener = new BookmarkListener(this, selectedRecipe.getId(), bookmarkBtn, false);
+                    bookmarkBtn.setOnClickListener(bookmarkListener);
+                    fetchBookmarkData(bookmarkBtn, bookmarkListener, userEmail);
+
+                    navigationBar();
                 },
                 error -> {
                     Toast.makeText(this, "You are Logged out", Toast.LENGTH_LONG).show();
@@ -197,23 +206,42 @@ public class ViewRecipeActivity extends AppCompatActivity
     }
 
     private void submitReview() {
-        JsonObjectRequest objectRequest = new JsonObjectRequest(
+        final String requestBody = reviewJsonObject.toString();
+        StringRequest objectRequest = new StringRequest(
                 Request.Method.POST,
                 String.format(getString(R.string.domain_name) + "api/user/post_review"),
-                reviewJsonObject,
                 response -> {
                     //TODO go to review page
-//                    Intent intent = new Intent(view.getContext(), FilterResult.class);
-//                    startActivity(intent);
+//                    Gson gson = new Gson();
+//                    selectedRecipe = gson.fromJson(response.toString(), Recipe.class);
+
+                    Intent intent = new Intent(ViewRecipeActivity.this,ViewRecipeActivity.class);
+                    intent.putExtra("recipe", selectedRecipe);
+                    startActivity(intent);
                 },
                 error -> {
                     //TODO uncomment the below codes after you are done with this function
-                    /*Toast.makeText(this, "You are Logged out", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "You are Logged out", Toast.LENGTH_LONG).show();
                     userContext.clearLoginPreferences();
                     Intent intent = new Intent(this, LoginActivity.class);
-                    startActivity(intent);*/
+                    startActivity(intent);
                 }
         ) {
+            @Override
+            public String getBodyContentType() {
+                return "application/json; charset=utf-8";
+            }
+
+            @Override
+            public byte[] getBody() throws AuthFailureError {
+                try {
+                    return requestBody == null ? null : requestBody.getBytes("utf-8");
+                } catch (UnsupportedEncodingException uee) {
+                    VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", requestBody, "utf-8");
+                    return null;
+                }
+            }
+
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> headerMap = new HashMap<String, String>();
@@ -319,6 +347,9 @@ public class ViewRecipeActivity extends AppCompatActivity
             reviewToJson();
             submitReview();
             myPopUpReviewDialog.dismiss();
+//            Intent intent = new Intent(this,ViewRecipeActivity.class);
+//            startActivity(intent);
+            //ViewRecipeActivity.this.recreate();
         }
 
         if (id == R.id.cancelBtn) {
