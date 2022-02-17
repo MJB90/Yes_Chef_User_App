@@ -1,6 +1,5 @@
 package com.example.yeschefuserapp.adapter;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,13 +16,11 @@ import com.example.yeschefuserapp.model.UserReview;
 import java.util.List;
 
 public class ReviewListAdapter extends RecyclerView.Adapter<ReviewListAdapter.MyReviewViewHolder> {
-    private int resourceId;
-    private final Context context;
-    private List<UserReview> mUserReviews;
+    private final int resourceId;
+    private final List<UserReview> mUserReviews;
 
-    public ReviewListAdapter(int resourceId, Context context, List<UserReview> mUserReviews) {
+    public ReviewListAdapter(int resourceId, List<UserReview> mUserReviews) {
         this.resourceId = resourceId;
-        this.context = context;
         this.mUserReviews = mUserReviews;
     }
 

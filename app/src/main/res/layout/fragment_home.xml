@@ -41,7 +41,7 @@
             app:layout_constraintStart_toEndOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintVertical_bias="1"
-            android:background="@drawable/searchview_background"/>
+            android:background="@drawable/search_view_background"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
@@ -62,7 +62,7 @@
             android:layout_marginTop="15dp"
             android:layout_marginBottom="15dp"
             android:fontFamily="@font/courier_prime_bold_italic"
-            android:text="Your recommendations"/>
+            android:text="@string/recommendations"/>
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view"
             android:layout_width="match_parent"

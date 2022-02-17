@@ -50,8 +50,8 @@ app:cardElevation="20dp">
                 android:id="@+id/recipe_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:text="Recipe Name"
+                android:layout_marginStart="20dp"
+                android:text="@string/filter_textview_name"
                 android:textSize="12sp"
                 android:textStyle="bold" />
 
@@ -59,8 +59,8 @@ app:cardElevation="20dp">
                 android:id="@+id/recipe_cuisineType"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:text="Cuisine Type"
+                android:layout_marginStart="20dp"
+                android:text="@string/filter_textview_cuisineType"
                 android:textSize="11sp" />
 
         </LinearLayout>

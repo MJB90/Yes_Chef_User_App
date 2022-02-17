@@ -8,13 +8,14 @@
         android:id="@+id/writeReviewHead"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Write A Review" />
+        android:text="@string/write_a_review" />
 
     <EditText
         android:id="@+id/writeReviewText"
         android:layout_width="match_parent"
         android:layout_height="160dp"
-        android:hint="Write your review here" />
+        android:hint="@string/writeReviewText"
+        android:inputType="text" />
 
     <RatingBar
         android:id="@+id/submit_rating_bar"
@@ -34,14 +35,14 @@
             android:id="@+id/submitBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Submit" />
+            android:text="@string/submitBtn" />
 
         <Button
             android:id="@+id/cancelBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="100dp"
-            android:text="Cancel" />
+            android:text="@string/cancel_btn" />
     </LinearLayout>
 
 </LinearLayout>

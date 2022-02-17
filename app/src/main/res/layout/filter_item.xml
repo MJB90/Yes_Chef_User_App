@@ -10,7 +10,8 @@
         android:layout_height="wrap_content"
         android:id="@+id/categories"
         android:textColor="@color/black"
-        android:paddingLeft="50dp"
+        android:paddingStart="50dp"
+        android:paddingEnd="50dp"
         android:text=""/>
 
 </LinearLayout>

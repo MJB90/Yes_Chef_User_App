@@ -1,11 +1,8 @@
 package com.example.yeschefuserapp.adapter;
 
-import android.app.Activity;
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -19,7 +16,6 @@ import com.example.yeschefuserapp.R;
 import com.example.yeschefuserapp.listener.ItemClickListener;
 import com.example.yeschefuserapp.model.Recipe;
 import com.example.yeschefuserapp.model.UserReview;
-import com.example.yeschefuserapp.utility.DownloadImageTask;
 import com.google.android.material.card.MaterialCardView;
 
 import java.text.DecimalFormat;
@@ -27,15 +23,13 @@ import java.util.List;
 
 
 public class FilteredCustomListAdapter extends RecyclerView.Adapter<FilteredCustomListAdapter.MyFilterViewHolder> {
-    private int resourceId;
-    private final Context context;
-    private List<Recipe> recipes;
-    private ItemClickListener mItemListener;
+    private final int resourceId;
+    private final List<Recipe> recipes;
+    private final ItemClickListener mItemListener;
 
-    public FilteredCustomListAdapter(int resourceId, Context context, List<Recipe> recipes, ItemClickListener itemClickListener) {
+    public FilteredCustomListAdapter(int resourceId, List<Recipe> recipes, ItemClickListener itemClickListener) {
             this.resourceId = resourceId;
-            this.context = context;
-            this.recipes = recipes;
+        this.recipes = recipes;
             mItemListener = itemClickListener;
     }
 
@@ -60,64 +54,62 @@ public class FilteredCustomListAdapter extends RecyclerView.Adapter<FilteredCust
                         .into(holder.recipeImage);
             }
         }
-        if (holder.recipeName!=null){
+        if (holder.recipeName!=null && recipes!=null){
             holder.recipeName.setText(recipes.get(pos).getName());
         }
-        if (holder.review!=null){
+        if (holder.review!=null && recipes!=null){
             holder.review.setRating(getAvgRating(recipes.get(pos)));
         }
         if (holder.cuisineType!=null){
             String words="";
-            for (int i=0;i<recipes.get(pos).getCuisineType().size();i++)
+            for (int i = 0; i< (recipes != null ? recipes.get(pos).getCuisineType().size() : 0); i++)
             {
                 if (i==recipes.get(pos).getCuisineType().size()-1)
                 {
-                    words=words+" "+recipes.get(pos).getCuisineType().get(i);
+                    words=String.format("%s %s",words,recipes.get(pos).getCuisineType().get(i));
                 }
-                words=words+" "+recipes.get(pos).getCuisineType().get(i)+",";
+                words=String.format("%s %s, ",words,recipes.get(pos).getCuisineType().get(i));
             }
             holder.cuisineType.setText(words);
         }
-        if (holder.prepTime!=null)
+        if (holder.prepTime!=null && recipes!=null)
         {
             int time=recipes.get(pos).getPrepTime()/60;
             if (time>=60){
                 int minute= time%60;
                 int hour=time/60;
                 if (hour==1 && minute>1) {
-                    holder.prepTime.setText(hour+" Hour "+minute+ " Minutes");
+                    holder.prepTime.setText(String.format("%s Hour %s Minutes",hour,minute));
                 }
                 else if (hour>1 && minute>1){
-                    holder.prepTime.setText(hour+" Hours "+minute+ " Minutes");
+                    holder.prepTime.setText(String.format("%s Hours %s Minutes",hour,minute));
                 }
                 else if(hour==1 && minute==1){
-                    holder.prepTime.setText(hour+" Hour "+minute+ " Minute");
+                    holder.prepTime.setText(String.format("%s Hour %s Minute",hour,minute));
                 }
-                else if(hour==1 && minute==0){
-                    holder.prepTime.setText(hour+" Hour");
+                else if(hour == 1){
+                    holder.prepTime.setText(String.format("%s Hour",hour));
                 }
-                else if(hour>1 && minute==1){
-                    holder.prepTime.setText(hour+" Hours "+minute+ " Minute");
+                else if(minute == 1){
+                    holder.prepTime.setText(String.format("%s Hours %s Minute",hour,minute));
                 }
-                else if(hour>1 && minute==0){
-                    holder.prepTime.setText(hour+" Hours");
+                else {
+                    holder.prepTime.setText(String.format("%s Hours",hour));
                 }
             }
             else{
                 if (time>1){
-                    holder.prepTime.setText(time+ " Minutes");
+                    holder.prepTime.setText(String.format("%s Minutes",time));
                 }
                 else if(time==1){
-                    holder.prepTime.setText(time+ " Minute");
+                    holder.prepTime.setText(String.format("%s Minute",time));
                 }
                 else if(time==0){
-                    holder.prepTime.setText(time+" Minute");
+                    holder.prepTime.setText(String.format("%s Minute",time));
                 }
             }
         }
-        holder.card.setOnClickListener(view ->{
-            mItemListener.onItemClick(recipes.get(pos));
-        });
+        holder.card.setOnClickListener(view -> mItemListener.onItemClick(recipes != null ? recipes.get(pos) : null));
     }
 
     @Override

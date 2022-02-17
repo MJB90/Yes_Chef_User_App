@@ -21,9 +21,8 @@ import com.example.yeschefuserapp.context.UserContext;
 import com.example.yeschefuserapp.listener.ChangePasswordListener;
 import com.example.yeschefuserapp.utility.MySingleton;
 
-public class ForgetPasswordActivity extends AppCompatActivity implements View.OnClickListener{
+public class ForgetPasswordActivity extends AppCompatActivity implements View.OnClickListener {
     private EditText forgetEmail;
-    private Button confirmBtn;
     private AlertDialog myPopUpChangePasswordDialog;
     private TextView oldPassword;
     private TextView newPassword;
@@ -35,50 +34,46 @@ public class ForgetPasswordActivity extends AppCompatActivity implements View.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forget_password);
 
-        userContext=new UserContext(this);
-        forgetEmail=findViewById(R.id.forget_email);
-        confirmBtn=findViewById(R.id.confirm_button);
+        userContext = new UserContext(this);
+        forgetEmail = findViewById(R.id.forget_email);
+        Button confirmBtn = findViewById(R.id.confirm_button);
 
-        if (forgetEmail!=null && confirmBtn !=null){
+        if (forgetEmail != null && confirmBtn != null) {
             confirmBtn.setOnClickListener(this);
         }
     }
 
     @Override
     public void onClick(View view) {
-        int id= view.getId();
-        if (id==R.id.confirm_button){
-            String email=forgetEmail.getText().toString();
+        int id = view.getId();
+        if (id == R.id.confirm_button) {
+            String email = forgetEmail.getText().toString();
             StringRequest objectRequest = new StringRequest(
                     Request.Method.GET,
-                    getString(R.string.domain_name) + "api/user/email_verification/"+email,
+                    getString(R.string.domain_name) + "api/user/email_verification/" + email,
                     response -> {
-                        if (response.equals("true")){
+                        if (response.equals("true")) {
                             PopUpChangePassword(view);
-                        }
-                        else{
+                        } else {
                             Toast.makeText(view.getContext(), "Wrong email address!", Toast.LENGTH_SHORT).show();
                         }
                     },
-                    error -> {
-                        Toast.makeText(view.getContext(), error.toString(), Toast.LENGTH_SHORT).show();
-                    }
+                    error -> Toast.makeText(view.getContext(), error.toString(), Toast.LENGTH_SHORT).show()
             );
             objectRequest.setRetryPolicy(new DefaultRetryPolicy(0, 0, DefaultRetryPolicy.DEFAULT_TIMEOUT_MS));
             MySingleton.getInstance(view.getContext()).addToRequestQueue(objectRequest);
-        }
-        else if (id == R.id.confirm_btn) {
+        } else if (id == R.id.confirm_btn) {
             ChangePasswordListener changePasswordListener = new ChangePasswordListener(view.getContext(),
                     userContext.getEmail(),
                     oldPassword.getText().toString(),
                     newPassword.getText().toString(),
                     reenterNewPassword.getText().toString());
             changePasswordListener.onClick(view);
-        }
-        else if (id==R.id.cancel_btn){
+        } else if (id == R.id.cancel_btn) {
             myPopUpChangePasswordDialog.dismiss();
         }
     }
+
     public void PopUpChangePassword(View view) {
 
         LayoutInflater inflater = (LayoutInflater) getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
@@ -89,7 +84,10 @@ public class ForgetPasswordActivity extends AppCompatActivity implements View.On
         popUpBuilder.setCancelable(false);
         myPopUpChangePasswordDialog = popUpBuilder.create();
 
+        TextView header = myPopUpChangePassword.findViewById(R.id.writeChangePasswordHead);
+        header.setText(R.string.check_email);
         oldPassword = myPopUpChangePassword.findViewById(R.id.old_password);
+        oldPassword.setHint("Verification code");
         newPassword = myPopUpChangePassword.findViewById(R.id.new_password);
         reenterNewPassword = myPopUpChangePassword.findViewById(R.id.renter_new_password);
 

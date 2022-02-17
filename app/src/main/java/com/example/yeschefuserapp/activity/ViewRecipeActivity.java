@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -118,7 +117,7 @@ public class ViewRecipeActivity extends AppCompatActivity
         getSteps();
         steps.setText(preparationSteps);
 
-        ReviewListAdapter adapter = new ReviewListAdapter(R.layout.review_item_row, this, selectedRecipe.getUserReviews());
+        ReviewListAdapter adapter = new ReviewListAdapter(R.layout.review_item_row, selectedRecipe.getUserReviews());
         RecyclerView reviewRecyclerView = findViewById(R.id.recycler_review);
         if (reviewRecyclerView != null) {
             LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
@@ -345,22 +344,14 @@ public class ViewRecipeActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         Intent intent = new Intent(this, MainActivity.class);
-        switch (id) {
-            case R.id.nav_home:
-                intent.putExtra("nav_item", R.id.nav_home);
-                break;
-            case R.id.nav_bookmarks:
-                intent.putExtra("nav_item", R.id.nav_bookmarks);
-                break;
-            case R.id.nav_advanced_filter:
-                intent.putExtra("nav_item", R.id.nav_advanced_filter);
-                break;
-            case R.id.nav_account:
-                intent.putExtra("nav_item", R.id.nav_account);
-                break;
-            default:
-                return false;
-        }
+
+        if (id == R.id.nav_home) intent.putExtra("nav_item", R.id.nav_home);
+        else if (id == R.id.nav_bookmarks) intent.putExtra("nav_item", R.id.nav_bookmarks);
+        else if (id == R.id.nav_advanced_filter)
+            intent.putExtra("nav_item", R.id.nav_advanced_filter);
+        else if (id == R.id.nav_account) intent.putExtra("nav_item", R.id.nav_account);
+        else return false;
+
         startActivity(intent);
         return true;
     }

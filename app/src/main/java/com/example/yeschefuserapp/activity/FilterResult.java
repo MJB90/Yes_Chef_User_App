@@ -33,11 +33,10 @@ public class FilterResult extends AppCompatActivity implements NavigationBarView
         List<Recipe> recipes = (List<Recipe>) getIntent().getExtras().getSerializable("recipes");
 
         TextView searchResult = findViewById(R.id.filter_result_size);
-        searchResult.setText(recipes.size() + " recipes");
+        searchResult.setText(String.format("%s recipes found", recipes.size()));
 
         RecipeClickListener onClickListener = new RecipeClickListener(this);
         FilteredCustomListAdapter adapter = new FilteredCustomListAdapter(R.layout.filter_result_row,
-                this,
                 recipes,
                 onClickListener);
 
@@ -55,26 +54,22 @@ public class FilterResult extends AppCompatActivity implements NavigationBarView
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         Intent intent = new Intent(this, MainActivity.class);
-        switch (id) {
 
-            case R.id.nav_home:
-                intent.putExtra("nav_item", R.id.nav_home);
-                break;
-            case R.id.nav_bookmarks:
-                intent.putExtra("nav_item", R.id.nav_bookmarks);
-                break;
-            case R.id.nav_advanced_filter:
-                intent.putExtra("nav_item", R.id.nav_advanced_filter);
-                break;
-            case R.id.nav_account:
-                intent.putExtra("nav_item", R.id.nav_account);
-                break;
-            default:
-                return false;
+        if (id == R.id.nav_home) {
+            intent.putExtra("nav_item", R.id.nav_home);
+        } else if (id == R.id.nav_bookmarks) {
+            intent.putExtra("nav_item", R.id.nav_bookmarks);
+        } else if (id == R.id.nav_advanced_filter) {
+            intent.putExtra("nav_item", R.id.nav_advanced_filter);
+        } else if (id == R.id.nav_account) {
+            intent.putExtra("nav_item", R.id.nav_account);
+        } else {
+            return false;
         }
         startActivity(intent);
         return true;
     }
+
     @Override
     public void onBackPressed() {
         Intent intent = new Intent(this, MainActivity.class);
