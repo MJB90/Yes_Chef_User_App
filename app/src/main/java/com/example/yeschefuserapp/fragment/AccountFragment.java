@@ -19,7 +19,7 @@ import com.example.yeschefuserapp.listener.ChangePasswordListener;
 import com.example.yeschefuserapp.listener.LogoutListener;
 import com.google.android.material.card.MaterialCardView;
 
-public class AccountFragment extends Fragment {
+public class AccountFragment extends Fragment implements View.OnClickListener{
     private TextView userEmail;
     private MaterialCardView userPassword;
     private Button logoutBtn;
@@ -72,25 +72,29 @@ public class AccountFragment extends Fragment {
 
         Button confirmBtn = myPopUpChangePassword.findViewById(R.id.confirm_btn);
         if (confirmBtn != null) {
-            if (newPassword.getText().toString().equals(reenterNewPassword.getText().toString()) &&
-                    oldPassword.getText().toString().equals(userContext.getPwd())){
-                ChangePasswordListener changePasswordListener = new ChangePasswordListener(view.getContext(),
-                        userContext.getEmail(),
-                        newPassword.getText().toString());
-                confirmBtn.setOnClickListener(changePasswordListener);
-            }
-            else if (! newPassword.getText().toString().equals(reenterNewPassword.getText().toString())){
-                Toast.makeText(view.getContext(), "The new password reentered doesn't match the new password!", Toast.LENGTH_SHORT).show();
-            }
-            else{
-                Toast.makeText(view.getContext(), "The old password is incorrect!", Toast.LENGTH_SHORT).show();
-            }
+            confirmBtn.setOnClickListener(this);
         }
 
         Button cancelBtn = myPopUpChangePassword.findViewById(R.id.cancel_btn);
         if (cancelBtn != null) {
-            cancelBtn.setOnClickListener(v->{myPopUpChangePasswordDialog.dismiss();});
+            cancelBtn.setOnClickListener(this);
         }
         myPopUpChangePasswordDialog.show();
+    }
+
+    @Override
+    public void onClick(View view) {
+        int id = view.getId();
+        if (id == R.id.confirm_btn) {
+            ChangePasswordListener changePasswordListener = new ChangePasswordListener(view.getContext(),
+                    userContext.getEmail(),
+                    oldPassword.getText().toString(),
+                    newPassword.getText().toString(),
+                    reenterNewPassword.getText().toString());
+            changePasswordListener.onClick(view);
+        }
+        else if (id==R.id.cancel_btn){
+            myPopUpChangePasswordDialog.dismiss();
+        }
     }
 }

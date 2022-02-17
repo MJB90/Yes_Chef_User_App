@@ -7,6 +7,7 @@ import com.example.yeschefuserapp.R;
 
 public class UserContext {
     private static final String EMAIL = "email";
+    private static final String OLD_PWD = "old password";
     private static final String PWD = "password";
     private static final String TOKEN = "token";
 
@@ -19,7 +20,8 @@ public class UserContext {
     public void setUserInfo(String email, String password, String token, boolean isChecked) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(EMAIL, email);
-        if (isChecked) editor.putString(PWD, password);
+        editor.putString(OLD_PWD, password); //for changing the password
+        if (isChecked) editor.putString(PWD, password); //for autologin
         editor.putString(TOKEN, token);
         editor.apply();
     }
@@ -30,6 +32,10 @@ public class UserContext {
 
     public String getPwd() {
         return this.sharedPreferences.getString(PWD, "wrong");
+    }
+
+    public String getOldPwd() {
+        return this.sharedPreferences.getString(OLD_PWD, "wrong");
     }
 
     public String getToken() {
