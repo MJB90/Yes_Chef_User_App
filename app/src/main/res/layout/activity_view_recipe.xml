@@ -34,70 +34,57 @@
         android:textColor="@color/black"
         android:fontFamily="@font/courier_prime_bold_italic"
         android:text="Recipe Name" />
-    <TableLayout
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:stretchColumns="*">
-        <!--row 1-->
+        android:layout_height="wrap_content">
 
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/calories"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            app:layout_constraintWidth_percent="0.3"
+            android:layout_column="0"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="Calories"
+            app:layout_constraintStart_toStartOf="parent" />
 
-            <TextView
-                android:id="@+id/calories"
-                android:layout_gravity="center"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_column="0"
-                android:gravity="center"
-                android:text="Calories" />
+        <TextView
+            android:id="@+id/prep_time"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            app:layout_constraintWidth_percent="0.3"
+            android:layout_marginStart="16dp"
+            android:gravity="center"
+            android:text="Duration"
+            app:layout_constraintStart_toEndOf="@+id/calories" />
 
-            <TextView
-                android:id="@+id/prep_time"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_column="1"
-                android:gravity="center"
-                android:text="Duration" />
+        <RatingBar
+            android:id="@+id/view_rating_bar"
+            style="@style/Widget.AppCompat.RatingBar.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_column="2"
+            android:layout_marginStart="16dp"
+            android:gravity="center"
+            android:isIndicator="true"
+            android:numStars="5"
+            android:stepSize="1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/prep_time"
+            tools:layout_editor_absoluteY="0dp" />
+        <TextView
+            android:id="@+id/rating"
+            app:layout_constraintTop_toBottomOf="@id/view_rating_bar"
+            android:layout_marginLeft="100dp"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="4/5(120 reviews)" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <RatingBar
-                android:id="@+id/view_rating_bar"
-                style="@style/Widget.AppCompat.RatingBar.Indicator"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_column="2"
-                android:gravity="left"
-                android:isIndicator="true"
-                android:numStars="4"
-                android:scaleX=".5"
-                android:scaleY=".5"
-                android:stepSize="1"
-                android:transformPivotX="10dp"
-                android:transformPivotY="10dp" />
-        </TableRow>
-        <!--row2-->
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:id="@+id/rating"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_column="2"
-                android:layout_gravity="center"
-                android:text="4/5(120 reviews)" />
-        </TableRow>
-        <!--row 3-->
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-        </TableRow>
-    </TableLayout>
 
     <TextView
         android:id="@+id/ingredients_header"
