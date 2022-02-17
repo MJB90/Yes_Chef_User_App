@@ -74,7 +74,10 @@ public class ViewRecipeActivity extends AppCompatActivity
         ACCESS_TOKEN = userContext.getToken();
         Intent intent = getIntent();
         selectedRecipe = (Recipe) intent.getSerializableExtra("recipe");
+        fetchSelectedRecipe(selectedRecipe);
+    }
 
+    public void initView(){
         ImageView recipeImage = findViewById(R.id.recipe_image);
         if (selectedRecipe.getResizedImageURL() != null && selectedRecipe.getResizedImageURL().size() != 0) {
             Glide.with(this)
@@ -137,7 +140,6 @@ public class ViewRecipeActivity extends AppCompatActivity
         fetchBookmarkData(bookmarkBtn, bookmarkListener, userEmail);
 
         navigationBar();
-
     }
 
     public void getAvgRating() {
@@ -151,14 +153,15 @@ public class ViewRecipeActivity extends AppCompatActivity
         formatter.format(ratingAvg);
     }
 
-    public void fetchSelectedRecipe(String uri) {
+    public void fetchSelectedRecipe(Recipe recipe) {
         JsonObjectRequest objectRequest = new JsonObjectRequest(
                 Request.Method.GET,
-                uri,
+                String.format(this.getString(R.string.domain_name) + "api/user/all_recipes/%s", recipe.getId()),
                 null,
                 response -> {
                     Gson gson = new Gson();
                     selectedRecipe = gson.fromJson(response.toString(), Recipe.class);
+                    initView();
                 },
                 error -> {
                     Toast.makeText(this, "You are Logged out", Toast.LENGTH_LONG).show();
@@ -201,16 +204,16 @@ public class ViewRecipeActivity extends AppCompatActivity
                 String.format(getString(R.string.domain_name) + "api/user/post_review"),
                 reviewJsonObject,
                 response -> {
-                    //TODO go to review page
-//                    Intent intent = new Intent(view.getContext(), FilterResult.class);
-//                    startActivity(intent);
+                    Toast.makeText(this, "You are Logged out", Toast.LENGTH_LONG).show();
+                    /*Intent intent= new Intent(this, ViewRecipeActivity.class);
+                    intent.putExtra("recipe", selectedRecipe);
+                    startActivity(intent);*/
                 },
                 error -> {
-                    //TODO uncomment the below codes after you are done with this function
-                    /*Toast.makeText(this, "You are Logged out", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "You are Logged out", Toast.LENGTH_LONG).show();
                     userContext.clearLoginPreferences();
                     Intent intent = new Intent(this, LoginActivity.class);
-                    startActivity(intent);*/
+                    startActivity(intent);
                 }
         ) {
             @Override

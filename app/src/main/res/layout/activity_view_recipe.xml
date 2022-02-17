@@ -24,7 +24,8 @@
     <ImageView
         android:id="@+id/recipe_image"
         android:layout_width="match_parent"
-        android:layout_height="200dp" />
+        android:layout_height="200dp"
+        android:contentDescription="@string/project_name" />
     <TextView
         android:id="@+id/recipe_name"
         android:layout_width="wrap_content"
@@ -33,7 +34,7 @@
         android:layout_gravity="center"
         android:textColor="@color/black"
         android:fontFamily="@font/courier_prime_bold_italic"
-        android:text="Recipe Name" />
+        android:text="@string/recipe_name" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -47,7 +48,7 @@
             android:layout_column="0"
             android:layout_gravity="center"
             android:gravity="center"
-            android:text="Calories"
+            android:text="@string/calories"
             app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
@@ -57,7 +58,7 @@
             app:layout_constraintWidth_percent="0.3"
             android:layout_marginStart="16dp"
             android:gravity="center"
-            android:text="Duration"
+            android:text="@string/prep_time"
             app:layout_constraintStart_toEndOf="@+id/calories" />
 
         <RatingBar
@@ -77,12 +78,12 @@
         <TextView
             android:id="@+id/rating"
             app:layout_constraintTop_toBottomOf="@id/view_rating_bar"
-            android:layout_marginLeft="100dp"
+            android:layout_marginStart="100dp"
             app:layout_constraintRight_toRightOf="parent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="4/5(120 reviews)" />
+            android:text="@string/rating" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
@@ -90,7 +91,7 @@
         android:id="@+id/ingredients_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Ingredients"
+        android:text="@string/ingredients_header"
         android:layout_marginTop="5dp"
         android:textAlignment="center"
         android:fontFamily="@font/courier_prime_bold_italic"
@@ -103,14 +104,14 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:text="ingredient 1"/>
+        android:text="@string/ingredients"/>
 
     <TextView
         android:id="@+id/steps_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:text="Preparation Steps"
+        android:text="@string/steps_header"
         android:fontFamily="@font/courier_prime_bold_italic"
         android:textAlignment="center"
         android:textSize="22sp"
@@ -122,7 +123,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:text="step 1"/>
+        android:text="@string/steps"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_marginLeft="20dp"
@@ -150,7 +151,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
-            android:text="Write A Review" />
+            android:text="@string/write_a_review" />
         <Button
             android:id="@+id/add_bookmark_btn"
             android:layout_width="match_parent"
