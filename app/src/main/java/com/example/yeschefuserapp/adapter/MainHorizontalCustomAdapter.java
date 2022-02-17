@@ -59,7 +59,9 @@ public class MainHorizontalCustomAdapter extends RecyclerView.Adapter<MainHorizo
             new Thread(() -> {
                 ((MainActivity)holder.itemView.getContext()).runOnUiThread(() -> {
                     holder.ratingBar.setRating(getAvgRating(recipe));
-                    holder.recipeCuisineType.setText(recipe.getCuisineType().get(0));
+                    if (recipe.getCuisineType().size()>1){
+                        holder.recipeCuisineType.setText(recipe.getCuisineType().get(0));
+                    }
                 });
             }).start();
         }
