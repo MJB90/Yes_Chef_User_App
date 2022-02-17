@@ -60,15 +60,15 @@ public class FilteredCustomListAdapter extends RecyclerView.Adapter<FilteredCust
         if (holder.review!=null && recipes!=null){
             holder.review.setRating(getAvgRating(recipes.get(pos)));
         }
-        if (holder.cuisineType!=null){
+        if (holder.cuisineType!=null && recipes!=null){
             String words="";
-            for (int i = 0; i< (recipes != null ? recipes.get(pos).getCuisineType().size() : 0); i++)
-            {
-                if (i==recipes.get(pos).getCuisineType().size()-1)
-                {
+            for (int i = 0; i< recipes.get(pos).getCuisineType().size(); i++) {
+                if (i==(recipes.get(pos).getCuisineType().size()-1)) {
                     words=String.format("%s %s",words,recipes.get(pos).getCuisineType().get(i));
                 }
-                words=String.format("%s %s, ",words,recipes.get(pos).getCuisineType().get(i));
+                else {
+                    words = String.format("%s %s, ", words, recipes.get(pos).getCuisineType().get(i));
+                }
             }
             holder.cuisineType.setText(words);
         }

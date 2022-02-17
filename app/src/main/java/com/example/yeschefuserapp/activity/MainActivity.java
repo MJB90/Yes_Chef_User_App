@@ -138,11 +138,6 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
             fragmentManager.beginTransaction().hide(activeFragment).show(accountFragment).commit();
             activeFragment = accountFragment;
         } else {
-            SharedPreferences pref = this.getSharedPreferences(this.getResources().getString(R.string.login_preference), Context.MODE_PRIVATE);
-            String email = pref.getString("email", "wrong");
-            Bundle bundle = new Bundle();
-            bundle.putString("email", email);
-            homeFragment.setArguments(bundle);
             fragmentManager.beginTransaction().hide(activeFragment).show(homeFragment).commit();
             activeFragment = homeFragment;
         }
