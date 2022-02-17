@@ -75,4 +75,10 @@ public class FilterResult extends AppCompatActivity implements NavigationBarView
         startActivity(intent);
         return true;
     }
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra("nav_item", R.id.nav_advanced_filter);
+        startActivity(intent);
+    }
 }

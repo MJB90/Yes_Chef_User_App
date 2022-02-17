@@ -165,7 +165,7 @@ public class HomeFragment extends Fragment {
         Gson gson = new GsonBuilder().serializeNulls().create();
         //caching
         if (pref.contains("RecommendedRecipes") &&
-                pref.contains("email") && email.equals(pref.getString("email","")) &&
+                pref.contains("Email") && email.equals(pref.getString("Email","")) &&
                 pref.contains("Country") && country.equals(pref.getString("Country","")) &&
                 pref.contains("Hour") && hour.equals(pref.getString("Hour",""))){
 
