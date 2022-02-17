@@ -10,7 +10,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.yeschefuserapp.R;
-import com.example.yeschefuserapp.activity.MainActivity;
 import com.example.yeschefuserapp.listener.RecipeClickListener;
 import com.example.yeschefuserapp.model.Recipe;
 import com.example.yeschefuserapp.utility.RecommendedRecipes;

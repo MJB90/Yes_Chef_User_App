@@ -2,7 +2,6 @@ package com.example.yeschefuserapp.activity;
 
 import android.Manifest;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -30,12 +29,11 @@ import com.google.android.material.navigation.NavigationBarView;
 
 public class MainActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener {
     private final static int REQ_LOCATION = 44;
-    private BottomNavigationView bottomNavigationView;
-    private Fragment homeFragment = new HomeFragment();
-    private Fragment bookmarksFragment = new BookmarksFragment();
-    private Fragment advancedFilterFragment = new AdvancedFilterFragment();
-    private Fragment accountFragment = new AccountFragment();
-    private FragmentManager fragmentManager = getSupportFragmentManager();
+    private final Fragment homeFragment = new HomeFragment();
+    private final Fragment bookmarksFragment = new BookmarksFragment();
+    private final Fragment advancedFilterFragment = new AdvancedFilterFragment();
+    private final Fragment accountFragment = new AccountFragment();
+    private final FragmentManager fragmentManager = getSupportFragmentManager();
     private Fragment activeFragment = homeFragment;
     private Context context;
     private UserContext userContext;
@@ -44,7 +42,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        context=this;
+        context = this;
         userContext = new UserContext(this);
     }
 
@@ -81,18 +79,13 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
                     .setTitle("Enable GPS Service")
                     .setCancelable(false)
                     .setPositiveButton("Enable", (dialogInterface, i) -> startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))).setNegativeButton("Cancel",
-                    new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            Toast.makeText(context, "You are Logged out", Toast.LENGTH_SHORT).show();
-                            userContext.clearLoginPreferences();
-                            Intent intent = new Intent(context, LoginActivity.class);
-                            context.startActivity(intent);
-                        }
+                    (dialogInterface, i) -> {
+                        Toast.makeText(context, "You are Logged out", Toast.LENGTH_SHORT).show();
+                        userContext.clearLoginPreferences();
+                        Intent intent = new Intent(context, LoginActivity.class);
+                        context.startActivity(intent);
                     }).show();
-        }
-        else
-        {
+        } else {
             grantPermission();
         }
     }
@@ -108,7 +101,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     }
 
     private void navigationBar() {
-        bottomNavigationView = findViewById(R.id.bottom_nav);
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_nav);
         bottomNavigationView.setOnItemSelectedListener(this);
         int id = getIntent().getIntExtra("nav_item", 0);
         bottomNavigationView.setSelectedItemId(id);
@@ -122,8 +115,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 createFragment();
                 navigationBar();
-            }
-            else
+            } else
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, REQ_LOCATION);
         }
     }
@@ -136,27 +128,18 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     }
 
     public void checkId(int id) {
-        switch (id) {
-            case R.id.nav_bookmarks:
-                fragmentManager.beginTransaction().hide(activeFragment).show(bookmarksFragment).commit();
-                activeFragment = bookmarksFragment;
-                break;
-            case R.id.nav_advanced_filter:
-                fragmentManager.beginTransaction().hide(activeFragment).show(advancedFilterFragment).commit();
-                activeFragment = advancedFilterFragment;
-                break;
-            case R.id.nav_account:
-                fragmentManager.beginTransaction().hide(activeFragment).show(accountFragment).commit();
-                activeFragment = accountFragment;
-                break;
-            default:
-                SharedPreferences pref = this.getSharedPreferences(this.getResources().getString(R.string.login_preference), Context.MODE_PRIVATE);
-                String email = pref.getString("email", "wrong");
-                Bundle bundle = new Bundle();
-                bundle.putString("email", email);
-                homeFragment.setArguments(bundle);
-                fragmentManager.beginTransaction().hide(activeFragment).show(homeFragment).commit();
-                activeFragment = homeFragment;
+        if (id == R.id.nav_bookmarks) {
+            fragmentManager.beginTransaction().hide(activeFragment).show(bookmarksFragment).commit();
+            activeFragment = bookmarksFragment;
+        } else if (id == R.id.nav_advanced_filter) {
+            fragmentManager.beginTransaction().hide(activeFragment).show(advancedFilterFragment).commit();
+            activeFragment = advancedFilterFragment;
+        } else if (id == R.id.nav_account) {
+            fragmentManager.beginTransaction().hide(activeFragment).show(accountFragment).commit();
+            activeFragment = accountFragment;
+        } else {
+            fragmentManager.beginTransaction().hide(activeFragment).show(homeFragment).commit();
+            activeFragment = homeFragment;
         }
     }
 
@@ -166,8 +149,9 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
                 .setTitle("Really Exit?")
                 .setMessage("Are you sure you want to exit?")
                 .setNegativeButton(android.R.string.no, null)
-                .setPositiveButton(android.R.string.yes, ((arg0, arg1)->{
+                .setPositiveButton(android.R.string.yes, ((arg0, arg1) -> {
                     finishAffinity();
-                    System.exit(0);})).create().show();
+                    System.exit(0);
+                })).create().show();
     }
 }

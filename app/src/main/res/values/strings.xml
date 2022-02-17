@@ -2,6 +2,9 @@
     <string name="app_name">Yes Chef User App</string>
     <string name="project_name">Yes Chef</string>
 
+    <!--Domain name-->
+    <string name="domain_name">http://10.0.2.2:8090/</string>
+
     <string name="nav_home">Home</string>
     <string name="nav_bookmarks">Bookmarks</string>
     <string name="nav_advanced_filter">Advanced Filter</string>
@@ -10,18 +13,76 @@
     <string name="nav_filtered_result">Results</string>
 
     <string name="filter">Filter</string>
-    <string name="add_to_bookmark">add to bookmark</string>
     <string name="delete_from_bookmark">delete from bookmark</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="login_preference">login_preference</string>
 
-    <string name="user_email">Email</string>
-    <string name="user_password">Password</string>
-
+    <!-- Back button-->
     <string name="yes">Yes</string>
     <string name="no">No</string>
 
-    <string name="domain_name">http://10.0.2.2:8090/</string>
+    <!--pop up change password-->
+    <string name="writeChangePasswordHead">Change Password</string>
+    <string name="old_password">Old Password</string>
+    <string name="new_password">New Password</string>
+    <string name="renter_new_password">Re-enter New Password</string>
+    <string name="confirm_btn">Confirm</string>
+    <string name="cancel_btn">Cancel</string>
+
+    <!--Forget password-->
+    <string name="forget_email">Email</string>
+
+    <!--View Recipe-->
+    <string name="recipe_name">Recipe Name</string>
+    <string name="calories">Calories</string>
+    <string name="prep_time">Duration</string>
+    <string name="rating">4/5(120 reviews)</string>
+    <string name="ingredients_header">Ingredients</string>
+    <string name="ingredients">ingredient 1</string>
+    <string name="steps_header">Preparation Steps</string>
+    <string name="steps">step 1</string>
+    <string name="write_a_review">Write A Review</string>
+    <string name="add_to_bookmark">Add to bookmark</string>
+
+    <!--Filtered result-->
+    <string name="filter_textview_name">Recipe Name</string>
+    <string name="filter_textview_cuisineType">Cuisine Type</string>
+    <string name="filter_textview_prepTime">Preparation Time</string>
+
+    <!--Fragment account-->
+    <string name="user_email">Email</string>
+    <string name="password">Password</string>
+    <string name="user_password">********</string>
+    <string name="logout_btn">Logout</string>
+
+    <!--Fragment bookmarks-->
+    <string name="bookmarks_header">Bookmarks:</string>
+
+    <!--Home fragment-->
+    <string name="recommendations">Your recommendations</string>
+    <string name="loginBtn">Login</string>
+    <string name="forget_password">Forget Password</string>
+    <string name="remember_me">Remember Me</string>
+
+    <!--Sign up fragment-->
+    <string name="confirm_password">Confirm Password</string>
+    <string name="sign_up_btn">Sign Up</string>
+
+    <!--Review item row-->
+    <string name="user_name">User Name</string>
+    <string name="review_date">Review Date</string>
+    <string name="review_desc">This is review</string>
+
+    <!--Pop up review-->
+    <string name="writeReviewText">Write your review here</string>
+    <string name="submitBtn">Submit</string>
+
+    <!--ForgetPasswordActivity-->
+    <string name="check_email">Check your email to get the verification code!</string>
+
+
+
+
 
 </resources>

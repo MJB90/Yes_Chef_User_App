@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -14,31 +13,41 @@
         app:layout_constraintHeight_percent="0.91">
 
         <TextView
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:text="@string/project_name"
+            android:fontFamily="@font/dancing_script_bold"
+            android:textColor="#fff"
+            android:background="@drawable/login_image"
+            android:textSize="40sp"
+            android:textStyle="italic"
+            android:gravity="center"
+            />
+
+        <TextView
             android:id="@+id/filter_result_size"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Search Result"
-            android:textSize="16sp"
-            android:textStyle="bold"
             android:textColor="@color/black"
-            />
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/filtered_result_recycler_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent" />
 
     </LinearLayout>
 
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_nav_filter"
-        app:layout_constraintHeight_percent="0.09"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="#fff"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.09"
+        app:layout_constraintStart_toStartOf="parent"
         app:menu="@menu/bottom_menu_filtered_result" />
 </androidx.constraintlayout.widget.ConstraintLayout>

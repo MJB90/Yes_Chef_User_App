@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/filter_card"
     android:layout_width="match_parent"
     android:layout_height="280dp"
-    android:id="@+id/filter_card"
     android:layout_gravity="center"
     android:layout_margin="15dp"
-    android:foreground="?attr/selectableItemBackgroundBorderless"
     android:clickable="true"
+    android:foreground="?attr/selectableItemBackgroundBorderless"
     app:cardCornerRadius="20dp"
     app:cardElevation="20dp">
 
@@ -49,7 +48,7 @@
                     android:id="@+id/filter_textview_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Recipe Name"
+                    android:text="@string/filter_textview_name"
                     android:textSize="14sp"
                     android:textStyle="bold" />
 
@@ -58,14 +57,15 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
-                    android:text="Cuisine Type"
+                    android:text="@string/filter_textview_cuisineType"
                     android:textSize="11sp" />
 
                 <TextView
                     android:id="@+id/filter_textview_prepTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Preparation Time"
+                    android:layout_marginStart="4dp"
+                    android:text="@string/filter_textview_prepTime"
                     android:textSize="11sp" />
 
             </LinearLayout>

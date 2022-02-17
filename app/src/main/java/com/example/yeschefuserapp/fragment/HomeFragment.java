@@ -74,8 +74,7 @@ public class HomeFragment extends Fragment {
         this.userContext = new UserContext(viewContext);
         recyclerView=view.findViewById(R.id.recycler_view);
         ACCESS_TOKEN=userContext.getToken();
-
-        if (getArguments() != null) email = getArguments().getString("email");
+        email=userContext.getEmail();
 
         //creating a list of recipe category list
         getUserLocationAndTime(viewContext);

@@ -1,49 +1,37 @@
 package com.example.yeschefuserapp.adapter;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
-import android.content.res.ColorStateList;
 import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.cardview.widget.CardView;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.android.volley.Request;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.yeschefuserapp.R;
-import com.example.yeschefuserapp.fragment.AdvancedFilterFragment;
 import com.example.yeschefuserapp.utility.AdvancedFilterTags;
-import com.example.yeschefuserapp.utility.MySingleton;
 import com.google.android.material.card.MaterialCardView;
-import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class MyExpandableListAdapter extends BaseExpandableListAdapter{
-    private Context context;
-    private List<String> selections;
-    private Map<String,List<String>> categories;
-    private CardAdapter adapter;
-    private RecyclerView cardList;
-    private IMyExpandableList iMyExpandableList;
+    private final Context context;
+    private final List<String> selections;
+    private final Map<String,List<String>> categories;
+    private final IMyExpandableList iMyExpandableList;
 
-    private Map<String,List<MaterialCardView>> cards=new HashMap<>();
+    private final Map<String,List<MaterialCardView>> cards=new HashMap<>();
     private final AdvancedFilterTags advancedFilterTags=new AdvancedFilterTags(.0,0,0,null,null,null,null);
 
     private List<String> tags;
@@ -52,11 +40,7 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter{
     private List<String> cuisineType;
 
     private int caloriesCount=0;
-    private int difficultyCount=0;
     private int prepTimeCount=0;
-    private int noServingCount=0;
-    private int courseTypeCount=0;
-    private int cuisineCount=0;
 
     public MyExpandableListAdapter(Context context, List<String> selections,Map<String,List<String>> categories,IMyExpandableList iMyExpandableList){
         this.context=context;
@@ -82,7 +66,7 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter{
 
     @Override
     public Object getChild(int i, int i1) {
-        return categories.get(selections.get(i)).get(i1);
+        return Objects.requireNonNull(categories.get(selections.get(i))).get(i1);
     }
 
     @Override
@@ -119,234 +103,194 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter{
             view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.filter_child_item,viewGroup,false);
         }
 
-        cardList=view.findViewById(R.id.gridView);
+        RecyclerView cardList = view.findViewById(R.id.gridView);
 
         List<MaterialCardView> cardToSendToCardAdapter=cards.get(selections.get(i));
 
-        adapter=new CardAdapter(view.getContext(), selections.get(i) ,categories.get(selections.get(i)),(card,item)->{
-            switch (selections.get(i)){
+        //Create an AdvancedFilterTags object
+        CardAdapter adapter = new CardAdapter(view.getContext(), categories.get(selections.get(i)), (card, item) -> {
+            switch (selections.get(i)) {
                 case "Tags":
-                    if (cards.get("Tags")==null)
-                    {
-                        List<MaterialCardView> temp=new ArrayList<>();
+                    if (cards.get("Tags") == null) {
+                        List<MaterialCardView> temp = new ArrayList<>();
                         temp.add(card);
-                        cards.put("Tags",temp);
+                        cards.put("Tags", temp);
                         card.setStrokeColor(0xffff0000);
-                    }
-                    else if (cards.get("Tags").contains(card))
-                    {
+                    } else if (cards.get("Tags").contains(card)) {
                         card.setStrokeColor(0xffffff);
                         cards.get("Tags").remove(card);
-                    }
-                    else{
+                    } else {
                         card.setStrokeColor(0xffff0000);
                         cards.get("Tags").add(card);
                     }
                     break;
                 case "Calories":
-                    if (caloriesCount==0)
-                    {
-                        if (cards.get("Calories")==null){
-                            List<MaterialCardView> temp=new ArrayList<>();
+                    if (caloriesCount == 0) {
+                        if (cards.get("Calories") == null) {
+                            List<MaterialCardView> temp = new ArrayList<>();
                             temp.add(card);
-                            cards.put("Calories",temp);
-                        }
-                        else{
+                            cards.put("Calories", temp);
+                        } else {
                             cards.get("Calories").add(card);
                         }
                         card.setStrokeColor(0xffff0000);
                         caloriesCount++;
-                    }
-                    else if(caloriesCount==1){
-                        if (cards.get("Calories").contains(card)){
+                    } else if (caloriesCount == 1) {
+                        if (cards.get("Calories").contains(card)) {
                             cards.get("Calories").clear();
                             card.setStrokeColor(0xffffff);
                             caloriesCount--;
-                        }
-                        else
-                        {
+                        } else {
                             cards.get("Calories").get(0).setStrokeColor(0xffffff);
                             cards.get("Calories").clear();
                             card.setStrokeColor(0xffff0000);
                             cards.get("Calories").add(card);
-                            Toast.makeText(context,"Select one option",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, "Select one option", Toast.LENGTH_SHORT).show();
                         }
                     }
                     break;
                 case "Difficulty":
-                    if (cards.get("Difficulty")==null)
-                    {
-                        List<MaterialCardView> temp=new ArrayList<>();
+                    if (cards.get("Difficulty") == null) {
+                        List<MaterialCardView> temp = new ArrayList<>();
                         temp.add(card);
-                        cards.put("Difficulty",temp);
+                        cards.put("Difficulty", temp);
                         card.setStrokeColor(0xffff0000);
-                    }
-                    else if (cards.get("Difficulty").contains(card))
-                    {
+                    } else if (cards.get("Difficulty").contains(card)) {
                         card.setStrokeColor(0xffffff);
                         cards.get("Difficulty").remove(card);
-                    }
-                    else{
+                    } else {
                         card.setStrokeColor(0xffff0000);
                         cards.get("Difficulty").add(card);
                     }
                     break;
                 case "Preparation Time":
-                    if (prepTimeCount==0)
-                    {
-                        if (cards.get("Preparation Time")==null){
-                            List<MaterialCardView> temp=new ArrayList<>();
+                    if (prepTimeCount == 0) {
+                        if (cards.get("Preparation Time") == null) {
+                            List<MaterialCardView> temp = new ArrayList<>();
                             temp.add(card);
-                            cards.put("Preparation Time",temp);
-                        }
-                        else{
+                            cards.put("Preparation Time", temp);
+                        } else {
                             cards.get("Preparation Time").add(card);
                         }
                         card.setStrokeColor(0xffff0000);
                         prepTimeCount++;
-                    }
-                    else if(prepTimeCount==1){
-                        if (cards.get("Preparation Time").contains(card)){
+                    } else if (prepTimeCount == 1) {
+                        if (cards.get("Preparation Time").contains(card)) {
                             cards.get("Preparation Time").clear();
                             card.setStrokeColor(0xffffff);
                             prepTimeCount--;
-                        }
-                        else
-                        {
+                        } else {
                             cards.get("Preparation Time").get(0).setStrokeColor(0xffffff);
                             cards.get("Preparation Time").clear();
                             card.setStrokeColor(0xffff0000);
                             cards.get("Preparation Time").add(card);
-                            Toast.makeText(context,"Select one option",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, "Select one option", Toast.LENGTH_SHORT).show();
                         }
                     }
                     break;
                 case "Course Type":
-                    if (cards.get("Course Type")==null)
-                    {
-                        List<MaterialCardView> temp=new ArrayList<>();
+                    if (cards.get("Course Type") == null) {
+                        List<MaterialCardView> temp = new ArrayList<>();
                         temp.add(card);
-                        cards.put("Course Type",temp);
+                        cards.put("Course Type", temp);
                         card.setStrokeColor(0xffff0000);
-                    }
-                    else if (cards.get("Course Type").contains(card))
-                    {
+                    } else if (cards.get("Course Type").contains(card)) {
                         card.setStrokeColor(0xffffff);
                         cards.get("Course Type").remove(card);
-                    }
-                    else{
+                    } else {
                         card.setStrokeColor(0xffff0000);
                         cards.get("Course Type").add(card);
                     }
                     break;
                 case "Cuisine Type":
-                    if (cards.get("Cuisine Type")==null)
-                    {
-                        List<MaterialCardView> temp=new ArrayList<>();
+                    if (cards.get("Cuisine Type") == null) {
+                        List<MaterialCardView> temp = new ArrayList<>();
                         temp.add(card);
-                        cards.put("Cuisine Type",temp);
+                        cards.put("Cuisine Type", temp);
                         card.setStrokeColor(0xffff0000);
-                    }
-                    else if (cards.get("Cuisine Type").contains(card))
-                    {
+                    } else if (cards.get("Cuisine Type").contains(card)) {
                         card.setStrokeColor(0xffffff);
                         cards.get("Cuisine Type").remove(card);
-                    }
-                    else{
+                    } else {
                         card.setStrokeColor(0xffff0000);
                         cards.get("Cuisine Type").add(card);
                     }
                     break;
             }
             //Create an AdvancedFilterTags object
-            if (selections.get(i)=="Tags"){
-                if (advancedFilterTags.getTags()==null) {
-                    tags=new ArrayList<>();
+            if (selections.get(i).equals("Tags")) {
+                if (advancedFilterTags.getTags() == null) {
+                    tags = new ArrayList<>();
                     tags.add(item);
-                }
-                else {
+                } else {
                     tags = advancedFilterTags.getTags();
                     tags.add(item);
                 }
                 advancedFilterTags.setTags(tags);
-            }
-            else if(selections.get(i)=="Calories"){
+            } else if (selections.get(i).equals("Calories")) {
                 Matcher matcher = Pattern.compile("\\d+").matcher(item);
 
                 List<Integer> numbers = new ArrayList<>();
                 while (matcher.find()) {
                     numbers.add(Integer.valueOf(matcher.group()));
                 }
-                advancedFilterTags.setMaxCalories((double)numbers.get(1));
-                advancedFilterTags.setMinCalories((double)numbers.get(0));
-            }
-            else if(selections.get(i)=="Difficulty"){
-                if (advancedFilterTags.getDifficulty()==null) {
-                    difficulty=new ArrayList<>();
+                advancedFilterTags.setMaxCalories((double) numbers.get(1));
+                advancedFilterTags.setMinCalories((double) numbers.get(0));
+            } else if (selections.get(i).equals("Difficulty")) {
+                if (advancedFilterTags.getDifficulty() == null) {
+                    difficulty = new ArrayList<>();
                     difficulty.add(item);
-                }
-                else {
+                } else {
                     difficulty = advancedFilterTags.getDifficulty();
                     difficulty.add(item);
                 }
                 advancedFilterTags.setDifficulty(difficulty);
-            }
-            else if(selections.get(i)=="Preparation Time") {
+            } else if (selections.get(i).equals("Preparation Time")) {
                 Matcher matcher = Pattern.compile("\\d+").matcher(item);
 
                 List<Integer> prepTime = new ArrayList<>();
                 while (matcher.find()) {
                     prepTime.add(Integer.valueOf(matcher.group()));
                 }
-                int minPrepTime=prepTime.get(0);
-                int maxPrepTime=prepTime.get(1);
-                if (minPrepTime==1 && maxPrepTime==10){
+                int minPrepTime = prepTime.get(0);
+                int maxPrepTime = prepTime.get(1);
+                if (minPrepTime == 1 && maxPrepTime == 10) {
                     advancedFilterTags.setMaxPrepTime(600);
                     advancedFilterTags.setMinPrepTime(60);
-                }
-                else if (minPrepTime==10 && maxPrepTime==30){
+                } else if (minPrepTime == 10 && maxPrepTime == 30) {
                     advancedFilterTags.setMaxPrepTime(1800);
                     advancedFilterTags.setMinPrepTime(600);
-                }
-                else if (minPrepTime==0 && maxPrepTime==5 && prepTime.get(2)==1){
+                } else if (minPrepTime == 0 && maxPrepTime == 5 && prepTime.get(2) == 1) {
                     advancedFilterTags.setMaxPrepTime(3600);
                     advancedFilterTags.setMinPrepTime(1800);
-                }
-                else if (minPrepTime==1 && maxPrepTime==5){
+                } else if (minPrepTime == 1 && maxPrepTime == 5) {
                     advancedFilterTags.setMaxPrepTime(18000);
                     advancedFilterTags.setMinPrepTime(3600);
-                }
-                else if (minPrepTime==5 && maxPrepTime==10){
+                } else if (minPrepTime == 5 && maxPrepTime == 10) {
                     advancedFilterTags.setMaxPrepTime(36000);
                     advancedFilterTags.setMinPrepTime(18000);
                 }
-            }
-            else if (selections.get(i)=="Course Type")
-            {
-                if (advancedFilterTags.getCourseType()==null) {
-                    courseType=new ArrayList<>();
+            } else if (selections.get(i).equals("Course Type")) {
+                if (advancedFilterTags.getCourseType() == null) {
+                    courseType = new ArrayList<>();
                     courseType.add(item);
-                }
-                else {
+                } else {
                     courseType = advancedFilterTags.getCourseType();
                     courseType.add(item);
                 }
                 advancedFilterTags.setCourseType(courseType);
-            }
-            else if (selections.get(i)=="Cuisine Type")
-            {
-                if (advancedFilterTags.getCuisineType()==null) {
-                    cuisineType=new ArrayList<>();
+            } else if (selections.get(i).equals("Cuisine Type")) {
+                if (advancedFilterTags.getCuisineType() == null) {
+                    cuisineType = new ArrayList<>();
                     cuisineType.add(item);
-                }
-                else {
+                } else {
                     cuisineType = advancedFilterTags.getCuisineType();
                     cuisineType.add(item);
                 }
                 advancedFilterTags.setCuisineType(cuisineType);
             }
             iMyExpandableList.onItemClick(advancedFilterTags);
-        },cardToSendToCardAdapter);
+        }, cardToSendToCardAdapter);
         GridLayoutManager gridLayoutManager=new GridLayoutManager(view.getContext(),3,GridLayoutManager.VERTICAL,false);
         cardList.setLayoutManager(gridLayoutManager);
         cardList.setAdapter(adapter);
