@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.yeschefuserapp.R;
 import com.example.yeschefuserapp.model.UserReview;
 
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class ReviewListAdapter extends RecyclerView.Adapter<ReviewListAdapter.MyReviewViewHolder> {
@@ -42,11 +43,9 @@ public class ReviewListAdapter extends RecyclerView.Adapter<ReviewListAdapter.My
         holder.ratingBar.setRating(userReview.getRating().floatValue());
 
         //TODO Once review Date in model, change review date to real date.
-//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-YYYY hh:mm a z");
-//        String reviewDate = formatter.format(userReview.getReviewDate());
-//        holder.dateReview.setText(reviewDate);
-        holder.dateReview.setText("1 Jan 2020");
-
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MMMM-YYYY");
+        String reviewDate = formatter.format(userReview.getReviewDateTime());
+        holder.dateReview.setText(reviewDate);
         holder.reviewDesc.setText(userReview.getDescription());
     }
 
