@@ -364,4 +364,11 @@ public class ViewRecipeActivity extends AppCompatActivity
         startActivity(intent);
         return true;
     }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra("nav_item", R.id.nav_home);
+        startActivity(intent);
+    }
 }

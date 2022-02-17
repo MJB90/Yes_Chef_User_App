@@ -16,6 +16,12 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="login_preference">login_preference</string>
 
+    <string name="user_email">Email</string>
+    <string name="user_password">Password</string>
+
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+
     <string name="domain_name">http://10.0.2.2:8090/</string>
 
 </resources>
