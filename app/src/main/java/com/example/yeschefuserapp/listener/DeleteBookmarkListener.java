@@ -2,7 +2,6 @@ package com.example.yeschefuserapp.listener;
 
 import android.content.Context;
 import android.util.Log;
-import android.view.View;
 import android.widget.Toast;
 
 import com.android.volley.DefaultRetryPolicy;
@@ -11,31 +10,30 @@ import com.android.volley.toolbox.StringRequest;
 import com.example.yeschefuserapp.adapter.BookmarkAdapter;
 import com.example.yeschefuserapp.context.UserContext;
 import com.example.yeschefuserapp.utility.MySingleton;
+import com.example.yeschefuserapp.utility.SwipeHelper;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class DeleteBookmarkListener implements View.OnClickListener {
+public class DeleteBookmarkListener implements SwipeHelper.UnderlayButtonClickListener {
     private static final String TAG = "DeleteBookmarkListener";
 
     private final Context context;
     private final UserContext userContext;
     private final BookmarkAdapter adapter;
-    private final int pos;
 
-    public DeleteBookmarkListener(Context context, BookmarkAdapter adapter, int pos) {
+    public DeleteBookmarkListener(Context context, BookmarkAdapter adapter) {
         this.context = context;
         this.userContext = new UserContext(context);
         this.adapter = adapter;
-        this.pos = pos;
     }
 
     @Override
-    public void onClick(View view) {
-        deleteBookmark();
+    public void onClick(int pos) {
+        deleteBookmark(pos);
     }
 
-    private void deleteBookmark() {
+    private void deleteBookmark(int pos) {
         StringRequest objectRequest = new StringRequest(
                 Request.Method.DELETE,
                 String.format("http://10.0.2.2:8090/api/user/delete_bookmark/%s/%s", this.userContext.getEmail(), this.adapter.getRecipe(pos).getId()),

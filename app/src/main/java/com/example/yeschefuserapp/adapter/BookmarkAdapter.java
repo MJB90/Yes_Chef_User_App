@@ -1,10 +1,8 @@
 package com.example.yeschefuserapp.adapter;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -14,20 +12,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.yeschefuserapp.R;
-import com.example.yeschefuserapp.listener.DeleteBookmarkListener;
 import com.example.yeschefuserapp.listener.ItemClickListener;
 import com.example.yeschefuserapp.model.Recipe;
 
 import java.util.List;
 
 public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.MyViewHolder> {
-    private final Context context;
     private final int resourceId;
     private final List<Recipe> recipes;
     private final ItemClickListener mItemListener;
 
-    public BookmarkAdapter(Context context, int resourceId, List<Recipe> recipes, ItemClickListener itemClickListener) {
-        this.context = context;
+    public BookmarkAdapter(int resourceId, List<Recipe> recipes, ItemClickListener itemClickListener) {
         this.resourceId = resourceId;
         this.recipes = recipes;
         mItemListener = itemClickListener;
@@ -64,8 +59,6 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.MyView
 
         holder.recipeName.setText(recipe.getName());
         holder.itemView.setOnClickListener(view -> mItemListener.onItemClick(recipe));
-        DeleteBookmarkListener listener = new DeleteBookmarkListener(context, this, position);
-        holder.btn.setOnClickListener(listener);
     }
 
     @Override
@@ -76,13 +69,11 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.MyView
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         ImageView recipeImage;
         TextView recipeName;
-        Button btn;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             recipeImage = itemView.findViewById(R.id.recipe_image);
             recipeName = itemView.findViewById(R.id.recipe_name);
-            btn = itemView.findViewById(R.id.delete_btn);
         }
     }
 }

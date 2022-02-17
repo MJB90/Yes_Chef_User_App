@@ -1,6 +1,7 @@
 package com.example.yeschefuserapp.fragment;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,9 +21,11 @@ import com.example.yeschefuserapp.R;
 import com.example.yeschefuserapp.activity.LoginActivity;
 import com.example.yeschefuserapp.adapter.BookmarkAdapter;
 import com.example.yeschefuserapp.context.UserContext;
+import com.example.yeschefuserapp.listener.DeleteBookmarkListener;
 import com.example.yeschefuserapp.listener.RecipeClickListener;
 import com.example.yeschefuserapp.model.Recipe;
 import com.example.yeschefuserapp.utility.MySingleton;
+import com.example.yeschefuserapp.utility.SwipeHelper;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -49,7 +52,7 @@ public class BookmarksFragment extends Fragment {
         this.userContext = new UserContext(view.getContext());
         ACCESS_TOKEN = userContext.getToken();
         RecipeClickListener onClickListener = new RecipeClickListener(view.getContext());
-        adapter = new BookmarkAdapter(view.getContext(), R.layout.bookmark_item, bookmarkList, onClickListener);
+        adapter = new BookmarkAdapter(R.layout.bookmark_item, bookmarkList, onClickListener);
 
         fetchData(this.userContext.getEmail());
         initView(view.findViewById(R.id.bookmark_recycler_view));
@@ -104,6 +107,19 @@ public class BookmarksFragment extends Fragment {
             recyclerView.setLayoutManager(layoutManager);
             recyclerView.setItemAnimator(new DefaultItemAnimator());
             recyclerView.setAdapter(adapter);
+
+            DeleteBookmarkListener btnListener = new DeleteBookmarkListener(this.getContext(), adapter);
+            SwipeHelper swipeHelper = new SwipeHelper(this.getContext(), recyclerView) {
+                @Override
+                public void instantiateUnderlayButton(RecyclerView.ViewHolder viewHolder, List<UnderlayButton> underlayButtons) {
+                    underlayButtons.add(new SwipeHelper.UnderlayButton(
+                            "Delete",
+                            0,
+                            Color.parseColor("#FF3C30"),
+                            btnListener
+                    ));
+                }
+            };
         }
     }
 }
