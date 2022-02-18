@@ -112,7 +112,7 @@ public class ViewRecipeActivity extends AppCompatActivity
                                 .load(selectedRecipe.getResizedImageURL().get(0))
                                 .centerCrop()
                                 .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                                .placeholder(R.drawable.ic_launcher_background)
+                                .placeholder(R.drawable.yes_chef)
                                 .into(recipeImage);
                     }
 

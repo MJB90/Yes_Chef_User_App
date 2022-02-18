@@ -37,7 +37,7 @@ public class ReviewListAdapter extends RecyclerView.Adapter<ReviewListAdapter.My
     public void onBindViewHolder(@NonNull MyReviewViewHolder holder, int position) {
         UserReview userReview = mUserReviews.get(position);
         //TODO to change profile image to real image
-        holder.profileImage.setImageResource(R.drawable.ic_launcher_background);
+        holder.profileImage.setImageResource(R.drawable.yes_chef);
 
         holder.username.setText(userReview.getUserEmail());
         holder.ratingBar.setRating(userReview.getRating().floatValue());
