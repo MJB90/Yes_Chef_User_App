@@ -13,10 +13,8 @@ import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
-import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.yeschefuserapp.R;
@@ -29,16 +27,8 @@ import com.example.yeschefuserapp.utility.AdvancedFilterTags;
 import com.example.yeschefuserapp.utility.MySingleton;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.Serializable;
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -128,8 +118,8 @@ public class AdvancedFilterFragment extends Fragment implements View.OnClickList
                 }
         ){
             @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> headerMap = new HashMap<String, String>();
+            public Map<String, String> getHeaders() {
+                Map<String, String> headerMap = new HashMap<>();
                 headerMap.put("Content-Type", "application/json");
                 headerMap.put("Authorization", "Bearer " + ACCESS_TOKEN);
                 return headerMap;
@@ -142,27 +132,38 @@ public class AdvancedFilterFragment extends Fragment implements View.OnClickList
     public void fetchCategory(AdvancedFilterTags filterTags) {
         categoriesCollection = new HashMap<>();
         for (String category : categoryList) {
-            if (category.equals("Tags")) childList = filterTags.getTags();
-            else if (category.equals("Calories")) {
-                Double maxCalorie = filterTags.getMaxCalories();
-                childList = new ArrayList<>();
-                childList.add("1 to 100 kcals");
-                int i=100;
-                    for (; i <= maxCalorie; i*=2) {
-                        childList.add(i + " to " + i*2 + "kcals");
+            switch (category) {
+                case "Tags":
+                    childList = filterTags.getTags();
+                    break;
+                case "Calories":
+                    Double maxCalorie = filterTags.getMaxCalories();
+                    childList = new ArrayList<>();
+                    childList.add("1 to 100 kCals");
+                    int i = 100;
+                    for (; i <= maxCalorie; i *= 2) {
+                        childList.add(i + " to " + i * 2 + "kCals");
                     }
-                    childList.add(i + " to " + i*2 + "kcals");
+                    childList.add(i + " to " + i * 2 + "kCals");
+                    break;
+                case "Difficulty":
+                    childList = filterTags.getDifficulty();
+                    break;
+                case "Preparation Time":
+                    childList = new ArrayList<>();
+                    childList.add("1 to 10 minutes");
+                    childList.add("10 to 30 minutes");
+                    childList.add("0.5 to 1 hour");
+                    childList.add("1 to 5 hours");
+                    childList.add("5 to 10 hours");
+                    break;
+                case "Course Type":
+                    childList = filterTags.getCourseType();
+                    break;
+                case "Cuisine Type":
+                    childList = filterTags.getCuisineType();
+                    break;
             }
-            else if (category.equals("Difficulty")) childList = filterTags.getDifficulty();
-            else if (category.equals("Preparation Time")) {
-                childList = new ArrayList<>();
-                childList.add("1 to 10 minutes");
-                childList.add("10 to 30 minutes");
-                childList.add("0.5 to 1 hour");
-                childList.add("1 to 5 hours");
-                childList.add("5 to 10 hours");
-            } else if (category.equals("Course Type")) childList = filterTags.getCourseType();
-            else if (category.equals("Cuisine Type")) childList = filterTags.getCuisineType();
 
             categoriesCollection.put(category, childList);
         }
@@ -199,17 +200,12 @@ public class AdvancedFilterFragment extends Fragment implements View.OnClickList
 
             @Override
             public byte[] getBody() {
-                try {
-                    return json == null ? null : json.getBytes("utf-8");
-                } catch (UnsupportedEncodingException uee) {
-                    VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", json, "utf-8");
-                    return null;
-                }
+                return json == null ? null : json.getBytes(StandardCharsets.UTF_8);
             }
 
             @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> headerMap = new HashMap<String, String>();
+            public Map<String, String> getHeaders() {
+                Map<String, String> headerMap = new HashMap<>();
                 headerMap.put("Content-Type", "application/json");
                 headerMap.put("Authorization", "Bearer " + ACCESS_TOKEN);
                 return headerMap;

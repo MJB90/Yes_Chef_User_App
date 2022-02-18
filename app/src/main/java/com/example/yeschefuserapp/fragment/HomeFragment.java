@@ -5,9 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Address;
 import android.location.Geocoder;
-import android.location.Location;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +17,6 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.toolbox.JsonArrayRequest;
@@ -29,13 +26,11 @@ import com.example.yeschefuserapp.activity.FilterResult;
 import com.example.yeschefuserapp.activity.LoginActivity;
 import com.example.yeschefuserapp.adapter.MainVerticalCustomListAdapter;
 import com.example.yeschefuserapp.context.UserContext;
-import com.example.yeschefuserapp.listener.LogoutListener;
 import com.example.yeschefuserapp.model.Recipe;
 import com.example.yeschefuserapp.utility.MySingleton;
 import com.example.yeschefuserapp.utility.RecommendedRecipes;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.Task;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -49,11 +44,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.concurrent.CountDownLatch;
 
 public class HomeFragment extends Fragment {
 
-    private MainVerticalCustomListAdapter mainVerticalCustomListAdapter;
     private RecyclerView recyclerView;
     private String country;
     private RecommendedRecipes recommendedRecipes;
@@ -108,8 +101,8 @@ public class HomeFragment extends Fragment {
                             }
                     ){
                         @Override
-                        public Map<String, String> getHeaders() throws AuthFailureError {
-                            Map<String, String> headerMap = new HashMap<String, String>();
+                        public Map<String, String> getHeaders() {
+                            Map<String, String> headerMap = new HashMap<>();
                             headerMap.put("Content-Type", "application/json");
                             headerMap.put("Authorization", "Bearer " + ACCESS_TOKEN);
                             return headerMap;
@@ -195,8 +188,8 @@ public class HomeFragment extends Fragment {
                     }
             ){
                 @Override
-                public Map<String, String> getHeaders() throws AuthFailureError {
-                    Map<String, String> headerMap = new HashMap<String, String>();
+                public Map<String, String> getHeaders() {
+                    Map<String, String> headerMap = new HashMap<>();
                     headerMap.put("Content-Type", "application/json");
                     headerMap.put("Authorization", "Bearer " + ACCESS_TOKEN);
                     return headerMap;
@@ -208,7 +201,7 @@ public class HomeFragment extends Fragment {
     }
 
     public void createVerticalRecycleView(Context context, RecommendedRecipes object){
-        mainVerticalCustomListAdapter = new MainVerticalCustomListAdapter(context, object);
+        MainVerticalCustomListAdapter mainVerticalCustomListAdapter = new MainVerticalCustomListAdapter(context, object);
         if (recyclerView != null) {
             LinearLayoutManager layoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
             recyclerView.setLayoutManager(layoutManager);

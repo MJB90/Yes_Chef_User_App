@@ -11,7 +11,6 @@ import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
 import com.example.yeschefuserapp.R;
 import com.example.yeschefuserapp.activity.LoginActivity;
-import com.example.yeschefuserapp.activity.MainActivity;
 import com.example.yeschefuserapp.model.AppUser;
 import com.example.yeschefuserapp.utility.MySingleton;
 import com.google.gson.Gson;

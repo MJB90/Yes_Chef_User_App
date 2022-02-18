@@ -1,8 +1,6 @@
 package com.example.yeschefuserapp.fragment;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,12 +11,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 
 import com.example.yeschefuserapp.R;
 import com.example.yeschefuserapp.activity.ForgetPasswordActivity;
-import com.example.yeschefuserapp.activity.MainActivity;
-import com.example.yeschefuserapp.context.UserContext;
 import com.example.yeschefuserapp.listener.LoginListener;
 
 public class LoginFragment extends Fragment {
@@ -40,19 +35,15 @@ public class LoginFragment extends Fragment {
         passwordText = view.findViewById(R.id.password);
         rememberMe = view.findViewById(R.id.remember_me);
         forgetPassword = view.findViewById(R.id.forget_password);
-        UserContext userContext = new UserContext(view.getContext());
 
         //Auto login
 
         LoginListener listener = new LoginListener(this.getContext(), emailText, passwordText, rememberMe);
         loginBtn.setOnClickListener(listener);
 
-        forgetPassword.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(view.getContext(), ForgetPasswordActivity.class);
-                startActivity(intent);
-            }
+        forgetPassword.setOnClickListener(view1 -> {
+            Intent intent = new Intent(view1.getContext(), ForgetPasswordActivity.class);
+            startActivity(intent);
         });
         return view;
     }

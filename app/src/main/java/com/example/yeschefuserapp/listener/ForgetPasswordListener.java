@@ -15,7 +15,7 @@ import com.example.yeschefuserapp.model.AppUser;
 import com.example.yeschefuserapp.utility.MySingleton;
 import com.google.gson.Gson;
 
-public class ForgetPasswordListener implements View.OnClickListener{
+public class ForgetPasswordListener implements View.OnClickListener {
     private final Context context;
     private final String email;
     private final String otp;
@@ -27,9 +27,9 @@ public class ForgetPasswordListener implements View.OnClickListener{
         this.context = context;
         this.email = email;
         this.otp = otp;
-        this.newPassword=newPassword;
-        this.reenterNewPassword=reenterNewPassword;
-        userContext=new UserContext(context);
+        this.newPassword = newPassword;
+        this.reenterNewPassword = reenterNewPassword;
+        userContext = new UserContext(context);
     }
 
     @Override
@@ -43,7 +43,7 @@ public class ForgetPasswordListener implements View.OnClickListener{
 
             StringRequest objectRequest = new StringRequest(
                     Request.Method.POST,
-                    context.getString(R.string.domain_name) + "api/user/forget_password/"+otp,
+                    context.getString(R.string.domain_name) + "api/user/forget_password/" + otp,
                     response -> {
                         Toast.makeText(context, response, Toast.LENGTH_SHORT).show();
                         userContext.clearLoginPreferences();
@@ -64,8 +64,7 @@ public class ForgetPasswordListener implements View.OnClickListener{
             };
             objectRequest.setRetryPolicy(new DefaultRetryPolicy(0, 0, DefaultRetryPolicy.DEFAULT_TIMEOUT_MS));
             MySingleton.getInstance(context).addToRequestQueue(objectRequest);
-        }
-        else if (! newPassword.equals(reenterNewPassword)){
+        } else {
             Toast.makeText(view.getContext(), "The new password re-entered doesn't match the new password!", Toast.LENGTH_SHORT).show();
         }
     }

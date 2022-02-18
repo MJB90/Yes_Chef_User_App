@@ -49,7 +49,7 @@ public class DeleteBookmarkListener implements SwipeHelper.UnderlayButtonClickLi
         ) {
             @Override
             public Map<String, String> getHeaders() {
-                Map<String, String> headerMap = new HashMap<String, String>();
+                Map<String, String> headerMap = new HashMap<>();
                 headerMap.put("Authorization", "Bearer " + userContext.getToken());
                 return headerMap;
             }

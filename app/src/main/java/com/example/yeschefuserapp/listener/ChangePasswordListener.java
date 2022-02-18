@@ -28,9 +28,9 @@ public class ChangePasswordListener implements View.OnClickListener {
         this.context = context;
         this.email = email;
         this.oldPassword = oldPassword;
-        this.newPassword=newPassword;
-        this.reenterNewPassword=reenterNewPassword;
-        userContext=new UserContext(context);
+        this.newPassword = newPassword;
+        this.reenterNewPassword = reenterNewPassword;
+        userContext = new UserContext(context);
     }
 
     @Override
@@ -66,11 +66,9 @@ public class ChangePasswordListener implements View.OnClickListener {
             };
             objectRequest.setRetryPolicy(new DefaultRetryPolicy(0, 0, DefaultRetryPolicy.DEFAULT_TIMEOUT_MS));
             MySingleton.getInstance(context).addToRequestQueue(objectRequest);
-        }
-        else if (! newPassword.equals(reenterNewPassword)){
+        } else if (!newPassword.equals(reenterNewPassword)) {
             Toast.makeText(view.getContext(), "The new password reentered doesn't match the new password!", Toast.LENGTH_SHORT).show();
-        }
-        else{
+        } else {
             Toast.makeText(view.getContext(), "The old password is incorrect!", Toast.LENGTH_SHORT).show();
         }
     }

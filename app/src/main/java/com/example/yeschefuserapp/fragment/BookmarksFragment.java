@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.toolbox.JsonArrayRequest;
@@ -65,7 +64,6 @@ public class BookmarksFragment extends Fragment {
         fetchData(this.userContext.getEmail());
     }
 
-
     private void fetchData(String email) {
         JsonArrayRequest objectRequest = new JsonArrayRequest(
                 Request.Method.GET,
@@ -79,7 +77,6 @@ public class BookmarksFragment extends Fragment {
                     bookmarkList.addAll(Arrays.asList(tmpArray.clone()));
 
                     // Need to notify the adapter after updating the recipes
-                    // ref: https://stackoverflow.com/a/48959184
                     adapter.notifyDataSetChanged();
                 },
                 error -> {
@@ -90,8 +87,8 @@ public class BookmarksFragment extends Fragment {
                 }
         ) {
             @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> headerMap = new HashMap<String, String>();
+            public Map<String, String> getHeaders() {
+                Map<String, String> headerMap = new HashMap<>();
                 headerMap.put("Content-Type", "application/json");
                 headerMap.put("Authorization", "Bearer " + ACCESS_TOKEN);
                 return headerMap;
