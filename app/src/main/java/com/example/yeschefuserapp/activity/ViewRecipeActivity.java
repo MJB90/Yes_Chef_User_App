@@ -21,10 +21,8 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
-import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
@@ -45,7 +43,7 @@ import com.google.gson.Gson;
 
 import org.json.JSONObject;
 
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -120,13 +118,13 @@ public class ViewRecipeActivity extends AppCompatActivity
                     recipeName.setText(selectedRecipe.getName());
 
                     TextView prepTime = findViewById(R.id.prep_time);
-                    prepTime.setText("Prep time : " + String.valueOf(selectedRecipe.getPrepTime() / 60) + "min");
+                    prepTime.setText("Prep time : " + selectedRecipe.getPrepTime() / 60 + "min");
 
                     TextView rating = findViewById(R.id.rating);
                     RatingBar viewRatingBar = findViewById(R.id.view_rating_bar);
                     if (selectedRecipe.getUserReviews() != null) {
                         getAvgRating();
-                        rating.setText(String.valueOf(ratingAvg) + "/5.0 (" + reviewNo.toString() + " reviews)");
+                        rating.setText(ratingAvg + "/5.0 (" + reviewNo.toString() + " reviews)");
                         viewRatingBar.setRating(ratingAvg.floatValue());
                     } else
                         rating.setText("No reviews");
@@ -177,8 +175,8 @@ public class ViewRecipeActivity extends AppCompatActivity
                 }
         ) {
             @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> headerMap = new HashMap<String, String>();
+            public Map<String, String> getHeaders() {
+                Map<String, String> headerMap = new HashMap<>();
                 headerMap.put("Content-Type", "application/json");
                 headerMap.put("Authorization", "Bearer " + ACCESS_TOKEN);
                 return headerMap;
@@ -208,11 +206,9 @@ public class ViewRecipeActivity extends AppCompatActivity
         final String requestBody = reviewJsonObject.toString();
         StringRequest objectRequest = new StringRequest(
                 Request.Method.POST,
-                String.format(getString(R.string.domain_name) + "api/user/post_review"),
+                getString(R.string.domain_name) + "api/user/post_review",
                 response -> {
                     //TODO go to review page
-//                    Gson gson = new Gson();
-//                    selectedRecipe = gson.fromJson(response.toString(), Recipe.class);
 
                     Intent intent = new Intent(ViewRecipeActivity.this,ViewRecipeActivity.class);
                     intent.putExtra("recipe", selectedRecipe);
@@ -232,18 +228,13 @@ public class ViewRecipeActivity extends AppCompatActivity
             }
 
             @Override
-            public byte[] getBody() throws AuthFailureError {
-                try {
-                    return requestBody == null ? null : requestBody.getBytes("utf-8");
-                } catch (UnsupportedEncodingException uee) {
-                    VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", requestBody, "utf-8");
-                    return null;
-                }
+            public byte[] getBody() {
+                return requestBody.getBytes(StandardCharsets.UTF_8);
             }
 
             @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> headerMap = new HashMap<String, String>();
+            public Map<String, String> getHeaders() {
+                Map<String, String> headerMap = new HashMap<>();
                 headerMap.put("Content-Type", "application/json");
                 headerMap.put("Authorization", "Bearer " + ACCESS_TOKEN);
                 return headerMap;
@@ -282,8 +273,8 @@ public class ViewRecipeActivity extends AppCompatActivity
                 }
         ) {
             @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> headerMap = new HashMap<String, String>();
+            public Map<String, String> getHeaders() {
+                Map<String, String> headerMap = new HashMap<>();
                 headerMap.put("Content-Type", "application/json");
                 headerMap.put("Authorization", "Bearer " + ACCESS_TOKEN);
                 return headerMap;
@@ -352,10 +343,6 @@ public class ViewRecipeActivity extends AppCompatActivity
             myPopUpReviewDialog.dismiss();
         }
 
-        //if (id == R.id.bookmark_this) {
-
-        //
-        //}
         if (id == R.id.write_a_review) {
             PopUpWriteReview();
 

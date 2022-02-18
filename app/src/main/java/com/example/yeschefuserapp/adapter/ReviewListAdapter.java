@@ -43,7 +43,7 @@ public class ReviewListAdapter extends RecyclerView.Adapter<ReviewListAdapter.My
         holder.ratingBar.setRating(userReview.getRating().floatValue());
 
         //TODO Once review Date in model, change review date to real date.
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MMMM-YYYY");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MMMM-yyyy");
         String reviewDate = formatter.format(userReview.getReviewDateTime());
         holder.dateReview.setText(reviewDate);
         holder.reviewDesc.setText(userReview.getDescription());

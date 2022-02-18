@@ -218,76 +218,81 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter{
                     break;
             }
             //Create an AdvancedFilterTags object
-            if (selections.get(i).equals("Tags")) {
-                if (advancedFilterTags.getTags() == null) {
-                    tags = new ArrayList<>();
+            switch (selections.get(i)) {
+                case "Tags":
+                    if (advancedFilterTags.getTags() == null) {
+                        tags = new ArrayList<>();
+                    } else {
+                        tags = advancedFilterTags.getTags();
+                    }
                     tags.add(item);
-                } else {
-                    tags = advancedFilterTags.getTags();
-                    tags.add(item);
-                }
-                advancedFilterTags.setTags(tags);
-            } else if (selections.get(i).equals("Calories")) {
-                Matcher matcher = Pattern.compile("\\d+").matcher(item);
+                    advancedFilterTags.setTags(tags);
+                    break;
+                case "Calories": {
+                    Matcher matcher = Pattern.compile("\\d+").matcher(item);
 
-                List<Integer> numbers = new ArrayList<>();
-                while (matcher.find()) {
-                    numbers.add(Integer.valueOf(matcher.group()));
+                    List<Integer> numbers = new ArrayList<>();
+                    while (matcher.find()) {
+                        numbers.add(Integer.valueOf(matcher.group()));
+                    }
+                    advancedFilterTags.setMaxCalories((double) numbers.get(1));
+                    advancedFilterTags.setMinCalories((double) numbers.get(0));
+                    break;
                 }
-                advancedFilterTags.setMaxCalories((double) numbers.get(1));
-                advancedFilterTags.setMinCalories((double) numbers.get(0));
-            } else if (selections.get(i).equals("Difficulty")) {
-                if (advancedFilterTags.getDifficulty() == null) {
-                    difficulty = new ArrayList<>();
+                case "Difficulty":
+                    if (advancedFilterTags.getDifficulty() == null) {
+                        difficulty = new ArrayList<>();
+                    } else {
+                        difficulty = advancedFilterTags.getDifficulty();
+                    }
                     difficulty.add(item);
-                } else {
-                    difficulty = advancedFilterTags.getDifficulty();
-                    difficulty.add(item);
-                }
-                advancedFilterTags.setDifficulty(difficulty);
-            } else if (selections.get(i).equals("Preparation Time")) {
-                Matcher matcher = Pattern.compile("\\d+").matcher(item);
+                    advancedFilterTags.setDifficulty(difficulty);
+                    break;
+                case "Preparation Time": {
+                    Matcher matcher = Pattern.compile("\\d+").matcher(item);
 
-                List<Integer> prepTime = new ArrayList<>();
-                while (matcher.find()) {
-                    prepTime.add(Integer.valueOf(matcher.group()));
+                    List<Integer> prepTime = new ArrayList<>();
+                    while (matcher.find()) {
+                        prepTime.add(Integer.valueOf(matcher.group()));
+                    }
+                    int minPrepTime = prepTime.get(0);
+                    int maxPrepTime = prepTime.get(1);
+                    if (minPrepTime == 1 && maxPrepTime == 10) {
+                        advancedFilterTags.setMaxPrepTime(600);
+                        advancedFilterTags.setMinPrepTime(60);
+                    } else if (minPrepTime == 10 && maxPrepTime == 30) {
+                        advancedFilterTags.setMaxPrepTime(1800);
+                        advancedFilterTags.setMinPrepTime(600);
+                    } else if (minPrepTime == 0 && maxPrepTime == 5 && prepTime.get(2) == 1) {
+                        advancedFilterTags.setMaxPrepTime(3600);
+                        advancedFilterTags.setMinPrepTime(1800);
+                    } else if (minPrepTime == 1 && maxPrepTime == 5) {
+                        advancedFilterTags.setMaxPrepTime(18000);
+                        advancedFilterTags.setMinPrepTime(3600);
+                    } else if (minPrepTime == 5 && maxPrepTime == 10) {
+                        advancedFilterTags.setMaxPrepTime(36000);
+                        advancedFilterTags.setMinPrepTime(18000);
+                    }
+                    break;
                 }
-                int minPrepTime = prepTime.get(0);
-                int maxPrepTime = prepTime.get(1);
-                if (minPrepTime == 1 && maxPrepTime == 10) {
-                    advancedFilterTags.setMaxPrepTime(600);
-                    advancedFilterTags.setMinPrepTime(60);
-                } else if (minPrepTime == 10 && maxPrepTime == 30) {
-                    advancedFilterTags.setMaxPrepTime(1800);
-                    advancedFilterTags.setMinPrepTime(600);
-                } else if (minPrepTime == 0 && maxPrepTime == 5 && prepTime.get(2) == 1) {
-                    advancedFilterTags.setMaxPrepTime(3600);
-                    advancedFilterTags.setMinPrepTime(1800);
-                } else if (minPrepTime == 1 && maxPrepTime == 5) {
-                    advancedFilterTags.setMaxPrepTime(18000);
-                    advancedFilterTags.setMinPrepTime(3600);
-                } else if (minPrepTime == 5 && maxPrepTime == 10) {
-                    advancedFilterTags.setMaxPrepTime(36000);
-                    advancedFilterTags.setMinPrepTime(18000);
-                }
-            } else if (selections.get(i).equals("Course Type")) {
-                if (advancedFilterTags.getCourseType() == null) {
-                    courseType = new ArrayList<>();
+                case "Course Type":
+                    if (advancedFilterTags.getCourseType() == null) {
+                        courseType = new ArrayList<>();
+                    } else {
+                        courseType = advancedFilterTags.getCourseType();
+                    }
                     courseType.add(item);
-                } else {
-                    courseType = advancedFilterTags.getCourseType();
-                    courseType.add(item);
-                }
-                advancedFilterTags.setCourseType(courseType);
-            } else if (selections.get(i).equals("Cuisine Type")) {
-                if (advancedFilterTags.getCuisineType() == null) {
-                    cuisineType = new ArrayList<>();
+                    advancedFilterTags.setCourseType(courseType);
+                    break;
+                case "Cuisine Type":
+                    if (advancedFilterTags.getCuisineType() == null) {
+                        cuisineType = new ArrayList<>();
+                    } else {
+                        cuisineType = advancedFilterTags.getCuisineType();
+                    }
                     cuisineType.add(item);
-                } else {
-                    cuisineType = advancedFilterTags.getCuisineType();
-                    cuisineType.add(item);
-                }
-                advancedFilterTags.setCuisineType(cuisineType);
+                    advancedFilterTags.setCuisineType(cuisineType);
+                    break;
             }
             iMyExpandableList.onItemClick(advancedFilterTags);
         }, cardToSendToCardAdapter);
