@@ -62,6 +62,7 @@ public class ForgetPasswordActivity extends AppCompatActivity implements View.On
                     getString(R.string.domain_name) + "api/user/forget_password",
                     response -> {
                         Toast.makeText(this, response,Toast.LENGTH_SHORT).show();
+                        userContext.setUserInfo(email,"","",false);
                         PopUpChangePassword(view);
                     },
                     error -> Toast.makeText(view.getContext(), error.toString(), Toast.LENGTH_SHORT).show()
