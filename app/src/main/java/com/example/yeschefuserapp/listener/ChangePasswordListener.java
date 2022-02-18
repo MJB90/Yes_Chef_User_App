@@ -3,7 +3,6 @@ package com.example.yeschefuserapp.listener;
 import android.content.Context;
 import android.content.Intent;
 import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.DefaultRetryPolicy;
@@ -14,19 +13,15 @@ import com.example.yeschefuserapp.activity.LoginActivity;
 import com.example.yeschefuserapp.context.UserContext;
 import com.example.yeschefuserapp.model.AppUser;
 import com.example.yeschefuserapp.utility.MySingleton;
-import com.google.android.material.card.MaterialCardView;
 import com.google.gson.Gson;
 
 public class ChangePasswordListener implements View.OnClickListener {
-
-    private static final String TAG = "ChangePasswordListener";
 
     private final Context context;
     private final String email;
     private final String oldPassword;
     private final String newPassword;
     private final String reenterNewPassword;
-    private final CustomErrorListener errorListener;
     private final UserContext userContext;
 
     public ChangePasswordListener(Context context, String email, String oldPassword, String newPassword, String reenterNewPassword) {
@@ -35,7 +30,6 @@ public class ChangePasswordListener implements View.OnClickListener {
         this.oldPassword = oldPassword;
         this.newPassword=newPassword;
         this.reenterNewPassword=reenterNewPassword;
-        this.errorListener = new CustomErrorListener(TAG, context);
         userContext=new UserContext(context);
     }
 
@@ -58,9 +52,7 @@ public class ChangePasswordListener implements View.OnClickListener {
                         Intent intent = new Intent(context, LoginActivity.class);
                         context.startActivity(intent);
                     },
-                    error -> {
-                        Toast.makeText(context, "Unsuccessful", Toast.LENGTH_SHORT).show();
-                    }
+                    error -> Toast.makeText(context, "Unsuccessful", Toast.LENGTH_SHORT).show()
             ) {
                 @Override
                 public byte[] getBody() {

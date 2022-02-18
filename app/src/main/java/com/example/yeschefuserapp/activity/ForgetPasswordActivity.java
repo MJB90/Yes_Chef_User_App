@@ -19,7 +19,10 @@ import com.android.volley.toolbox.StringRequest;
 import com.example.yeschefuserapp.R;
 import com.example.yeschefuserapp.context.UserContext;
 import com.example.yeschefuserapp.listener.ChangePasswordListener;
+import com.example.yeschefuserapp.listener.ForgetPasswordListener;
+import com.example.yeschefuserapp.model.AppUser;
 import com.example.yeschefuserapp.utility.MySingleton;
+import com.google.gson.Gson;
 
 public class ForgetPasswordActivity extends AppCompatActivity implements View.OnClickListener {
     private EditText forgetEmail;
@@ -48,22 +51,35 @@ public class ForgetPasswordActivity extends AppCompatActivity implements View.On
         int id = view.getId();
         if (id == R.id.confirm_button) {
             String email = forgetEmail.getText().toString();
+            AppUser appUser = AppUser.builder().
+                    email(email).
+                    password("").
+                    build();
+            Gson gson = new Gson();
+
             StringRequest objectRequest = new StringRequest(
-                    Request.Method.GET,
-                    getString(R.string.domain_name) + "api/user/email_verification/" + email,
+                    Request.Method.POST,
+                    getString(R.string.domain_name) + "api/user/forget_password",
                     response -> {
-                        if (response.equals("true")) {
-                            PopUpChangePassword(view);
-                        } else {
-                            Toast.makeText(view.getContext(), "Wrong email address!", Toast.LENGTH_SHORT).show();
-                        }
+                        Toast.makeText(this, response,Toast.LENGTH_SHORT).show();
+                        PopUpChangePassword(view);
                     },
                     error -> Toast.makeText(view.getContext(), error.toString(), Toast.LENGTH_SHORT).show()
-            );
+            ){
+                @Override
+                public byte[] getBody() {
+                    return gson.toJson(appUser).getBytes();
+                }
+
+                @Override
+                public String getBodyContentType() {
+                    return "application/json";
+                }
+            };
             objectRequest.setRetryPolicy(new DefaultRetryPolicy(0, 0, DefaultRetryPolicy.DEFAULT_TIMEOUT_MS));
             MySingleton.getInstance(view.getContext()).addToRequestQueue(objectRequest);
         } else if (id == R.id.confirm_btn) {
-            ChangePasswordListener changePasswordListener = new ChangePasswordListener(view.getContext(),
+            ForgetPasswordListener changePasswordListener = new ForgetPasswordListener(view.getContext(),
                     userContext.getEmail(),
                     oldPassword.getText().toString(),
                     newPassword.getText().toString(),
