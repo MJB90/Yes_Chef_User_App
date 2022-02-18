@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -29,13 +30,17 @@ import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.yeschefuserapp.R;
+import com.example.yeschefuserapp.adapter.MainHorizontalCustomAdapter;
+import com.example.yeschefuserapp.adapter.MainVerticalCustomListAdapter;
 import com.example.yeschefuserapp.adapter.ReviewListAdapter;
 import com.example.yeschefuserapp.context.UserContext;
 import com.example.yeschefuserapp.listener.BookmarkListener;
+import com.example.yeschefuserapp.listener.RecipeClickListener;
 import com.example.yeschefuserapp.model.Ingredient;
 import com.example.yeschefuserapp.model.Recipe;
 import com.example.yeschefuserapp.model.UserReview;
 import com.example.yeschefuserapp.utility.MySingleton;
+import com.example.yeschefuserapp.utility.RecommendedRecipes;
 import com.example.yeschefuserapp.utility.ReviewCommunicationModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
@@ -54,6 +59,7 @@ import java.util.Map;
 public class ViewRecipeActivity extends AppCompatActivity
         implements View.OnClickListener, NavigationBarView.OnItemSelectedListener {
     private Recipe selectedRecipe = new Recipe();
+    private RecommendedRecipes moreLikeThisRecipes;
     private Integer reviewNo;
     private Double ratingAvg;
     private Integer ratingTotal;
@@ -146,16 +152,19 @@ public class ViewRecipeActivity extends AppCompatActivity
                     getSteps();
                     steps.setText(preparationSteps);
 
-                    ReviewListAdapter adapter = new ReviewListAdapter(R.layout.review_item_row, selectedRecipe.getUserReviews());
-                    RecyclerView reviewRecyclerView = findViewById(R.id.recycler_review);
-                    if (reviewRecyclerView != null) {
-                        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-                        reviewRecyclerView.setLayoutManager(layoutManager);
-                        reviewRecyclerView.setItemAnimator(new DefaultItemAnimator());
-                        reviewRecyclerView.setAdapter(adapter);
+                    if(selectedRecipe.getUserReviews()!=null && selectedRecipe.getUserReviews().size()!=0){
+                        ReviewListAdapter adapter = new ReviewListAdapter(R.layout.review_item_row, selectedRecipe.getUserReviews());
+                        RecyclerView reviewRecyclerView = findViewById(R.id.recycler_review);
+                        if (reviewRecyclerView != null) {
+                            LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+                            reviewRecyclerView.setLayoutManager(layoutManager);
+                            reviewRecyclerView.setItemAnimator(new DefaultItemAnimator());
+                            reviewRecyclerView.setAdapter(adapter);
+                        }
                     }
 
                     Button writeAReview = findViewById(R.id.write_a_review);
+                    if(writeAReview!=null)
                     writeAReview.setOnClickListener(this);
 
                     Button bookmarkBtn = findViewById(R.id.add_bookmark_btn);
@@ -166,6 +175,8 @@ public class ViewRecipeActivity extends AppCompatActivity
                     fetchBookmarkData(bookmarkBtn, bookmarkListener, userEmail);
 
                     navigationBar();
+                    //TODO: when get endpoint from Manas, to call fetch more like this.
+                    //fetchMoreLikeThis(id);
                 },
                 error -> {
                     Toast.makeText(this, "You are Logged out", Toast.LENGTH_LONG).show();
@@ -183,6 +194,49 @@ public class ViewRecipeActivity extends AppCompatActivity
             }
         };
         MySingleton.getInstance(this).addToRequestQueue(objectRequest);
+    }
+
+
+    public void fetchMoreLikeThis(String id){
+        Gson gson = new Gson();
+            JsonObjectRequest objectRequest = new JsonObjectRequest(
+                    Request.Method.GET,
+                    String.format(getString(R.string.domain_name)+"api/user/more_like_this/%s/20", id),
+                    null,
+                    response -> {
+                        moreLikeThisRecipes = gson.fromJson(String.valueOf(response), RecommendedRecipes.class);
+                        if (moreLikeThisRecipes!=null) {
+                            List<Recipe> recipes = moreLikeThisRecipes.getRecommendedRecipes().get(0).getRecommendedRecipeData();
+
+                            RecipeClickListener onClickListener = new RecipeClickListener(this);
+                            MainHorizontalCustomAdapter mainHorizontalCustomAdapter = new MainHorizontalCustomAdapter(
+                                    R.layout.main_recycler_column_item, recipes, onClickListener);
+                            RecyclerView moreLikeThisRecyclerView = findViewById(R.id.more_like_this_recycler);
+                            if (moreLikeThisRecyclerView != null) {
+                                LinearLayoutManager layoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
+                                moreLikeThisRecyclerView.setLayoutManager(layoutManager);
+                                moreLikeThisRecyclerView.setItemAnimator(new DefaultItemAnimator());
+                                moreLikeThisRecyclerView.setAdapter(mainHorizontalCustomAdapter);
+                            }
+                        }
+                    },
+                    error -> {
+                        Toast.makeText(context, "You are Logged out", Toast.LENGTH_LONG).show();
+                        userContext.clearLoginPreferences();
+                        Intent intent = new Intent(context, LoginActivity.class);
+                        context.startActivity(intent);
+                    }
+            ){
+                @Override
+                public Map<String, String> getHeaders() {
+                    Map<String, String> headerMap = new HashMap<>();
+                    headerMap.put("Content-Type", "application/json");
+                    headerMap.put("Authorization", "Bearer " + ACCESS_TOKEN);
+                    return headerMap;
+                }
+            };
+            objectRequest.setRetryPolicy(new DefaultRetryPolicy(0, 0, DefaultRetryPolicy.DEFAULT_TIMEOUT_MS));
+            MySingleton.getInstance(context).addToRequestQueue(objectRequest);
     }
 
     private void reviewToJson() {

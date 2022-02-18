@@ -124,13 +124,34 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:text="@string/steps"/>
-
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/review_header"
+        android:text="Reviews"
+        android:layout_gravity="center"
+        android:textColor="@color/black"/>
     <androidx.recyclerview.widget.RecyclerView
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:id="@+id/recycler_review"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:id="@+id/more_like_this_header"
+    android:text="More Like This"
+    android:layout_gravity="center"
+    android:textColor="@color/black"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/more_like_this_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        />
 
 </LinearLayout>
     </ScrollView>
