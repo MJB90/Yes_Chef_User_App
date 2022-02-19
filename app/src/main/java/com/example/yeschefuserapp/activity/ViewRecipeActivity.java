@@ -122,7 +122,7 @@ public class ViewRecipeActivity extends AppCompatActivity
                     recipeName.setText(selectedRecipe.getName());
 
                     TextView prepTime = findViewById(R.id.prep_time);
-                    prepTime.setText("Prep time : " + selectedRecipe.getPrepTime() / 60 + "min");
+                    prepTime.setText("Prep time : " + selectedRecipe.getPrepTime() + "min");
 
                     TextView rating = findViewById(R.id.rating);
                     RatingBar viewRatingBar = findViewById(R.id.view_rating_bar);
