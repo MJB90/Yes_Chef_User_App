@@ -113,8 +113,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == REQ_LOCATION) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                createFragment();
-                navigationBar();
+                //Do nothing because it will go back to onResume();
             } else
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, REQ_LOCATION);
         }
