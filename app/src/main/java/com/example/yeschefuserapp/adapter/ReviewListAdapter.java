@@ -37,9 +37,9 @@ public class ReviewListAdapter extends RecyclerView.Adapter<ReviewListAdapter.My
     public void onBindViewHolder(@NonNull MyReviewViewHolder holder, int position) {
         UserReview userReview = mUserReviews.get(position);
         //TODO to change profile image to real image
-        holder.profileImage.setImageResource(R.drawable.yes_chef);
+        //holder.profileImage.setImageResource(R.drawable.yes_chef);
 
-        holder.username.setText(userReview.getUserEmail());
+        holder.username.setText(userReview.getUserEmail()+ " says: ");
         holder.ratingBar.setRating(userReview.getRating().floatValue());
 
         //TODO Once review Date in model, change review date to real date.
@@ -66,7 +66,7 @@ public class ReviewListAdapter extends RecyclerView.Adapter<ReviewListAdapter.My
 
         public MyReviewViewHolder(@NonNull View itemView) {
             super(itemView);
-            profileImage = itemView.findViewById(R.id.profile_image);
+            //profileImage = itemView.findViewById(R.id.profile_image);
             username = itemView.findViewById(R.id.user_name);
             ratingBar = itemView.findViewById(R.id.view_rating_bar);
             dateReview = itemView.findViewById(R.id.review_date);
