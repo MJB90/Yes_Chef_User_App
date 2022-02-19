@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -30,8 +29,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.yeschefuserapp.R;
-import com.example.yeschefuserapp.adapter.MainHorizontalCustomAdapter;
-import com.example.yeschefuserapp.adapter.MainVerticalCustomListAdapter;
+import com.example.yeschefuserapp.adapter.MoreLikeThisAdapter;
 import com.example.yeschefuserapp.adapter.ReviewListAdapter;
 import com.example.yeschefuserapp.context.UserContext;
 import com.example.yeschefuserapp.listener.BookmarkListener;
@@ -176,7 +174,7 @@ public class ViewRecipeActivity extends AppCompatActivity
 
                     navigationBar();
                     //TODO: when get endpoint from Manas, to call fetch more like this.
-                    //fetchMoreLikeThis(id);
+                    fetchMoreLikeThis(id);
                 },
                 error -> {
                     Toast.makeText(this, "You are Logged out", Toast.LENGTH_LONG).show();
@@ -201,7 +199,7 @@ public class ViewRecipeActivity extends AppCompatActivity
         Gson gson = new Gson();
             JsonObjectRequest objectRequest = new JsonObjectRequest(
                     Request.Method.GET,
-                    String.format(getString(R.string.domain_name)+"api/user/more_like_this/%s/20", id),
+                    String.format(getString(R.string.domain_name)+"api/user/more_like_this_recipes/%s/5", id),
                     null,
                     response -> {
                         moreLikeThisRecipes = gson.fromJson(String.valueOf(response), RecommendedRecipes.class);
@@ -209,14 +207,14 @@ public class ViewRecipeActivity extends AppCompatActivity
                             List<Recipe> recipes = moreLikeThisRecipes.getRecommendedRecipes().get(0).getRecommendedRecipeData();
 
                             RecipeClickListener onClickListener = new RecipeClickListener(this);
-                            MainHorizontalCustomAdapter mainHorizontalCustomAdapter = new MainHorizontalCustomAdapter(
+                            MoreLikeThisAdapter moreLikeThisAdapter = new MoreLikeThisAdapter(
                                     R.layout.main_recycler_column_item, recipes, onClickListener);
                             RecyclerView moreLikeThisRecyclerView = findViewById(R.id.more_like_this_recycler);
                             if (moreLikeThisRecyclerView != null) {
                                 LinearLayoutManager layoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
                                 moreLikeThisRecyclerView.setLayoutManager(layoutManager);
                                 moreLikeThisRecyclerView.setItemAnimator(new DefaultItemAnimator());
-                                moreLikeThisRecyclerView.setAdapter(mainHorizontalCustomAdapter);
+                                moreLikeThisRecyclerView.setAdapter(moreLikeThisAdapter);
                             }
                         }
                     },
@@ -236,7 +234,7 @@ public class ViewRecipeActivity extends AppCompatActivity
                 }
             };
             objectRequest.setRetryPolicy(new DefaultRetryPolicy(0, 0, DefaultRetryPolicy.DEFAULT_TIMEOUT_MS));
-            MySingleton.getInstance(context).addToRequestQueue(objectRequest);
+            MySingleton.getInstance(this).addToRequestQueue(objectRequest);
     }
 
     private void reviewToJson() {
