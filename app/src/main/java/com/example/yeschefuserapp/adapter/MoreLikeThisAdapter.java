@@ -1,9 +1,5 @@
 package com.example.yeschefuserapp.adapter;
 
-import static com.google.android.material.internal.ContextUtils.getActivity;
-
-import android.app.Activity;
-import android.content.ContextWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,21 +12,22 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.example.yeschefuserapp.activity.MainActivity;
-import com.example.yeschefuserapp.listener.ItemClickListener;
 import com.example.yeschefuserapp.R;
+import com.example.yeschefuserapp.activity.MainActivity;
+import com.example.yeschefuserapp.activity.ViewRecipeActivity;
+import com.example.yeschefuserapp.listener.ItemClickListener;
 import com.example.yeschefuserapp.model.Recipe;
 import com.example.yeschefuserapp.model.UserReview;
 
 import java.text.DecimalFormat;
 import java.util.List;
 
-public class MainHorizontalCustomAdapter extends RecyclerView.Adapter<MainHorizontalCustomAdapter.MyViewHolder> {
+public class MoreLikeThisAdapter extends RecyclerView.Adapter<MoreLikeThisAdapter.MyViewHolder> {
     private final int resourceId;
     private final List<Recipe> recipes;
     private final ItemClickListener mItemListener;
 
-    public MainHorizontalCustomAdapter(int resourceId, List<Recipe> recipes, ItemClickListener itemClickListener) {
+    public MoreLikeThisAdapter(int resourceId, List<Recipe> recipes, ItemClickListener itemClickListener) {
         this.resourceId = resourceId;
         this.recipes = recipes;
         mItemListener = itemClickListener;
@@ -60,7 +57,7 @@ public class MainHorizontalCustomAdapter extends RecyclerView.Adapter<MainHorizo
         holder.recipeName.setText(recipe.getName());
         holder.itemView.setOnClickListener(view -> mItemListener.onItemClick(recipe));
         if (holder.ratingBar != null && holder.recipeCuisineType != null) {
-            new Thread(() -> ((MainActivity)holder.itemView.getContext()).runOnUiThread(() -> {
+            new Thread(() -> ((ViewRecipeActivity)holder.itemView.getContext()).runOnUiThread(() -> {
                 holder.ratingBar.setRating(getAvgRating(recipe));
                 if (recipe.getCuisineType().size()>=1){
                     holder.recipeCuisineType.setText(recipe.getCuisineType().get(0));
