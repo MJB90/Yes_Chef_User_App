@@ -46,8 +46,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
         holder.card.setOnClickListener(view -> cardClickListener.onItemClick(holder.card, item));
         if (cards != null) {
             for (MaterialCardView c : cards) {
-                ViewGroup viewGroup = ((ViewGroup) c.getChildAt(0));
-                String getName = ((TextView) viewGroup.getChildAt(1)).getText().toString();
+                String getName = ((TextView) c.getChildAt(0)).getText().toString();
                 if (child.get(position).equals(getName)) {
                     holder.card.setStrokeColor(0xffff0000);
                 }
