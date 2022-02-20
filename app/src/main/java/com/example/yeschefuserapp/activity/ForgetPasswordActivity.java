@@ -18,7 +18,6 @@ import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
 import com.example.yeschefuserapp.R;
 import com.example.yeschefuserapp.context.UserContext;
-import com.example.yeschefuserapp.listener.ChangePasswordListener;
 import com.example.yeschefuserapp.listener.ForgetPasswordListener;
 import com.example.yeschefuserapp.model.AppUser;
 import com.example.yeschefuserapp.utility.MySingleton;

@@ -60,11 +60,9 @@ public class ViewRecipeActivity extends AppCompatActivity
     private RecommendedRecipes moreLikeThisRecipes;
     private Integer reviewNo;
     private Double ratingAvg;
-    private Integer ratingTotal;
     private String ingredients = "";
     private String preparationSteps = "";
     private int counter = 0;
-    private String selectedRecipeId;
     private JSONObject reviewJsonObject;
     private UserContext userContext;
     private String ACCESS_TOKEN;
@@ -81,7 +79,7 @@ public class ViewRecipeActivity extends AppCompatActivity
         userContext = new UserContext(this);
         ACCESS_TOKEN = userContext.getToken();
         Intent intent = getIntent();
-        selectedRecipeId = (String)((Recipe) intent.getSerializableExtra("recipe")).getId();
+        String selectedRecipeId = (String) ((Recipe) intent.getSerializableExtra("recipe")).getId();
 
         context = this;
         fetchSelectedRecipe(selectedRecipeId);
@@ -89,13 +87,13 @@ public class ViewRecipeActivity extends AppCompatActivity
     }
 
     public void getAvgRating() {
-        ratingTotal = 0;
+        Integer ratingTotal = 0;
         for (UserReview ur : selectedRecipe.getUserReviews()) {
             ratingTotal += ur.getRating();
         }
         reviewNo = selectedRecipe.getUserReviews().size();
         DecimalFormat formatter = new DecimalFormat("#0.0");
-        ratingAvg = Double.valueOf(ratingTotal / reviewNo);
+        ratingAvg = (double) (ratingTotal / reviewNo);
         formatter.format(ratingAvg);
     }
 
@@ -122,22 +120,22 @@ public class ViewRecipeActivity extends AppCompatActivity
                     recipeName.setText(selectedRecipe.getName());
 
                     TextView prepTime = findViewById(R.id.prep_time);
-                    prepTime.setText("Prep time : " + selectedRecipe.getPrepTime() + "min");
+                    prepTime.setText(String.format("Prep time : %s min",selectedRecipe.getPrepTime()));
 
                     TextView rating = findViewById(R.id.rating);
                     RatingBar viewRatingBar = findViewById(R.id.view_rating_bar);
                     if (selectedRecipe.getUserReviews() != null) {
                         getAvgRating();
-                        rating.setText(ratingAvg + "/5.0 (" + reviewNo.toString() + " reviews)");
+                        rating.setText(String.format("%s/5.0 (%s reviews)",ratingAvg,reviewNo.toString()));
                         viewRatingBar.setRating(ratingAvg.floatValue());
                     } else
-                        rating.setText("No reviews");
+                        rating.setText(R.string.no_review);
 
                     TextView calories = findViewById(R.id.calories);
                     if (selectedRecipe.getCalories() != null) {
-                        calories.setText(selectedRecipe.getCalories().toString() + " kCal");
+                        calories.setText(String.format("%s kCal",selectedRecipe.getCalories().toString()));
                     } else
-                        calories.setText("No calories info found");
+                        calories.setText(R.string.no_calories_found);
 
 
                     TextView ingredientsHeader = findViewById(R.id.ingredients_header);
@@ -173,7 +171,7 @@ public class ViewRecipeActivity extends AppCompatActivity
                     fetchBookmarkData(bookmarkBtn, bookmarkListener, userEmail);
 
                     navigationBar();
-                    //TODO: when get endpoint from Manas, to call fetch more like this.
+
                     fetchMoreLikeThis(id);
                 },
                 error -> {
@@ -363,7 +361,7 @@ public class ViewRecipeActivity extends AppCompatActivity
         myPopUpReviewDialog = popUpBuilder.create();
 
         TextView header = myPopUpReview.findViewById(R.id.writeReviewHead);
-        header.setText("Write A Review");
+        header.setText(R.string.write_a_review);
 
         submitRatingBar = myPopUpReview.findViewById(R.id.submit_rating_bar);
         inputReview = myPopUpReview.findViewById(R.id.writeReviewText);

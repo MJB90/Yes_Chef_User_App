@@ -44,6 +44,8 @@
     <string name="steps">step 1</string>
     <string name="write_a_review">Write A Review</string>
     <string name="add_to_bookmark">Add to bookmark</string>
+    <string name="view_recipe_reviews">Reviews</string>
+    <string name="more_like_this">More Like This</string>
 
     <!--Filtered result-->
     <string name="filter_textview_name">Recipe Name</string>
@@ -80,6 +82,10 @@
 
     <!--ForgetPasswordActivity-->
     <string name="check_email">Check your email to get the verification code!</string>
+
+    <!--ViewRecipeActivity-->
+    <string name="no_review">No reviews</string>
+    <string name="no_calories_found">No calories info found</string>
 
 
 

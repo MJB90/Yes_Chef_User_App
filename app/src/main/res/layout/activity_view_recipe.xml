@@ -128,7 +128,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/review_header"
-        android:text="Reviews"
+        android:text="@string/view_recipe_reviews"
+        android:fontFamily="@font/courier_prime_bold_italic"
         android:layout_gravity="center"
         android:textColor="@color/black"/>
     <androidx.recyclerview.widget.RecyclerView
@@ -141,7 +142,8 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:id="@+id/more_like_this_header"
-    android:text="More Like This"
+    android:text="@string/more_like_this"
+    android:fontFamily="@font/courier_prime_bold_italic"
     android:layout_gravity="center"
     android:textColor="@color/black"/>
 

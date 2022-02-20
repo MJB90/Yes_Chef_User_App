@@ -3,7 +3,6 @@ package com.example.yeschefuserapp.activity;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -112,9 +111,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == REQ_LOCATION) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                //Do nothing because it will go back to onResume();
-            } else
+            if (grantResults[0] != PackageManager.PERMISSION_GRANTED)
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, REQ_LOCATION);
         }
     }

@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.yeschefuserapp.R;
-import com.example.yeschefuserapp.activity.MainActivity;
 import com.example.yeschefuserapp.activity.ViewRecipeActivity;
 import com.example.yeschefuserapp.listener.ItemClickListener;
 import com.example.yeschefuserapp.model.Recipe;
