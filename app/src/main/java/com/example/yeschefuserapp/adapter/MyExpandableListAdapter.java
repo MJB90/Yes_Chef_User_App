@@ -25,28 +25,28 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class MyExpandableListAdapter extends BaseExpandableListAdapter{
+public class MyExpandableListAdapter extends BaseExpandableListAdapter {
     private final Context context;
     private final List<String> selections;
-    private final Map<String,List<String>> categories;
+    private final Map<String, List<String>> categories;
     private final IMyExpandableList iMyExpandableList;
 
-    private final Map<String,List<MaterialCardView>> cards=new HashMap<>();
-    private final AdvancedFilterTags advancedFilterTags=new AdvancedFilterTags(.0,0,0,null,null,null,null);
+    private final Map<String, List<MaterialCardView>> cards = new HashMap<>();
+    private final AdvancedFilterTags advancedFilterTags = new AdvancedFilterTags(.0, 0, 0, null, null, null, null);
 
     private List<String> tags;
     private List<String> difficulty;
     private List<String> courseType;
     private List<String> cuisineType;
 
-    private int caloriesCount=0;
-    private int prepTimeCount=0;
+    private int caloriesCount = 0;
+    private int prepTimeCount = 0;
 
-    public MyExpandableListAdapter(Context context, List<String> selections,Map<String,List<String>> categories,IMyExpandableList iMyExpandableList){
-        this.context=context;
-        this.selections=selections;
-        this.categories=categories;
-        this.iMyExpandableList=iMyExpandableList;
+    public MyExpandableListAdapter(Context context, List<String> selections, Map<String, List<String>> categories, IMyExpandableList iMyExpandableList) {
+        this.context = context;
+        this.selections = selections;
+        this.categories = categories;
+        this.iMyExpandableList = iMyExpandableList;
     }
 
     @Override
@@ -86,11 +86,11 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter{
 
     @Override
     public View getGroupView(int i, boolean b, View view, ViewGroup viewGroup) {
-        if (view==null){
+        if (view == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = inflater.inflate(R.layout.filter_item, null);
         }
-        TextView categories=view.findViewById(R.id.categories);
+        TextView categories = view.findViewById(R.id.categories);
         categories.setTypeface(null, Typeface.BOLD_ITALIC);
         categories.setText(getGroup(i).toString());
 
@@ -99,13 +99,13 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter{
 
     @Override
     public View getChildView(int i, int i1, boolean b, View view, ViewGroup viewGroup) {
-        if (view==null){
-            view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.filter_child_item,viewGroup,false);
+        if (view == null) {
+            view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.filter_child_item, viewGroup, false);
         }
 
         RecyclerView cardList = view.findViewById(R.id.gridView);
 
-        List<MaterialCardView> cardToSendToCardAdapter=cards.get(selections.get(i));
+        List<MaterialCardView> cardToSendToCardAdapter = cards.get(selections.get(i));
 
         //Create an AdvancedFilterTags object
         CardAdapter adapter = new CardAdapter(view.getContext(), categories.get(selections.get(i)), (card, item) -> {
@@ -223,6 +223,10 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter{
                     if (advancedFilterTags.getTags() == null) {
                         tags = new ArrayList<>();
                     } else {
+                        if (advancedFilterTags.getTags().contains(item)) {
+                            advancedFilterTags.getTags().remove(item);
+                            break;
+                        }
                         tags = advancedFilterTags.getTags();
                     }
                     tags.add(item);
@@ -235,6 +239,11 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter{
                     while (matcher.find()) {
                         numbers.add(Integer.valueOf(matcher.group()));
                     }
+                    if (advancedFilterTags.getMaxCalories() == (double) numbers.get(1) && advancedFilterTags.getMinCalories() == (double) numbers.get(0)) {
+                        advancedFilterTags.setMaxCalories(null);
+                        advancedFilterTags.setMinCalories(null);
+                        break;
+                    }
                     advancedFilterTags.setMaxCalories((double) numbers.get(1));
                     advancedFilterTags.setMinCalories((double) numbers.get(0));
                     break;
@@ -243,6 +252,10 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter{
                     if (advancedFilterTags.getDifficulty() == null) {
                         difficulty = new ArrayList<>();
                     } else {
+                        if (advancedFilterTags.getDifficulty().contains(item)) {
+                            advancedFilterTags.getDifficulty().remove(item);
+                            break;
+                        }
                         difficulty = advancedFilterTags.getDifficulty();
                     }
                     difficulty.add(item);
@@ -258,18 +271,43 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter{
                     int minPrepTime = prepTime.get(0);
                     int maxPrepTime = prepTime.get(1);
                     if (minPrepTime == 1 && maxPrepTime == 10) {
+                        if (advancedFilterTags.getMaxPrepTime() == 600 && advancedFilterTags.getMinPrepTime() == 60) {
+                            advancedFilterTags.setMaxPrepTime(null);
+                            advancedFilterTags.setMinPrepTime(null);
+                            break;
+                        }
                         advancedFilterTags.setMaxPrepTime(600);
                         advancedFilterTags.setMinPrepTime(60);
                     } else if (minPrepTime == 10 && maxPrepTime == 30) {
+                        if (advancedFilterTags.getMaxPrepTime() == 1800 && advancedFilterTags.getMinPrepTime() == 600) {
+                            advancedFilterTags.setMaxPrepTime(null);
+                            advancedFilterTags.setMinPrepTime(null);
+                            break;
+                        }
                         advancedFilterTags.setMaxPrepTime(1800);
                         advancedFilterTags.setMinPrepTime(600);
                     } else if (minPrepTime == 0 && maxPrepTime == 5 && prepTime.get(2) == 1) {
+                        if (advancedFilterTags.getMaxPrepTime() == 3600 && advancedFilterTags.getMinPrepTime() == 1800) {
+                            advancedFilterTags.setMaxPrepTime(null);
+                            advancedFilterTags.setMinPrepTime(null);
+                            break;
+                        }
                         advancedFilterTags.setMaxPrepTime(3600);
                         advancedFilterTags.setMinPrepTime(1800);
                     } else if (minPrepTime == 1 && maxPrepTime == 5) {
+                        if (advancedFilterTags.getMaxPrepTime() == 18000 && advancedFilterTags.getMinPrepTime() == 3600) {
+                            advancedFilterTags.setMaxPrepTime(null);
+                            advancedFilterTags.setMinPrepTime(null);
+                            break;
+                        }
                         advancedFilterTags.setMaxPrepTime(18000);
                         advancedFilterTags.setMinPrepTime(3600);
                     } else if (minPrepTime == 5 && maxPrepTime == 10) {
+                        if (advancedFilterTags.getMaxPrepTime() == 36000 && advancedFilterTags.getMinPrepTime() == 18000) {
+                            advancedFilterTags.setMaxPrepTime(null);
+                            advancedFilterTags.setMinPrepTime(null);
+                            break;
+                        }
                         advancedFilterTags.setMaxPrepTime(36000);
                         advancedFilterTags.setMinPrepTime(18000);
                     }
@@ -279,6 +317,10 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter{
                     if (advancedFilterTags.getCourseType() == null) {
                         courseType = new ArrayList<>();
                     } else {
+                        if (advancedFilterTags.getCourseType().contains(item)) {
+                            advancedFilterTags.getCourseType().remove(item);
+                            break;
+                        }
                         courseType = advancedFilterTags.getCourseType();
                     }
                     courseType.add(item);
@@ -288,6 +330,10 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter{
                     if (advancedFilterTags.getCuisineType() == null) {
                         cuisineType = new ArrayList<>();
                     } else {
+                        if (advancedFilterTags.getCuisineType().contains(item)) {
+                            advancedFilterTags.getCuisineType().remove(item);
+                            break;
+                        }
                         cuisineType = advancedFilterTags.getCuisineType();
                     }
                     cuisineType.add(item);
@@ -296,7 +342,7 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter{
             }
             iMyExpandableList.onItemClick(advancedFilterTags);
         }, cardToSendToCardAdapter);
-        GridLayoutManager gridLayoutManager=new GridLayoutManager(view.getContext(),3,GridLayoutManager.VERTICAL,false);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(view.getContext(), 3, GridLayoutManager.VERTICAL, false);
         cardList.setLayoutManager(gridLayoutManager);
         cardList.setAdapter(adapter);
 
@@ -308,7 +354,7 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter{
         return true;
     }
 
-    public interface IMyExpandableList{
+    public interface IMyExpandableList {
         void onItemClick(AdvancedFilterTags object);
     }
 }
