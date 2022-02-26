@@ -177,7 +177,7 @@ public class AdvancedFilterFragment extends Fragment implements View.OnClickList
         List<Recipe> recipes = new ArrayList<>();
         JsonArrayRequest objectRequest = new JsonArrayRequest(
                 Request.Method.POST,
-                "http://10.0.2.2:8090/api/user/advanced_filter",
+                R.string.domain_name+"api/user/advanced_filter",
                 null,
                 response -> {
                     Recipe[] tmpArray = gson.fromJson(response.toString(), Recipe[].class);
