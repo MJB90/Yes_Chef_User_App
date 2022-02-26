@@ -3,7 +3,7 @@
     <string name="project_name">Yes Chef</string>
 
     <!--Domain name-->
-    <string name="domain_name">http://10.0.2.2:8090/</string>
+    <string name="domain_name">http://yeschefweb-env.eba-wpq3pifx.us-east-1.elasticbeanstalk.com/</string>
 
     <string name="nav_home">Home</string>
     <string name="nav_bookmarks">Bookmarks</string>
